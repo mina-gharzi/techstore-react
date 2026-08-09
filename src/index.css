@@ -1,0 +1,238 @@
+/* ======================================================
+   استایل‌های پایه + Navbar
+   ====================================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/*
+  قبلاً اینجا بود:
+    .main-content { min-height: calc(100vh - 160px); }
+  مشکلش این بود که ۱۶۰px یک عدد هاردکده برای ارتفاع navbar + footer
+  بود؛ اگه navbar تغییر ارتفاع بده (مثلاً منوی موبایل باز بشه) یا
+  footer محتوای بیشتری بگیره، این عدد دیگه دقیق نیست و یا اسکرول
+  اضافه ایجاد می‌کنه یا فضای خالی می‌ذاره.
+
+  الگوی درست: .app به‌صورت flex column باشه و .main-content با
+  flex: 1 فضای باقی‌مونده رو پر کنه - مستقل از ارتفاع واقعی
+  navbar/footer. این کلاس .app از قبل توی App.jsx استفاده شده،
+  فقط استایلش این‌جا تعریف نشده بود.
+*/
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src: url("/fonts/Vazirmatn-Regular.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+body {
+  font-family: Vazirmatn, system-ui, sans-serif;
+  background-color: #f8fafc;
+  color: #0f172a;
+  line-height: 1.6;
+  direction: rtl;
+}
+/* ======================================================
+   Navbar
+   ====================================================== */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+}
+
+.navbar__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* لوگو */
+.navbar__logo {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #2563eb;
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+
+/* منوی دسکتاپ */
+.navbar__nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.navbar__link {
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #334155;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.navbar__link:hover {
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+.navbar__link.active {
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+/* اکشن‌ها */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.navbar__icon-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  color: #475569;
+  transition: all 0.2s ease;
+}
+
+.navbar__icon-btn:hover {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+/* بج */
+.navbar__badge {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 50px;
+  border: 2px solid #fff;
+}
+
+/* دکمه همبرگری */
+.navbar__menu-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  color: #334155;
+}
+
+.navbar__menu-toggle:hover {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+/* منوی موبایل */
+.navbar__mobile-menu {
+  display: none;
+  flex-direction: column;
+  background: #fff;
+  border-top: 1px solid #e2e8f0;
+  padding: 12px 20px 20px;
+}
+
+.navbar__mobile-menu.is-open {
+  display: flex;
+}
+
+.navbar__mobile-link {
+  padding: 14px 12px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #334155;
+  border-radius: 10px;
+}
+
+.navbar__mobile-link:hover,
+.navbar__mobile-link.active {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+/* Overlay */
+.navbar__overlay {
+  position: fixed;
+  inset: 0;
+  top: 70px;
+  background: rgba(15, 23, 42, 0.35);
+  z-index: 90;
+}
+
+/* ---------- ریسپانسیو ---------- */
+@media (max-width: 768px) {
+  .navbar__nav {
+    display: none;
+  }
+
+  .navbar__menu-toggle {
+    display: flex;
+  }
+}

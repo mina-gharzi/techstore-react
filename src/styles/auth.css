@@ -1,0 +1,328 @@
+/* =====================================================
+   AUTH PAGES
+   Minimal / Premium Design
+===================================================== */
+
+.auth-page {
+  /*
+    قبلاً اینجا "min-height: calc(100vh - 80px)" بود که فقط
+    ارتفاع navbar رو کم می‌کرد (نه footer رو)، و دقیقاً همون
+    مشکل عدد هاردکد رو داشت که توی index.css با flex حلش کردیم:
+    .main-content از قبل با flex:1 فضای بین navbar و footer رو
+    پر می‌کنه، پس این min-height اضافی فقط باعث می‌شد صفحه‌ی
+    لاگین/ثبت‌نام بلندتر از حد لازم بشه و footer بی‌دلیل به
+    پایین هل بخوره. حذفش کردیم و به‌جاش padding کار خودشو می‌کنه.
+  */
+  padding: 60px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  direction: rtl;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 470px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 42px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06);
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 34px;
+}
+
+.auth-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 32px;
+
+  color: #2563eb;
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+.auth-brand-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff;
+  background: #2563eb;
+}
+
+.auth-header-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.auth-header h1 {
+  margin: 0 0 9px;
+
+  color: #0f172a;
+  font-size: 1.55rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+}
+
+.auth-header p {
+  margin: 0;
+
+  color: #64748b;
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.auth-form {
+  width: 100%;
+}
+
+.auth-field {
+  margin-bottom: 20px;
+}
+
+.auth-label {
+  display: block;
+  margin-bottom: 8px;
+
+  color: #334155;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.auth-input-wrapper {
+  position: relative;
+}
+
+.auth-input {
+  width: 100%;
+  height: 50px;
+
+  box-sizing: border-box;
+
+  padding: 0 45px 0 15px;
+
+  border: 1px solid #dbe2ea;
+  border-radius: 11px;
+
+  outline: none;
+
+  background: #ffffff;
+  color: #0f172a;
+
+  font-family: inherit;
+  font-size: 0.9rem;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.auth-input::placeholder {
+  color: #a1aab8;
+}
+
+.auth-input:hover {
+  border-color: #cbd5e1;
+}
+
+.auth-input:focus {
+  border-color: #3b82f6;
+  background: #ffffff;
+
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+.auth-input-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #94a3b8;
+
+  pointer-events: none;
+
+  transition: color 0.2s ease;
+}
+
+.auth-input-wrapper:focus-within .auth-input-icon {
+  color: #2563eb;
+}
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+.auth-input-error {
+  border-color: #fca5a5;
+  background: #fffafa;
+}
+
+.auth-input-error:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.07);
+}
+
+.auth-error {
+  display: block;
+
+  margin-top: 6px;
+
+  color: #dc2626;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.auth-general-error {
+  margin-bottom: 20px;
+  padding: 11px 14px;
+
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+
+  background: #fff7f7;
+  color: #dc2626;
+
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.auth-submit {
+  width: 100%;
+  height: 51px;
+
+  margin-top: 4px;
+
+  border: none;
+  border-radius: 11px;
+
+  background: #2563eb;
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.auth-submit:hover:not(:disabled) {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.23);
+}
+
+.auth-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.auth-submit:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* =====================================================
+   SWITCH LINK
+===================================================== */
+
+.auth-switch {
+  margin: 24px 0 0;
+
+  color: #64748b;
+
+  text-align: center;
+
+  font-size: 0.84rem;
+}
+
+.auth-switch a {
+  color: #2563eb;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}
+
+/* =====================================================
+   REGISTER - slightly smaller card
+===================================================== */
+
+.auth-register-container {
+  max-width: 500px;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+  .auth-page {
+    padding: 30px 14px;
+  }
+
+  .auth-container {
+    padding: 32px 22px;
+    border-radius: 17px;
+  }
+
+  .auth-header {
+    margin-bottom: 28px;
+  }
+
+  .auth-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .auth-input {
+    height: 49px;
+  }
+
+  .auth-submit {
+    height: 50px;
+  }
+}
