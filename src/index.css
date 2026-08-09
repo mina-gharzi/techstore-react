@@ -190,13 +190,22 @@ body {
   color: #2563eb;
 }
 
-/* منوی موبایل */
+/* منوی موبایل
+   نکته‌ی مهم: قبلاً این منو هیچ z-index نداشت، در حالی که
+   .navbar__overlay (لایه‌ی تیره‌ی پشت منو) با z-index: 90 و
+   position: fixed روی کل صفحه می‌نشست - یعنی از نظر چیدمان
+   لایه‌ها، overlay روی خودِ منو قرار می‌گرفت و کلیک‌ها رو قبل
+   از رسیدن به لینک‌ها می‌قاپید (فقط باعث بسته شدن منو می‌شد،
+   نه رفتن به لینک). با z-index بالاتر روی خودِ منو این حل شد. */
 .navbar__mobile-menu {
   display: none;
   flex-direction: column;
+  gap: 4px;
   background: #fff;
   border-top: 1px solid #e2e8f0;
-  padding: 12px 20px 20px;
+  padding: 16px;
+  position: relative;
+  z-index: 95;
 }
 
 .navbar__mobile-menu.is-open {
@@ -204,17 +213,34 @@ body {
 }
 
 .navbar__mobile-link {
-  padding: 14px 12px;
-  font-size: 1.05rem;
+  display: block;
+  padding: 15px 16px;
+  font-size: 1.02rem;
   font-weight: 600;
   color: #334155;
-  border-radius: 10px;
+  border-radius: 12px;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
 .navbar__mobile-link:hover,
+.navbar__mobile-link:active {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
 .navbar__mobile-link.active {
   background: #eff6ff;
   color: #2563eb;
+  font-weight: 700;
+}
+
+/* جداکننده‌ی بصری قبل از بخش کاربر (پروفایل/خروج) توی منوی موبایل */
+.navbar__mobile-divider {
+  height: 1px;
+  background: #f1f5f9;
+  margin: 8px 4px;
 }
 
 /* Overlay */

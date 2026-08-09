@@ -8,6 +8,7 @@ import { FavoritesProvider } from "./context/FavoritesContext";
 
 // ---------- مسیرها ----------
 import AppRoutes from "./routes";
+import ScrollToTop from "./components/ScrollToTop";
 
 // ---------- لایه‌های ثابت ----------
 import Navbar from "./components/layout/Navbar";
@@ -26,6 +27,7 @@ import Footer from "./components/layout/Footer";
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <AuthProvider>
         <ProductsProvider>
           <CartProvider>

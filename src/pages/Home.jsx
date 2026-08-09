@@ -249,6 +249,7 @@ export default function Home() {
           </div>
 
           <div
+            className="home-product-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
@@ -301,6 +302,7 @@ export default function Home() {
           </div>
 
           <div
+            className="home-product-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
