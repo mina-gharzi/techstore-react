@@ -35,6 +35,37 @@ function writeUsers(users) {
   }
 }
 
+// ---------- ساخت یک حساب ادمین پیش‌فرض ----------
+// چون فرم ثبت‌نام فقط کاربر عادی (role: "customer") می‌سازه و
+// راهی برای "ادمین شدن" از توی UI وجود نداره، یک حساب ادمین
+// پیش‌فرض رو (فقط اگه از قبل هیچ ادمینی وجود نداشته باشه) توی
+// لیست کاربرها seed می‌کنیم. این فقط برای دمو/توسعه‌ست؛ در یک
+// پروژه‌ی واقعی نقش ادمین باید سمت بک‌اند و توسط یک ادمین دیگه
+// تعیین بشه، نه این‌طور هاردکد.
+const DEFAULT_ADMIN = {
+  id: 1,
+  fullName: "مدیر فروشگاه",
+  email: "admin@techstore.com",
+  phone: "09120000000",
+  password: "admin123",
+  role: "admin",
+};
+
+function ensureDefaultAdmin() {
+  const users = readUsers();
+  const hasAdmin = users.some((u) => u.role === "admin");
+
+  if (!hasAdmin) {
+    writeUsers([...users, DEFAULT_ADMIN]);
+  }
+}
+
+// این فایل فقط سمت مرورگر اجرا می‌شه (localStorage در دسترسه)، پس
+// می‌تونیم همین‌جا در سطح ماژول - یک بار موقع اولین import - چک
+// کنیم که حساب ادمین وجود داره یا نه. نیازی به قرار دادنش داخل
+// useState/useEffect کامپوننت نیست.
+ensureDefaultAdmin();
+
 export function AuthProvider({ children }) {
   // خواندن اولیه‌ی کاربر لاگین‌شده از localStorage
   const [user, setUser] = useState(() => {
@@ -79,6 +110,7 @@ export function AuthProvider({ children }) {
       email: normalizedEmail,
       phone: phone.trim(),
       password, // fake auth - در پروژه واقعی هرگز پسورد خام ذخیره نکن
+      role: "customer", // ثبت‌نام از فرم همیشه کاربر عادی می‌سازه؛ ادمین فقط با seed پیش‌فرض بالا وجود داره
     };
 
     writeUsers([...users, newUser]);
@@ -96,7 +128,8 @@ export function AuthProvider({ children }) {
     const normalizedEmail = email.trim().toLowerCase();
 
     const matchedUser = users.find(
-      (u) => u.email.toLowerCase() === normalizedEmail && u.password === password,
+      (u) =>
+        u.email.toLowerCase() === normalizedEmail && u.password === password,
     );
 
     if (!matchedUser) {
@@ -115,6 +148,7 @@ export function AuthProvider({ children }) {
   const value = {
     user,
     isAuthenticated: !!user,
+    isAdmin: user?.role === "admin",
     register,
     login,
     logout,

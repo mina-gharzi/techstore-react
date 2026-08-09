@@ -2,6 +2,7 @@ import { BrowserRouter } from "react-router-dom";
 
 // ---------- Context ها ----------
 import { AuthProvider } from "./context/AuthContext";
+import { ProductsProvider } from "./context/ProductsContext";
 import { CartProvider } from "./context/CartContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
 
@@ -26,22 +27,24 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <CartProvider>
-          <FavoritesProvider>
-            <div className="app">
-              {/* هدر ثابت در همه صفحات */}
-              <Navbar />
+        <ProductsProvider>
+          <CartProvider>
+            <FavoritesProvider>
+              <div className="app">
+                {/* هدر ثابت در همه صفحات */}
+                <Navbar />
 
-              {/* محتوای اصلی هر صفحه */}
-              <main className="main-content">
-                <AppRoutes />
-              </main>
+                {/* محتوای اصلی هر صفحه */}
+                <main className="main-content">
+                  <AppRoutes />
+                </main>
 
-              {/* فوتر ثابت در همه صفحات */}
-              <Footer />
-            </div>
-          </FavoritesProvider>
-        </CartProvider>
+                {/* فوتر ثابت در همه صفحات */}
+                <Footer />
+              </div>
+            </FavoritesProvider>
+          </CartProvider>
+        </ProductsProvider>
       </AuthProvider>
     </BrowserRouter>
   );

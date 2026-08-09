@@ -1,15 +1,21 @@
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, X } from "lucide-react";
-import { products, categories } from "../data/products";
+import { categories } from "../data/products";
+import { useProducts } from "../context/ProductsContext";
 import ProductCard from "../components/product/ProductCard";
 
 // ======================================================
 // Products
 // صفحه محصولات - کامل با سرچ، فیلتر و مرتب‌سازی
+//
+// نکته: "products" قبلاً مستقیم از data/products.js میومد.
+// الان از useProducts() میاد تا محصولاتی که ادمین اضافه/ویرایش/
+// حذف می‌کنه این‌جا هم دیده بشن.
 // ======================================================
 
 export default function Products() {
+  const { products } = useProducts();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // ---------- State ----------
@@ -75,7 +81,7 @@ export default function Products() {
     }
 
     return result;
-  }, [activeCategory, activeFilter, search, sort]);
+  }, [products, activeCategory, activeFilter, search, sort]);
 
   // ---------- عنوان صفحه ----------
   const pageTitle = useMemo(() => {

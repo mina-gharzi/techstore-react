@@ -1,13 +1,22 @@
 import { Link } from "react-router-dom";
-import { products, categories } from "../data/products";
+import { categories } from "../data/products";
+import { useProducts } from "../context/ProductsContext";
 import ProductCard from "../components/product/ProductCard";
 
 // ======================================================
 // Home
 // صفحه اصلی فروشگاه - نسخه طراحی‌شده
+//
+// نکته: قبلاً "products" مستقیم از data/products.js (یک آرایه‌ی
+// ثابت) ایمپورت می‌شد. الان از useProducts() میاد که به
+// localStorage وصله - یعنی اگه ادمین از پنل مدیریت محصولی اضافه/
+// حذف/ویرایش کنه، همین‌جا هم بدون نیاز به تغییر کد دیده می‌شه.
+// categories همچنان ثابته چون فعلاً ادمین دسته‌بندی جدید نمی‌سازه.
 // ======================================================
 
 export default function Home() {
+  const { products } = useProducts();
+
   const featuredProducts = products.slice(0, 4);
   const newProducts = products.filter((p) => p.isNew).slice(0, 4);
   const discountProducts = products

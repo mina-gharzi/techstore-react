@@ -12,8 +12,10 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import RequireAuth from "./components/RequireAuth";
+import RequireAdmin from "./components/RequireAdmin";
 
 // ======================================================
 // AppRoutes
@@ -68,6 +70,16 @@ export default function AppRoutes() {
       {/* ورود و ثبت‌نام */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+
+      {/* پنل مدیریت - فقط برای کاربر با نقش ادمین */}
+      <Route
+        path="/admin"
+        element={
+          <RequireAdmin>
+            <AdminDashboard />
+          </RequireAdmin>
+        }
+      />
 
       {/* صفحه ۴۰۴ - برای مسیرهای نامعتبر */}
       <Route path="*" element={<NotFound />} />

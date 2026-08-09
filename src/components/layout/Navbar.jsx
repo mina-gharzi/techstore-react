@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { ShoppingCart, Heart, Menu, X, User, LogOut } from "lucide-react";
+import { ShoppingCart, Heart, Menu, X, User, LogOut, Shield } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { useFavorites } from "../../context/FavoritesContext";
 import { useAuth } from "../../context/AuthContext";
@@ -19,7 +19,7 @@ export default function Navbar() {
   // ---------- Context ----------
   const { totalItems } = useCart();
   const { favorites } = useFavorites();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, isAdmin, logout } = useAuth();
 
   // ---------- Handlers ----------
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
@@ -128,6 +128,28 @@ export default function Navbar() {
                         {user.email}
                       </div>
                     </div>
+
+                    {isAdmin && (
+                      <Link
+                        to="/admin"
+                        onClick={closeUserMenu}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                          padding: "10px",
+                          borderRadius: "10px",
+                          color: "#2563eb",
+                          fontWeight: 600,
+                          fontSize: "0.9rem",
+                          textDecoration: "none",
+                        }}
+                      >
+                        <Shield size={16} />
+                        پنل مدیریت
+                      </Link>
+                    )}
+
                     <button
                       onClick={handleLogout}
                       style={{
@@ -208,6 +230,15 @@ export default function Navbar() {
             >
               👋 {user.fullName}
             </div>
+            {isAdmin && (
+              <NavLink
+                to="/admin"
+                className="navbar__mobile-link"
+                onClick={closeMenu}
+              >
+                پنل مدیریت
+              </NavLink>
+            )}
             <button
               onClick={handleLogout}
               className="navbar__mobile-link"

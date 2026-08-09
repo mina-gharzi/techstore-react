@@ -11,7 +11,8 @@ import {
   Minus,
   Plus,
 } from "lucide-react";
-import { products, categories } from "../data/products";
+import { categories } from "../data/products";
+import { useProducts } from "../context/ProductsContext";
 import { useCart } from "../context/CartContext";
 import { useFavorites } from "../context/FavoritesContext";
 import { formatPrice } from "../utils/formatPrice";
@@ -24,6 +25,7 @@ import ProductCard from "../components/product/ProductCard";
 
 export default function ProductDetails() {
   const { id } = useParams();
+  const { products } = useProducts();
   const { addToCart } = useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
 
@@ -49,7 +51,7 @@ export default function ProductDetails() {
     return products
       .filter((p) => p.category === product.category && p.id !== product.id)
       .slice(0, 4);
-  }, [product]);
+  }, [product, products]);
 
   const categoryName = useMemo(() => {
     if (!product) return "";
