@@ -1,18 +1,95 @@
-# React + Vite
+# 🛍️ TechStore React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern and fully responsive e-commerce website built with **React** and **Vite**.
 
-Currently, two official plugins are available:
+This project is the React rewrite of the original [TechStore (Vanilla JS version)](https://github.com/mina-gharzi/techstore).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- Fully responsive design (Desktop, Tablet, Mobile)
+- Clean and modern user interface
+- Home page with featured products and categories
+- Products listing page with filtering and sorting
+- Product details page
+- Shopping cart functionality
+- Wishlist / Favorites
+- User authentication (Login & Register)
+- Checkout process
+- Order success page
+- Protected routes
+- Reusable UI components
+- Context API for global state management (Cart, Auth, Favorites)
+- Well-organized and scalable project structure
 
-Note: This will impact Vite dev & build performances.
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **React 19**
+- **Vite**
+- **React Router DOM**
+- **Context API**
+- **Lucide React** (Icons)
+- Custom CSS
+
+---
+
+## 📂 Project Structure
+src/
+├── assets/
+├── components/
+│   ├── cart/
+│   ├── common/
+│   ├── layout/
+│   ├── product/
+│   └── ui/
+├── context/
+├── data/
+├── hooks/
+├── pages/
+├── styles/
+├── utils/
+├── App.jsx
+├── main.jsx
+└── routes.jsx
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher recommended)
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/mina-gharzi/techstore-react.git
+
+# Navigate to the project folder
+cd techstore-react
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+
+📌 Future Improvements
+
+Backend integration
+Payment gateway
+Advanced search functionality
+Admin dashboard
+Product reviews & ratings
+
+👩‍💻 Author
+Mina Gharzi
+GitHub: mina-gharzi
+
+📄 License
+This project is created for learning and portfolio purposes.
