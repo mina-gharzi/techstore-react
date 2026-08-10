@@ -58,13 +58,13 @@ button {
 
 @font-face {
   font-family: Vazirmatn;
-  src: url("/fonts/Doran-bold.ttf") format("truetype");
+  src: url("/fonts/Doran-Bold.ttf") format("truetype");
   font-weight: 100 900;
   font-display: swap;
 }
 
 body {
-  font-family: Vazirmatn, system-ui, sans-serif;
+  font-family: Doran-bold, system-ui, sans-serif;
   background-color: #f8fafc;
   color: #0f172a;
   line-height: 1.6;
