@@ -57,9 +57,9 @@ button {
 }
 
 @font-face {
-  font-family: Vazirmatn;
+  font-family: Doran-Bold;
   src: url("/fonts/Doran-Bold.ttf") format("truetype");
-  font-weight: 100 900;
+  font-weight: 700;
   font-display: swap;
 }
 
