@@ -53,7 +53,14 @@ export function OrdersProvider({ children }) {
   const getOrdersByUser = (userId) =>
     orders.filter((order) => order.userId === userId);
 
-  const value = { orders, addOrder, getOrdersByUser };
+  // ---------- تغییر وضعیت سفارش (توسط ادمین) ----------
+  const updateOrderStatus = (orderId, status) => {
+    setOrders((prev) =>
+      prev.map((order) => (order.id === orderId ? { ...order, status } : order)),
+    );
+  };
+
+  const value = { orders, addOrder, getOrdersByUser, updateOrderStatus };
 
   return <OrdersContext.Provider value={value}>{children}</OrdersContext.Provider>;
 }

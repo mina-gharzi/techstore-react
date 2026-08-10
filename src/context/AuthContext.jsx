@@ -186,6 +186,36 @@ export function AuthProvider({ children }) {
     return { success: true };
   };
 
+  // ---------- بازیابی رمز عبور (فراموشی رمز) ----------
+  // چون سرویس ایمیل واقعی نداریم (نمی‌تونیم لینک بازیابی بفرستیم)،
+  // هویت کاربر با تطابق ایمیل + شماره موبایلی که موقع ثبت‌نام داده
+  // بود تایید می‌شه، بعد اجازه‌ی تنظیم رمز جدید داده می‌شه. این یک
+  // جایگزین ساده‌ی fake‌ست؛ در پروژه‌ی واقعی باید یک لینک یک‌بارمصرف
+  // با محدودیت زمانی از طریق ایمیل/پیامک فرستاده بشه.
+  const resetPassword = ({ email, phone, newPassword }) => {
+    const users = readUsers();
+    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedPhone = phone.trim();
+
+    const matchedUser = users.find(
+      (u) => u.email.toLowerCase() === normalizedEmail && u.phone === normalizedPhone,
+    );
+
+    if (!matchedUser) {
+      return {
+        success: false,
+        message: "ایمیل و شماره موبایل با هم مطابقت ندارند",
+      };
+    }
+
+    const updatedUsers = users.map((u) =>
+      u.id === matchedUser.id ? { ...u, password: newPassword } : u,
+    );
+    writeUsers(updatedUsers);
+
+    return { success: true };
+  };
+
   const value = {
     user,
     isAuthenticated: !!user,
@@ -195,6 +225,7 @@ export function AuthProvider({ children }) {
     logout,
     updateProfile,
     changePassword,
+    resetPassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

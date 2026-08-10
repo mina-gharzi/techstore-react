@@ -113,6 +113,15 @@ export default function Login() {
                 className="auth-input"
               />
             </div>
+
+            <div style={{ textAlign: "left", marginTop: "8px" }}>
+              <Link
+                to="/forgot-password"
+                style={{ color: "#2563eb", fontSize: "0.82rem", fontWeight: 700 }}
+              >
+                رمز عبور را فراموش کرده‌اید؟
+              </Link>
+            </div>
           </div>
 
           {/* Submit */}
