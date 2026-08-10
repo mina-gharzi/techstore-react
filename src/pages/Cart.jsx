@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, AlertTriangle } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useProducts, getStock } from "../context/ProductsContext";
 import { formatPrice } from "../utils/formatPrice";
 
 // ======================================================
@@ -18,6 +19,17 @@ export default function Cart() {
     totalItems,
     totalPrice,
   } = useCart();
+  const { products } = useProducts();
+
+  // ---------- کمکی: موجودی فعلی یک آیتم سبد ----------
+  // مهم: موجودی رو از خودِ سبد نمی‌خونیم (چون snapshot لحظه‌ی
+  // افزودنه)، بلکه از ProductsContext می‌خونیم که همیشه آخرین
+  // مقدار واقعیه - مثلاً اگه ادمین بعد از اینکه کاربر این محصول
+  // رو به سبد اضافه کرده، موجودی رو کم کرده باشه.
+  const getItemStock = (item) => {
+    const liveProduct = products.find((p) => p.id === item.id);
+    return liveProduct ? getStock(liveProduct) : getStock(item);
+  };
 
   // ---------- اگر سبد خالی بود ----------
   if (cart.length === 0) {
@@ -115,12 +127,16 @@ export default function Cart() {
           <div
             style={{ display: "flex", flexDirection: "column", gap: "16px" }}
           >
-            {cart.map((item) => (
+            {cart.map((item) => {
+              const itemStock = getItemStock(item);
+              const exceedsStock = item.quantity > itemStock;
+
+              return (
               <div
                 key={item.cartItemId}
                 style={{
                   background: "#fff",
-                  border: "1px solid #e2e8f0",
+                  border: exceedsStock ? "1.5px solid #fca5a5" : "1px solid #e2e8f0",
                   borderRadius: "16px",
                   padding: "18px",
                   display: "flex",
@@ -188,6 +204,24 @@ export default function Cart() {
                   >
                     {formatPrice(item.price)}
                   </span>
+
+                  {/* هشدار: اگه موجودی از وقتی این آیتم به سبد اضافه شده کم شده باشه */}
+                  {exceedsStock && (
+                    <span
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                        marginTop: "6px",
+                        color: "#ef4444",
+                        fontSize: "0.8rem",
+                        fontWeight: 700,
+                      }}
+                    >
+                      <AlertTriangle size={13} />
+                      فقط {itemStock} عدد در انبار موجود است
+                    </span>
+                  )}
                 </div>
 
                 {/* کنترل تعداد */}
@@ -233,8 +267,9 @@ export default function Cart() {
 
                   <button
                     onClick={() =>
-                      updateQuantity(item.cartItemId, item.quantity + 1)
+                      updateQuantity(item.cartItemId, Math.min(itemStock, item.quantity + 1))
                     }
+                    disabled={item.quantity >= itemStock}
                     style={{
                       width: "30px",
                       height: "30px",
@@ -244,7 +279,8 @@ export default function Cart() {
                       borderRadius: "8px",
                       background: "#fff",
                       border: "1px solid #e2e8f0",
-                      cursor: "pointer",
+                      cursor: item.quantity >= itemStock ? "not-allowed" : "pointer",
+                      opacity: item.quantity >= itemStock ? 0.5 : 1,
                     }}
                     aria-label="زیاد کردن تعداد"
                   >
@@ -283,7 +319,8 @@ export default function Cart() {
                   <Trash2 size={18} />
                 </button>
               </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* ---------- خلاصه سفارش ---------- */}

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Plus, Pencil, Trash2, X, PackageSearch } from "lucide-react";
-import { useProducts } from "../context/ProductsContext";
+import { Plus, Pencil, Trash2, X, PackageSearch, AlertTriangle } from "lucide-react";
+import { useProducts, getStock } from "../context/ProductsContext";
 import { categories } from "../data/products";
 import { formatPrice } from "../utils/formatPrice";
 
@@ -22,6 +22,7 @@ const emptyForm = {
   price: "",
   oldPrice: "",
   rating: "4.5",
+  stock: "0",
   isNew: false,
   description: "",
   image: "",
@@ -53,6 +54,7 @@ export default function AdminDashboard() {
       price: String(product.price),
       oldPrice: product.oldPrice ? String(product.oldPrice) : "",
       rating: String(product.rating ?? "4.5"),
+      stock: String(getStock(product)),
       isNew: !!product.isNew,
       description: product.description || "",
       image: product.image || "",
@@ -98,6 +100,10 @@ export default function AdminDashboard() {
       newErrors.image = "آدرس تصویر را وارد کنید";
     }
 
+    if (formData.stock === "" || Number(formData.stock) < 0 || !Number.isInteger(Number(formData.stock))) {
+      newErrors.stock = "موجودی باید یک عدد صحیح و غیرمنفی باشد";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -113,6 +119,7 @@ export default function AdminDashboard() {
       price: Number(formData.price),
       oldPrice: formData.oldPrice ? Number(formData.oldPrice) : null,
       rating: Number(formData.rating) || 0,
+      stock: Number(formData.stock),
       isNew: formData.isNew,
       description: formData.description.trim(),
       image: formData.image.trim(),
@@ -322,6 +329,20 @@ export default function AdminDashboard() {
                     style={inputStyle(false)}
                   />
                 </div>
+
+                <div>
+                  <label style={labelStyle}>موجودی انبار</label>
+                  <input
+                    type="number"
+                    name="stock"
+                    min="0"
+                    step="1"
+                    value={formData.stock}
+                    onChange={handleChange}
+                    style={inputStyle(!!errors.stock)}
+                  />
+                  {errors.stock && <span style={errorStyle}>{errors.stock}</span>}
+                </div>
               </div>
 
               <div
@@ -517,8 +538,29 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                <div style={{ fontWeight: 800, color: "#2563eb", minWidth: "120px" }}>
+                <div style={{ fontWeight: 800, color: "#2563eb", minWidth: "110px" }}>
                   {formatPrice(product.price)}
+                </div>
+
+                {/* نشان موجودی: قرمز اگه صفره، نارنجی اگه کم (زیر ۵)، خاکستری در غیر این صورت */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    minWidth: "90px",
+                    fontSize: "0.82rem",
+                    fontWeight: 700,
+                    color:
+                      getStock(product) === 0
+                        ? "#ef4444"
+                        : getStock(product) <= 5
+                          ? "#f59e0b"
+                          : "#64748b",
+                  }}
+                >
+                  {getStock(product) === 0 && <AlertTriangle size={14} />}
+                  {getStock(product) === 0 ? "ناموجود" : `${getStock(product)} عدد`}
                 </div>
 
                 <div style={{ display: "flex", gap: "8px" }}>

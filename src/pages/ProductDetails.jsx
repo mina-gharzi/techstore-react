@@ -12,7 +12,7 @@ import {
   Plus,
 } from "lucide-react";
 import { categories } from "../data/products";
-import { useProducts } from "../context/ProductsContext";
+import { useProducts, getStock } from "../context/ProductsContext";
 import { useCart } from "../context/CartContext";
 import { useFavorites } from "../context/FavoritesContext";
 import { formatPrice } from "../utils/formatPrice";
@@ -83,11 +83,16 @@ export default function ProductDetails() {
     );
   }
 
+  const stock = getStock(product);
+  const isOutOfStock = stock <= 0;
+
   // ---------- افزودن به سبد ----------
   // قبلاً اینجا یک حلقه‌ی for اجرا می‌شد و addToCart را quantity بار صدا می‌زد
   // (یعنی quantity بار setState و re-render جدا). حالا CartContext خودش
   // پارامتر quantity را می‌پذیرد، پس فقط یک بار صدا می‌زنیم.
   const handleAddToCart = () => {
+    if (isOutOfStock) return;
+
     const itemToAdd = {
       ...product,
       selectedColor: selectedColor?.name || null,
@@ -435,7 +440,8 @@ export default function ProductDetails() {
                     {quantity}
                   </span>
                   <button
-                    onClick={() => setQuantity((q) => q + 1)}
+                    onClick={() => setQuantity((q) => Math.min(stock, q + 1))}
+                    disabled={quantity >= stock}
                     style={{
                       width: "34px",
                       height: "34px",
@@ -445,13 +451,19 @@ export default function ProductDetails() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      cursor: "pointer",
+                      cursor: quantity >= stock ? "not-allowed" : "pointer",
+                      opacity: quantity >= stock ? 0.5 : 1,
                     }}
                     aria-label="زیاد کردن تعداد"
                   >
                     <Plus size={14} />
                   </button>
                 </div>
+                {!isOutOfStock && stock <= 5 && (
+                  <span style={{ color: "#f59e0b", fontWeight: 700, fontSize: "0.85rem" }}>
+                    تنها {stock} عدد موجود است
+                  </span>
+                )}
               </div>
 
               {/* دکمه‌ها */}
@@ -465,14 +477,17 @@ export default function ProductDetails() {
               >
                 <button
                   onClick={handleAddToCart}
+                  disabled={isOutOfStock}
                   style={{
                     flex: 1,
                     minWidth: "180px",
                     padding: "15px 24px",
-                    background: added
-                      ? "linear-gradient(135deg, #16a34a, #15803d)"
-                      : "linear-gradient(135deg, #2563eb, #1d4ed8)",
-                    color: "#fff",
+                    background: isOutOfStock
+                      ? "#e2e8f0"
+                      : added
+                        ? "linear-gradient(135deg, #16a34a, #15803d)"
+                        : "linear-gradient(135deg, #2563eb, #1d4ed8)",
+                    color: isOutOfStock ? "#94a3b8" : "#fff",
                     borderRadius: "14px",
                     fontSize: "1rem",
                     fontWeight: 800,
@@ -480,14 +495,14 @@ export default function ProductDetails() {
                     alignItems: "center",
                     justifyContent: "center",
                     gap: "8px",
-                    cursor: "pointer",
+                    cursor: isOutOfStock ? "not-allowed" : "pointer",
                     border: "none",
                     fontFamily: "inherit",
-                    boxShadow: "0 12px 28px rgba(37, 99, 235, 0.28)",
+                    boxShadow: isOutOfStock ? "none" : "0 12px 28px rgba(37, 99, 235, 0.28)",
                   }}
                 >
                   <ShoppingCart size={20} />
-                  {added ? "به سبد اضافه شد ✓" : "افزودن به سبد"}
+                  {isOutOfStock ? "ناموجود" : added ? "به سبد اضافه شد ✓" : "افزودن به سبد"}
                 </button>
 
                 <button

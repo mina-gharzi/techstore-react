@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Heart, ShoppingCart, Check } from "lucide-react";
+import { Heart, ShoppingCart, Check, Ban } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { useFavorites } from "../../context/FavoritesContext";
+import { getStock } from "../../context/ProductsContext";
 import { formatPrice } from "../../utils/formatPrice";
 
 // ======================================================
@@ -19,10 +20,14 @@ export default function ProductCard({ product }) {
   // فیدبک کوتاه بعد از افزودن به سبد، هم‌راستا با همین رفتار در ProductDetails
   const [added, setAdded] = useState(false);
 
+  const stock = getStock(product);
+  const isOutOfStock = stock <= 0;
+
   // ---------- Handlers ----------
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    if (isOutOfStock) return;
     addToCart(product);
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
@@ -82,8 +87,27 @@ export default function ProductCard({ product }) {
           height: "200px",
           padding: "20px",
           background: "#f8fafc",
+          position: "relative",
         }}
       >
+        {isOutOfStock && (
+          <span
+            style={{
+              position: "absolute",
+              top: "12px",
+              right: "12px",
+              background: "rgba(15, 23, 42, 0.85)",
+              color: "#fff",
+              fontSize: "0.75rem",
+              fontWeight: 700,
+              padding: "5px 12px",
+              borderRadius: "50px",
+              zIndex: 1,
+            }}
+          >
+            ناموجود
+          </span>
+        )}
         <img
           src={product.image}
           alt={product.name}
@@ -91,6 +115,7 @@ export default function ProductCard({ product }) {
             maxHeight: "160px",
             maxWidth: "100%",
             objectFit: "contain",
+            opacity: isOutOfStock ? 0.5 : 1,
           }}
           onError={(e) => {
             e.target.src = "/assets/images/product/no-image.png";
@@ -190,11 +215,12 @@ export default function ProductCard({ product }) {
           */}
           <button
             onClick={handleAddToCart}
+            disabled={isOutOfStock}
             style={{
               flex: 1,
               padding: "10px",
-              background: added ? "#16a34a" : "#2563eb",
-              color: "#fff",
+              background: isOutOfStock ? "#e2e8f0" : added ? "#16a34a" : "#2563eb",
+              color: isOutOfStock ? "#94a3b8" : "#fff",
               borderRadius: "10px",
               fontSize: "0.88rem",
               fontWeight: 600,
@@ -202,16 +228,28 @@ export default function ProductCard({ product }) {
               alignItems: "center",
               justifyContent: "center",
               gap: "6px",
-              cursor: "pointer",
+              cursor: isOutOfStock ? "not-allowed" : "pointer",
               border: "none",
               fontFamily: "inherit",
               transition: "background 0.2s ease",
             }}
           >
-            {added ? <Check size={16} /> : <ShoppingCart size={16} />}
-            {added ? "اضافه شد" : "افزودن به سبد"}
+            {isOutOfStock ? (
+              <Ban size={16} />
+            ) : added ? (
+              <Check size={16} />
+            ) : (
+              <ShoppingCart size={16} />
+            )}
+            {isOutOfStock ? "ناموجود" : added ? "اضافه شد" : "افزودن به سبد"}
           </button>
         </div>
+
+        {!isOutOfStock && stock <= 5 && (
+          <span style={{ color: "#f59e0b", fontSize: "0.78rem", fontWeight: 700 }}>
+            تنها {stock} عدد باقی مانده
+          </span>
+        )}
       </div>
     </div>
   );

@@ -1,9 +1,16 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ShoppingBag, CreditCard, Wallet, MapPin } from "lucide-react";
+import {
+  ShoppingBag,
+  CreditCard,
+  Wallet,
+  MapPin,
+  AlertTriangle,
+} from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useOrders } from "../context/OrdersContext";
 import { useAuth } from "../context/AuthContext";
+import { useProducts, getStock } from "../context/ProductsContext";
 import { formatPrice } from "../utils/formatPrice";
 
 // ======================================================
@@ -22,6 +29,7 @@ export default function Checkout() {
   const { cart, totalItems, totalPrice, clearCart } = useCart();
   const { addOrder } = useOrders();
   const { user } = useAuth();
+  const { products, updateProduct } = useProducts();
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -34,12 +42,17 @@ export default function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState("online");
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [stockError, setStockError] = useState("");
 
   // ---------- اگر سبد خالی بود ----------
   if (cart.length === 0) {
     return (
       <section style={{ padding: "100px 20px", textAlign: "center" }}>
-        <ShoppingBag size={64} color="#94a3b8" style={{ margin: "0 auto 24px" }} />
+        <ShoppingBag
+          size={64}
+          color="#94a3b8"
+          style={{ margin: "0 auto 24px" }}
+        />
         <h1
           style={{
             fontSize: "1.8rem",
@@ -117,6 +130,24 @@ export default function Checkout() {
 
     if (!validate()) return;
 
+    // بازبینی موجودی درست قبل از ثبت نهایی - چون ممکنه بین لحظه‌ی
+    // افزودن به سبد و همین الان، ادمین موجودی رو کم کرده باشه یا
+    // یه کاربر دیگه همون موجودی رو خریده باشه. بدون این چک، سفارش
+    // بیشتر از موجودی واقعی ثبت می‌شد.
+    const outOfStockItems = cart.filter((item) => {
+      const liveProduct = products.find((p) => p.id === item.id);
+      const liveStock = liveProduct ? getStock(liveProduct) : getStock(item);
+      return item.quantity > liveStock;
+    });
+
+    if (outOfStockItems.length > 0) {
+      setStockError(
+        `موجودی «${outOfStockItems[0].name}» کافی نیست. لطفاً به سبد خرید برگردید و تعداد را اصلاح کنید.`,
+      );
+      return;
+    }
+
+    setStockError("");
     setIsSubmitting(true);
 
     // شبیه‌سازی زمان پردازش سفارش/اتصال به درگاه پرداخت
@@ -140,6 +171,17 @@ export default function Checkout() {
           postalCode: formData.postalCode,
           phone: formData.phone,
         },
+      });
+
+      // موجودی هر محصول رو به اندازه‌ی تعداد خریداری‌شده کم می‌کنیم
+      cart.forEach((item) => {
+        const liveProduct = products.find((p) => p.id === item.id);
+        if (liveProduct) {
+          const currentStock = getStock(liveProduct);
+          updateProduct(item.id, {
+            stock: Math.max(0, currentStock - item.quantity),
+          });
+        }
       });
 
       // سفارش "ثبت" شد → سبد باید خالی بشه
@@ -207,6 +249,27 @@ export default function Checkout() {
           </p>
         </div>
 
+        {stockError && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              background: "#fef2f2",
+              border: "1px solid #fecaca",
+              color: "#ef4444",
+              borderRadius: "12px",
+              padding: "14px 16px",
+              fontSize: "0.9rem",
+              fontWeight: 600,
+              marginBottom: "24px",
+            }}
+          >
+            <AlertTriangle size={18} />
+            {stockError}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
           <div
             style={{
@@ -218,7 +281,9 @@ export default function Checkout() {
             className="checkout-layout"
           >
             {/* ===================== فرم آدرس + پرداخت ===================== */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+            >
               {/* اطلاعات گیرنده */}
               <div
                 style={{
@@ -237,7 +302,13 @@ export default function Checkout() {
                   }}
                 >
                   <MapPin size={20} color="#2563eb" />
-                  <h2 style={{ fontSize: "1.15rem", fontWeight: 800, color: "#0f172a" }}>
+                  <h2
+                    style={{
+                      fontSize: "1.15rem",
+                      fontWeight: 800,
+                      color: "#0f172a",
+                    }}
+                  >
                     اطلاعات ارسال
                   </h2>
                 </div>
@@ -260,7 +331,9 @@ export default function Checkout() {
                       placeholder="مثلاً: مینا قرضی"
                       style={inputStyle(!!errors.fullName)}
                     />
-                    {errors.fullName && <span style={errorStyle}>{errors.fullName}</span>}
+                    {errors.fullName && (
+                      <span style={errorStyle}>{errors.fullName}</span>
+                    )}
                   </div>
 
                   <div>
@@ -273,7 +346,9 @@ export default function Checkout() {
                       placeholder="09xxxxxxxxx"
                       style={inputStyle(!!errors.phone)}
                     />
-                    {errors.phone && <span style={errorStyle}>{errors.phone}</span>}
+                    {errors.phone && (
+                      <span style={errorStyle}>{errors.phone}</span>
+                    )}
                   </div>
                 </div>
 
@@ -295,7 +370,9 @@ export default function Checkout() {
                       placeholder="مثلاً: تهران"
                       style={inputStyle(!!errors.city)}
                     />
-                    {errors.city && <span style={errorStyle}>{errors.city}</span>}
+                    {errors.city && (
+                      <span style={errorStyle}>{errors.city}</span>
+                    )}
                   </div>
 
                   <div>
@@ -330,7 +407,9 @@ export default function Checkout() {
                       lineHeight: 1.7,
                     }}
                   />
-                  {errors.address && <span style={errorStyle}>{errors.address}</span>}
+                  {errors.address && (
+                    <span style={errorStyle}>{errors.address}</span>
+                  )}
                 </div>
               </div>
 
@@ -354,7 +433,13 @@ export default function Checkout() {
                   روش پرداخت
                 </h2>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px",
+                  }}
+                >
                   {/* پرداخت آنلاین */}
                   <label
                     style={{
@@ -365,7 +450,8 @@ export default function Checkout() {
                       border: `1.5px solid ${
                         paymentMethod === "online" ? "#2563eb" : "#e2e8f0"
                       }`,
-                      background: paymentMethod === "online" ? "#eff6ff" : "#f8fafc",
+                      background:
+                        paymentMethod === "online" ? "#eff6ff" : "#f8fafc",
                       borderRadius: "14px",
                       cursor: "pointer",
                     }}
@@ -376,11 +462,21 @@ export default function Checkout() {
                       value="online"
                       checked={paymentMethod === "online"}
                       onChange={(e) => setPaymentMethod(e.target.value)}
-                      style={{ width: "18px", height: "18px", cursor: "pointer" }}
+                      style={{
+                        width: "18px",
+                        height: "18px",
+                        cursor: "pointer",
+                      }}
                     />
                     <CreditCard size={20} color="#2563eb" />
                     <div>
-                      <div style={{ fontWeight: 700, color: "#0f172a", fontSize: "0.95rem" }}>
+                      <div
+                        style={{
+                          fontWeight: 700,
+                          color: "#0f172a",
+                          fontSize: "0.95rem",
+                        }}
+                      >
                         پرداخت آنلاین (کارت بانکی)
                       </div>
                       <div style={{ color: "#64748b", fontSize: "0.82rem" }}>
@@ -399,7 +495,8 @@ export default function Checkout() {
                       border: `1.5px solid ${
                         paymentMethod === "cod" ? "#2563eb" : "#e2e8f0"
                       }`,
-                      background: paymentMethod === "cod" ? "#eff6ff" : "#f8fafc",
+                      background:
+                        paymentMethod === "cod" ? "#eff6ff" : "#f8fafc",
                       borderRadius: "14px",
                       cursor: "pointer",
                     }}
@@ -410,11 +507,21 @@ export default function Checkout() {
                       value="cod"
                       checked={paymentMethod === "cod"}
                       onChange={(e) => setPaymentMethod(e.target.value)}
-                      style={{ width: "18px", height: "18px", cursor: "pointer" }}
+                      style={{
+                        width: "18px",
+                        height: "18px",
+                        cursor: "pointer",
+                      }}
                     />
                     <Wallet size={20} color="#2563eb" />
                     <div>
-                      <div style={{ fontWeight: 700, color: "#0f172a", fontSize: "0.95rem" }}>
+                      <div
+                        style={{
+                          fontWeight: 700,
+                          color: "#0f172a",
+                          fontSize: "0.95rem",
+                        }}
+                      >
                         پرداخت در محل
                       </div>
                       <div style={{ color: "#64748b", fontSize: "0.82rem" }}>
@@ -471,10 +578,17 @@ export default function Checkout() {
                   >
                     <span style={{ color: "#334155" }}>
                       {item.name}
-                      {item.selectedColor ? ` (${item.selectedColor})` : ""} ×{" "}
-                      {item.quantity}
+                      {item.selectedColor
+                        ? ` (${item.selectedColor})`
+                        : ""} × {item.quantity}
                     </span>
-                    <span style={{ color: "#0f172a", fontWeight: 700, whiteSpace: "nowrap" }}>
+                    <span
+                      style={{
+                        color: "#0f172a",
+                        fontWeight: 700,
+                        whiteSpace: "nowrap",
+                      }}
+                    >
                       {formatPrice(item.price * item.quantity)}
                     </span>
                   </div>
@@ -508,7 +622,9 @@ export default function Checkout() {
                 }}
               >
                 <span>مبلغ قابل پرداخت</span>
-                <span style={{ color: "#2563eb" }}>{formatPrice(totalPrice)}</span>
+                <span style={{ color: "#2563eb" }}>
+                  {formatPrice(totalPrice)}
+                </span>
               </div>
 
               <button

@@ -43,6 +43,7 @@ export function ProductsProvider({ children }) {
       // واقعی این شناسه رو دیتابیس تولید می‌کنه، نه فرانت‌اند.
       id: Date.now(),
       colors: [],
+      stock: 0,
       ...productData,
     };
     setProducts((prev) => [newProduct, ...prev]);
@@ -87,4 +88,13 @@ export function useProducts() {
   }
 
   return context;
+}
+
+// ---------- خواندن امن موجودی ----------
+// چون stock یک فیلد جدیده، محصولاتی که قبل از این آپدیت توی
+// localStorage کاربرها ذخیره شده بودن این فیلد رو ندارن. به‌جای
+// اینکه با undefined همه‌جا "ناموجود" یا "بی‌نهایت" نشون بدیم،
+// یک مقدار پیش‌فرض معقول (۱۰) در نظر می‌گیریم.
+export function getStock(product) {
+  return Number.isFinite(product?.stock) ? product.stock : 10;
 }
