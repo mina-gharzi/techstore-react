@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ShoppingBag, CreditCard, Wallet, MapPin } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useOrders } from "../context/OrdersContext";
+import { useAuth } from "../context/AuthContext";
 import { formatPrice } from "../utils/formatPrice";
 
 // ======================================================
@@ -18,6 +20,8 @@ import { formatPrice } from "../utils/formatPrice";
 export default function Checkout() {
   const navigate = useNavigate();
   const { cart, totalItems, totalPrice, clearCart } = useCart();
+  const { addOrder } = useOrders();
+  const { user } = useAuth();
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -35,11 +39,7 @@ export default function Checkout() {
   if (cart.length === 0) {
     return (
       <section style={{ padding: "100px 20px", textAlign: "center" }}>
-        <ShoppingBag
-          size={64}
-          color="#94a3b8"
-          style={{ margin: "0 auto 24px" }}
-        />
+        <ShoppingBag size={64} color="#94a3b8" style={{ margin: "0 auto 24px" }} />
         <h1
           style={{
             fontSize: "1.8rem",
@@ -123,6 +123,25 @@ export default function Checkout() {
     setTimeout(() => {
       const orderNumber = `TS-${Date.now().toString().slice(-8)}`;
 
+      // یک snapshot از سبد قبل از خالی کردنش می‌گیریم، چون بعد از
+      // clearCart() دیگه به آیتم‌های سبد دسترسی نداریم و برای
+      // تاریخچه‌ی خرید توی پروفایل بهشون نیاز داریم.
+      addOrder({
+        orderNumber,
+        userId: user.id,
+        items: cart,
+        totalPrice,
+        totalItems,
+        paymentMethod,
+        customerName: formData.fullName,
+        shippingAddress: {
+          city: formData.city,
+          address: formData.address,
+          postalCode: formData.postalCode,
+          phone: formData.phone,
+        },
+      });
+
       // سفارش "ثبت" شد → سبد باید خالی بشه
       clearCart();
 
@@ -199,9 +218,7 @@ export default function Checkout() {
             className="checkout-layout"
           >
             {/* ===================== فرم آدرس + پرداخت ===================== */}
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "20px" }}
-            >
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
               {/* اطلاعات گیرنده */}
               <div
                 style={{
@@ -220,13 +237,7 @@ export default function Checkout() {
                   }}
                 >
                   <MapPin size={20} color="#2563eb" />
-                  <h2
-                    style={{
-                      fontSize: "1.15rem",
-                      fontWeight: 800,
-                      color: "#0f172a",
-                    }}
-                  >
+                  <h2 style={{ fontSize: "1.15rem", fontWeight: 800, color: "#0f172a" }}>
                     اطلاعات ارسال
                   </h2>
                 </div>
@@ -246,12 +257,10 @@ export default function Checkout() {
                       name="fullName"
                       value={formData.fullName}
                       onChange={handleChange}
-                      placeholder="مثلاً: مینا  قارزی "
+                      placeholder="مثلاً: مینا قرضی"
                       style={inputStyle(!!errors.fullName)}
                     />
-                    {errors.fullName && (
-                      <span style={errorStyle}>{errors.fullName}</span>
-                    )}
+                    {errors.fullName && <span style={errorStyle}>{errors.fullName}</span>}
                   </div>
 
                   <div>
@@ -264,9 +273,7 @@ export default function Checkout() {
                       placeholder="09xxxxxxxxx"
                       style={inputStyle(!!errors.phone)}
                     />
-                    {errors.phone && (
-                      <span style={errorStyle}>{errors.phone}</span>
-                    )}
+                    {errors.phone && <span style={errorStyle}>{errors.phone}</span>}
                   </div>
                 </div>
 
@@ -288,9 +295,7 @@ export default function Checkout() {
                       placeholder="مثلاً: تهران"
                       style={inputStyle(!!errors.city)}
                     />
-                    {errors.city && (
-                      <span style={errorStyle}>{errors.city}</span>
-                    )}
+                    {errors.city && <span style={errorStyle}>{errors.city}</span>}
                   </div>
 
                   <div>
@@ -325,9 +330,7 @@ export default function Checkout() {
                       lineHeight: 1.7,
                     }}
                   />
-                  {errors.address && (
-                    <span style={errorStyle}>{errors.address}</span>
-                  )}
+                  {errors.address && <span style={errorStyle}>{errors.address}</span>}
                 </div>
               </div>
 
@@ -351,13 +354,7 @@ export default function Checkout() {
                   روش پرداخت
                 </h2>
 
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "12px",
-                  }}
-                >
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                   {/* پرداخت آنلاین */}
                   <label
                     style={{
@@ -368,8 +365,7 @@ export default function Checkout() {
                       border: `1.5px solid ${
                         paymentMethod === "online" ? "#2563eb" : "#e2e8f0"
                       }`,
-                      background:
-                        paymentMethod === "online" ? "#eff6ff" : "#f8fafc",
+                      background: paymentMethod === "online" ? "#eff6ff" : "#f8fafc",
                       borderRadius: "14px",
                       cursor: "pointer",
                     }}
@@ -380,21 +376,11 @@ export default function Checkout() {
                       value="online"
                       checked={paymentMethod === "online"}
                       onChange={(e) => setPaymentMethod(e.target.value)}
-                      style={{
-                        width: "18px",
-                        height: "18px",
-                        cursor: "pointer",
-                      }}
+                      style={{ width: "18px", height: "18px", cursor: "pointer" }}
                     />
                     <CreditCard size={20} color="#2563eb" />
                     <div>
-                      <div
-                        style={{
-                          fontWeight: 700,
-                          color: "#0f172a",
-                          fontSize: "0.95rem",
-                        }}
-                      >
+                      <div style={{ fontWeight: 700, color: "#0f172a", fontSize: "0.95rem" }}>
                         پرداخت آنلاین (کارت بانکی)
                       </div>
                       <div style={{ color: "#64748b", fontSize: "0.82rem" }}>
@@ -413,8 +399,7 @@ export default function Checkout() {
                       border: `1.5px solid ${
                         paymentMethod === "cod" ? "#2563eb" : "#e2e8f0"
                       }`,
-                      background:
-                        paymentMethod === "cod" ? "#eff6ff" : "#f8fafc",
+                      background: paymentMethod === "cod" ? "#eff6ff" : "#f8fafc",
                       borderRadius: "14px",
                       cursor: "pointer",
                     }}
@@ -425,21 +410,11 @@ export default function Checkout() {
                       value="cod"
                       checked={paymentMethod === "cod"}
                       onChange={(e) => setPaymentMethod(e.target.value)}
-                      style={{
-                        width: "18px",
-                        height: "18px",
-                        cursor: "pointer",
-                      }}
+                      style={{ width: "18px", height: "18px", cursor: "pointer" }}
                     />
                     <Wallet size={20} color="#2563eb" />
                     <div>
-                      <div
-                        style={{
-                          fontWeight: 700,
-                          color: "#0f172a",
-                          fontSize: "0.95rem",
-                        }}
-                      >
+                      <div style={{ fontWeight: 700, color: "#0f172a", fontSize: "0.95rem" }}>
                         پرداخت در محل
                       </div>
                       <div style={{ color: "#64748b", fontSize: "0.82rem" }}>
@@ -496,17 +471,10 @@ export default function Checkout() {
                   >
                     <span style={{ color: "#334155" }}>
                       {item.name}
-                      {item.selectedColor
-                        ? ` (${item.selectedColor})`
-                        : ""} × {item.quantity}
+                      {item.selectedColor ? ` (${item.selectedColor})` : ""} ×{" "}
+                      {item.quantity}
                     </span>
-                    <span
-                      style={{
-                        color: "#0f172a",
-                        fontWeight: 700,
-                        whiteSpace: "nowrap",
-                      }}
-                    >
+                    <span style={{ color: "#0f172a", fontWeight: 700, whiteSpace: "nowrap" }}>
                       {formatPrice(item.price * item.quantity)}
                     </span>
                   </div>
@@ -540,9 +508,7 @@ export default function Checkout() {
                 }}
               >
                 <span>مبلغ قابل پرداخت</span>
-                <span style={{ color: "#2563eb" }}>
-                  {formatPrice(totalPrice)}
-                </span>
+                <span style={{ color: "#2563eb" }}>{formatPrice(totalPrice)}</span>
               </div>
 
               <button

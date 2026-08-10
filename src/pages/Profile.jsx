@@ -1,14 +1,29 @@
 import { useState } from "react";
-import { User, Phone, Mail, Lock, Check } from "lucide-react";
+import {
+  User,
+  Phone,
+  Mail,
+  Lock,
+  Check,
+  Package,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useOrders } from "../context/OrdersContext";
+import { formatPrice } from "../utils/formatPrice";
 
 // ======================================================
 // Profile
-// صفحه پروفایل کاربر - ویرایش اطلاعات + تغییر رمز عبور
+// صفحه پروفایل کاربر - ویرایش اطلاعات، تغییر رمز عبور، تاریخچه خرید
 // ======================================================
 
 export default function Profile() {
   const { user, updateProfile, changePassword } = useAuth();
+  const { getOrdersByUser } = useOrders();
+
+  const myOrders = getOrdersByUser(user.id);
 
   // ---------- فرم اطلاعات شخصی ----------
   const [infoData, setInfoData] = useState({
@@ -18,7 +33,8 @@ export default function Profile() {
   const [infoErrors, setInfoErrors] = useState({});
   const [infoSaved, setInfoSaved] = useState(false);
 
-  // ---------- فرم تغییر رمز عبور ----------
+  // ---------- تغییر رمز عبور: پشت یک دکمه مخفی می‌مونه ----------
+  const [isPasswordFormOpen, setIsPasswordFormOpen] = useState(false);
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -26,6 +42,16 @@ export default function Profile() {
   });
   const [passwordError, setPasswordError] = useState("");
   const [passwordSaved, setPasswordSaved] = useState(false);
+
+  const togglePasswordForm = () => {
+    setIsPasswordFormOpen((prev) => !prev);
+    setPasswordError("");
+    setPasswordData({
+      currentPassword: "",
+      newPassword: "",
+      confirmNewPassword: "",
+    });
+  };
 
   // ---------- Handlers: اطلاعات شخصی ----------
   const handleInfoChange = (e) => {
@@ -89,9 +115,27 @@ export default function Profile() {
       return;
     }
 
-    setPasswordData({ currentPassword: "", newPassword: "", confirmNewPassword: "" });
+    setPasswordData({
+      currentPassword: "",
+      newPassword: "",
+      confirmNewPassword: "",
+    });
     setPasswordSaved(true);
+    setIsPasswordFormOpen(false);
     setTimeout(() => setPasswordSaved(false), 2500);
+  };
+
+  // ---------- کمکی: فرمت تاریخ فارسی ----------
+  const formatOrderDate = (isoString) => {
+    try {
+      return new Date(isoString).toLocaleDateString("fa-IR", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } catch {
+      return "";
+    }
   };
 
   // ---------- استایل مشترک ----------
@@ -142,7 +186,14 @@ export default function Profile() {
     <section style={{ padding: "50px 20px 80px" }}>
       <div style={{ maxWidth: "640px", margin: "0 auto" }}>
         {/* ---------- سربرگ ---------- */}
-        <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "32px" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "16px",
+            marginBottom: "32px",
+          }}
+        >
           <div
             style={{
               width: "64px",
@@ -161,7 +212,14 @@ export default function Profile() {
             {user.fullName?.charAt(0) || "?"}
           </div>
           <div>
-            <h1 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#0f172a", marginBottom: "4px" }}>
+            <h1
+              style={{
+                fontSize: "1.4rem",
+                fontWeight: 800,
+                color: "#0f172a",
+                marginBottom: "4px",
+              }}
+            >
               {user.fullName}
             </h1>
             <p style={{ color: "#64748b", fontSize: "0.9rem" }}>{user.email}</p>
@@ -171,7 +229,14 @@ export default function Profile() {
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           {/* ===================== اطلاعات شخصی ===================== */}
           <div style={cardStyle}>
-            <h2 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#0f172a", marginBottom: "20px" }}>
+            <h2
+              style={{
+                fontSize: "1.1rem",
+                fontWeight: 800,
+                color: "#0f172a",
+                marginBottom: "20px",
+              }}
+            >
               اطلاعات شخصی
             </h2>
 
@@ -188,7 +253,9 @@ export default function Profile() {
                     style={inputStyle(!!infoErrors.fullName)}
                   />
                 </div>
-                {infoErrors.fullName && <span style={errorStyle}>{infoErrors.fullName}</span>}
+                {infoErrors.fullName && (
+                  <span style={errorStyle}>{infoErrors.fullName}</span>
+                )}
               </div>
 
               <div style={{ marginBottom: "16px" }}>
@@ -203,7 +270,9 @@ export default function Profile() {
                     style={inputStyle(!!infoErrors.phone)}
                   />
                 </div>
-                {infoErrors.phone && <span style={errorStyle}>{infoErrors.phone}</span>}
+                {infoErrors.phone && (
+                  <span style={errorStyle}>{infoErrors.phone}</span>
+                )}
               </div>
 
               {/* ایمیل عمداً غیرقابل ویرایش - چون شناسه‌ی ورود کاربره */}
@@ -223,7 +292,14 @@ export default function Profile() {
                     }}
                   />
                 </div>
-                <span style={{ display: "block", marginTop: "6px", color: "#94a3b8", fontSize: "0.78rem" }}>
+                <span
+                  style={{
+                    display: "block",
+                    marginTop: "6px",
+                    color: "#94a3b8",
+                    fontSize: "0.78rem",
+                  }}
+                >
                   ایمیل قابل تغییر نیست
                 </span>
               </div>
@@ -251,94 +327,324 @@ export default function Profile() {
             </form>
           </div>
 
-          {/* ===================== تغییر رمز عبور ===================== */}
+          {/* ===================== تغییر رمز عبور (پشت دکمه) ===================== */}
           <div style={cardStyle}>
-            <h2 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#0f172a", marginBottom: "20px" }}>
-              تغییر رمز عبور
-            </h2>
+            <button
+              onClick={togglePasswordForm}
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontFamily: "inherit",
+                padding: 0,
+              }}
+            >
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "10px" }}
+              >
+                <Lock size={18} color="#2563eb" />
+                <span
+                  style={{
+                    fontSize: "1.1rem",
+                    fontWeight: 800,
+                    color: "#0f172a",
+                  }}
+                >
+                  تغییر رمز عبور
+                </span>
+              </div>
+              {isPasswordFormOpen ? (
+                <ChevronUp size={20} color="#94a3b8" />
+              ) : (
+                <ChevronDown size={20} color="#94a3b8" />
+              )}
+            </button>
 
-            {passwordError && (
+            {passwordSaved && !isPasswordFormOpen && (
               <div
                 style={{
-                  background: "#fef2f2",
-                  border: "1px solid #fecaca",
-                  color: "#ef4444",
-                  borderRadius: "12px",
-                  padding: "12px 14px",
-                  fontSize: "0.85rem",
-                  fontWeight: 600,
-                  marginBottom: "18px",
-                }}
-              >
-                {passwordError}
-              </div>
-            )}
-
-            <form onSubmit={handlePasswordSubmit}>
-              <div style={{ marginBottom: "16px" }}>
-                <label style={labelStyle}>رمز عبور فعلی</label>
-                <div style={{ position: "relative" }}>
-                  <Lock size={18} color="#94a3b8" style={iconStyle} />
-                  <input
-                    type="password"
-                    name="currentPassword"
-                    value={passwordData.currentPassword}
-                    onChange={handlePasswordChange}
-                    style={inputStyle(false)}
-                  />
-                </div>
-              </div>
-
-              <div style={{ marginBottom: "16px" }}>
-                <label style={labelStyle}>رمز عبور جدید</label>
-                <div style={{ position: "relative" }}>
-                  <Lock size={18} color="#94a3b8" style={iconStyle} />
-                  <input
-                    type="password"
-                    name="newPassword"
-                    value={passwordData.newPassword}
-                    onChange={handlePasswordChange}
-                    placeholder="حداقل ۶ کاراکتر"
-                    style={inputStyle(false)}
-                  />
-                </div>
-              </div>
-
-              <div style={{ marginBottom: "22px" }}>
-                <label style={labelStyle}>تکرار رمز عبور جدید</label>
-                <div style={{ position: "relative" }}>
-                  <Lock size={18} color="#94a3b8" style={iconStyle} />
-                  <input
-                    type="password"
-                    name="confirmNewPassword"
-                    value={passwordData.confirmNewPassword}
-                    onChange={handlePasswordChange}
-                    style={inputStyle(false)}
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                style={{
-                  padding: "12px 26px",
-                  background: passwordSaved ? "#16a34a" : "#2563eb",
-                  color: "#fff",
-                  borderRadius: "12px",
-                  fontWeight: 700,
-                  border: "none",
-                  cursor: "pointer",
-                  fontFamily: "inherit",
+                  marginTop: "16px",
                   display: "flex",
                   alignItems: "center",
                   gap: "8px",
-                  transition: "background 0.2s ease",
+                  color: "#16a34a",
+                  fontWeight: 700,
+                  fontSize: "0.9rem",
                 }}
               >
-                {passwordSaved ? <Check size={17} /> : null}
-                {passwordSaved ? "رمز تغییر کرد" : "تغییر رمز عبور"}
-              </button>
-            </form>
+                <Check size={16} />
+                رمز عبور با موفقیت تغییر کرد
+              </div>
+            )}
+
+            {isPasswordFormOpen && (
+              <div style={{ marginTop: "22px" }}>
+                {passwordError && (
+                  <div
+                    style={{
+                      background: "#fef2f2",
+                      border: "1px solid #fecaca",
+                      color: "#ef4444",
+                      borderRadius: "12px",
+                      padding: "12px 14px",
+                      fontSize: "0.85rem",
+                      fontWeight: 600,
+                      marginBottom: "18px",
+                    }}
+                  >
+                    {passwordError}
+                  </div>
+                )}
+
+                <form onSubmit={handlePasswordSubmit}>
+                  <div style={{ marginBottom: "16px" }}>
+                    <label style={labelStyle}>رمز عبور فعلی</label>
+                    <div style={{ position: "relative" }}>
+                      <Lock size={18} color="#94a3b8" style={iconStyle} />
+                      <input
+                        type="password"
+                        name="currentPassword"
+                        value={passwordData.currentPassword}
+                        onChange={handlePasswordChange}
+                        style={inputStyle(false)}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ marginBottom: "16px" }}>
+                    <label style={labelStyle}>رمز عبور جدید</label>
+                    <div style={{ position: "relative" }}>
+                      <Lock size={18} color="#94a3b8" style={iconStyle} />
+                      <input
+                        type="password"
+                        name="newPassword"
+                        value={passwordData.newPassword}
+                        onChange={handlePasswordChange}
+                        placeholder="حداقل ۶ کاراکتر"
+                        style={inputStyle(false)}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ marginBottom: "22px" }}>
+                    <label style={labelStyle}>تکرار رمز عبور جدید</label>
+                    <div style={{ position: "relative" }}>
+                      <Lock size={18} color="#94a3b8" style={iconStyle} />
+                      <input
+                        type="password"
+                        name="confirmNewPassword"
+                        value={passwordData.confirmNewPassword}
+                        onChange={handlePasswordChange}
+                        style={inputStyle(false)}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    <button
+                      type="submit"
+                      style={{
+                        padding: "12px 26px",
+                        background: "#2563eb",
+                        color: "#fff",
+                        borderRadius: "12px",
+                        fontWeight: 700,
+                        border: "none",
+                        cursor: "pointer",
+                        fontFamily: "inherit",
+                      }}
+                    >
+                      تغییر رمز عبور
+                    </button>
+                    <button
+                      type="button"
+                      onClick={togglePasswordForm}
+                      style={{
+                        padding: "12px 22px",
+                        background: "#fff",
+                        color: "#64748b",
+                        border: "1.5px solid #e2e8f0",
+                        borderRadius: "12px",
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        fontFamily: "inherit",
+                      }}
+                    >
+                      انصراف
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+          </div>
+
+          {/* ===================== تاریخچه خرید ===================== */}
+          <div style={cardStyle}>
+            <h2
+              style={{
+                fontSize: "1.1rem",
+                fontWeight: 800,
+                color: "#0f172a",
+                marginBottom: "20px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              <Package size={18} color="#2563eb" />
+              تاریخچه خرید
+              {myOrders.length > 0 && (
+                <span
+                  style={{
+                    color: "#94a3b8",
+                    fontWeight: 600,
+                    fontSize: "0.85rem",
+                  }}
+                >
+                  ({myOrders.length} سفارش)
+                </span>
+              )}
+            </h2>
+
+            {myOrders.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "30px 10px" }}>
+                <p style={{ color: "#64748b", marginBottom: "16px" }}>
+                  هنوز سفارشی ثبت نکرده‌اید.
+                </p>
+                <Link
+                  to="/products"
+                  style={{
+                    display: "inline-block",
+                    padding: "10px 24px",
+                    background: "#2563eb",
+                    color: "#fff",
+                    borderRadius: "10px",
+                    fontWeight: 700,
+                    textDecoration: "none",
+                    fontSize: "0.9rem",
+                  }}
+                >
+                  مشاهده محصولات
+                </Link>
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "12px",
+                }}
+              >
+                {myOrders.map((order) => (
+                  <div
+                    key={order.id}
+                    style={{
+                      border: "1px solid #e2e8f0",
+                      borderRadius: "14px",
+                      padding: "16px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "flex-start",
+                        gap: "10px",
+                        marginBottom: "10px",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <div>
+                        <div
+                          style={{
+                            fontWeight: 700,
+                            color: "#0f172a",
+                            fontSize: "0.92rem",
+                          }}
+                        >
+                          کد پیگیری: {order.orderNumber}
+                        </div>
+                        <div
+                          style={{
+                            color: "#94a3b8",
+                            fontSize: "0.8rem",
+                            marginTop: "2px",
+                          }}
+                        >
+                          {formatOrderDate(order.createdAt)}
+                        </div>
+                      </div>
+                      <span
+                        style={{
+                          background: "#eff6ff",
+                          color: "#2563eb",
+                          fontSize: "0.78rem",
+                          fontWeight: 700,
+                          padding: "4px 12px",
+                          borderRadius: "50px",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {order.status}
+                      </span>
+                    </div>
+
+                    {/* لیست کوتاه آیتم‌های همین سفارش */}
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "4px",
+                        marginBottom: "10px",
+                        paddingTop: "10px",
+                        borderTop: "1px dashed #f1f5f9",
+                      }}
+                    >
+                      {order.items?.map((item) => (
+                        <div
+                          key={item.cartItemId || item.id}
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            fontSize: "0.85rem",
+                            color: "#64748b",
+                          }}
+                        >
+                          <span>
+                            {item.name}
+                            {item.selectedColor
+                              ? ` (${item.selectedColor})`
+                              : ""}{" "}
+                            × {item.quantity}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        paddingTop: "10px",
+                        borderTop: "1px solid #f1f5f9",
+                      }}
+                    >
+                      <span style={{ color: "#64748b", fontSize: "0.85rem" }}>
+                        {order.totalItems} کالا
+                      </span>
+                      <span style={{ fontWeight: 800, color: "#2563eb" }}>
+                        {formatPrice(order.totalPrice)}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
