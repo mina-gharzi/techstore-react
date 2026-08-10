@@ -67,6 +67,7 @@ function ensureDefaultAdmin() {
 ensureDefaultAdmin();
 
 export function AuthProvider({ children }) {
+
   // خواندن اولیه‌ی کاربر لاگین‌شده از localStorage
   const [user, setUser] = useState(() => {
     try {
@@ -128,8 +129,7 @@ export function AuthProvider({ children }) {
     const normalizedEmail = email.trim().toLowerCase();
 
     const matchedUser = users.find(
-      (u) =>
-        u.email.toLowerCase() === normalizedEmail && u.password === password,
+      (u) => u.email.toLowerCase() === normalizedEmail && u.password === password,
     );
 
     if (!matchedUser) {
@@ -145,6 +145,47 @@ export function AuthProvider({ children }) {
   // ---------- خروج ----------
   const logout = () => setUser(null);
 
+  // ---------- ویرایش پروفایل (نام/موبایل) ----------
+  // ایمیل عمداً قابل ویرایش نیست، چون همون شناسه‌ی یکتای ورود
+  // (username) هست؛ تغییرش نیاز به منطق پیچیده‌تری (تایید ایمیل
+  // جدید و...) داره که خارج از اسکوپ این نسخه‌ی fake auth‌ست.
+  const updateProfile = ({ fullName, phone }) => {
+    if (!user) {
+      return { success: false, message: "کاربر لاگین نیست" };
+    }
+
+    const users = readUsers();
+    const updatedUsers = users.map((u) =>
+      u.id === user.id ? { ...u, fullName: fullName.trim(), phone: phone.trim() } : u,
+    );
+    writeUsers(updatedUsers);
+
+    setUser((prev) => ({ ...prev, fullName: fullName.trim(), phone: phone.trim() }));
+
+    return { success: true };
+  };
+
+  // ---------- تغییر رمز عبور ----------
+  const changePassword = ({ currentPassword, newPassword }) => {
+    if (!user) {
+      return { success: false, message: "کاربر لاگین نیست" };
+    }
+
+    const users = readUsers();
+    const currentUserRecord = users.find((u) => u.id === user.id);
+
+    if (!currentUserRecord || currentUserRecord.password !== currentPassword) {
+      return { success: false, message: "رمز عبور فعلی اشتباه است" };
+    }
+
+    const updatedUsers = users.map((u) =>
+      u.id === user.id ? { ...u, password: newPassword } : u,
+    );
+    writeUsers(updatedUsers);
+
+    return { success: true };
+  };
+
   const value = {
     user,
     isAuthenticated: !!user,
@@ -152,6 +193,8 @@ export function AuthProvider({ children }) {
     register,
     login,
     logout,
+    updateProfile,
+    changePassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

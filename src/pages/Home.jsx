@@ -355,6 +355,7 @@ export default function Home() {
           </div>
 
           <div
+            className="home-product-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
@@ -459,6 +460,32 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/*
+        ریسپانسیو موبایل: قبلاً هر سه بخش (ویژه/جدید/تخفیفی) یک
+        گرید عمودی بودن که روی صفحه‌ی موبایل خیلی طولانی و پر از
+        اسکرول می‌شدن (۳ بخش × ۴ کارت = ۱۲ کارت زیر هم). زیر
+        ۶۴۰px، همون گرید رو به یک ردیف اسکرول افقی تبدیل می‌کنیم
+        (دقیقاً مثل اکثر اپ‌های فروشگاهی) تا هم فضای عمودی خیلی
+        کمتر بشه، هم "مشاهده همه محصولات" پایین هر بخش راحت‌تر
+        در دسترس باشه.
+      */}
+      <style>{`
+        @media (max-width: 640px) {
+          .home-product-grid {
+            display: flex !important;
+            overflow-x: auto;
+            gap: 14px !important;
+            padding-bottom: 6px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+          }
+          .home-product-grid > * {
+            flex: 0 0 200px;
+            scroll-snap-align: start;
+          }
+        }
+      `}</style>
     </div>
   );
 }

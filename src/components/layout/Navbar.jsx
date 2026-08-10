@@ -129,6 +129,25 @@ export default function Navbar() {
                       </div>
                     </div>
 
+                    <Link
+                      to="/profile"
+                      onClick={closeUserMenu}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        padding: "10px",
+                        borderRadius: "10px",
+                        color: "#334155",
+                        fontWeight: 600,
+                        fontSize: "0.9rem",
+                        textDecoration: "none",
+                      }}
+                    >
+                      <User size={16} />
+                      پروفایل من
+                    </Link>
+
                     {isAdmin && (
                       <Link
                         to="/admin"
@@ -224,12 +243,20 @@ export default function Navbar() {
         {/* بخش کاربر توی منوی موبایل */}
         {isAuthenticated ? (
           <>
+            <div className="navbar__mobile-divider" />
             <div
               className="navbar__mobile-link"
               style={{ color: "#94a3b8", fontWeight: 600, cursor: "default" }}
             >
               👋 {user.fullName}
             </div>
+            <NavLink
+              to="/profile"
+              className="navbar__mobile-link"
+              onClick={closeMenu}
+            >
+              پروفایل من
+            </NavLink>
             {isAdmin && (
               <NavLink
                 to="/admin"
@@ -246,7 +273,7 @@ export default function Navbar() {
                 textAlign: "right",
                 color: "#ef4444",
                 fontFamily: "inherit",
-                fontSize: "1.05rem",
+                fontSize: "1.02rem",
                 background: "none",
                 border: "none",
                 cursor: "pointer",
@@ -256,13 +283,16 @@ export default function Navbar() {
             </button>
           </>
         ) : (
-          <NavLink
-            to="/login"
-            className="navbar__mobile-link"
-            onClick={closeMenu}
-          >
-            ورود / ثبت‌نام
-          </NavLink>
+          <>
+            <div className="navbar__mobile-divider" />
+            <NavLink
+              to="/login"
+              className="navbar__mobile-link"
+              onClick={closeMenu}
+            >
+              ورود / ثبت‌نام
+            </NavLink>
+          </>
         )}
       </div>
 
