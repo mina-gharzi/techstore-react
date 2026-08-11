@@ -22,7 +22,7 @@ export default function OrderSuccess() {
     return <Navigate to="/" replace />;
   }
 
-  const { orderNumber, totalPrice, totalItems, paymentMethod, customerName } =
+  const { orderNumber, totalPrice, discountAmount, totalItems, paymentMethod, customerName } =
     orderInfo;
 
   return (
@@ -131,6 +131,22 @@ export default function OrderSuccess() {
               )}
             </span>
           </div>
+
+          {discountAmount > 0 && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "12px",
+                color: "#16a34a",
+                fontSize: "0.95rem",
+                fontWeight: 700,
+              }}
+            >
+              <span>تخفیف اعمال‌شده</span>
+              <span>-{formatPrice(discountAmount)}</span>
+            </div>
+          )}
 
           <div
             style={{

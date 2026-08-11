@@ -10,6 +10,7 @@ import { FavoritesProvider } from "./context/FavoritesContext";
 // ---------- مسیرها ----------
 import AppRoutes from "./routes";
 import ScrollToTop from "./components/ScrollToTop";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 // ---------- لایه‌های ثابت ----------
 import Navbar from "./components/layout/Navbar";
@@ -40,7 +41,9 @@ function App() {
 
                   {/* محتوای اصلی هر صفحه */}
                   <main className="main-content">
-                    <AppRoutes />
+                    <ErrorBoundary>
+                      <AppRoutes />
+                    </ErrorBoundary>
                   </main>
 
                   {/* فوتر ثابت در همه صفحات */}

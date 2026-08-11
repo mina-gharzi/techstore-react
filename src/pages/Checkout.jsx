@@ -1,12 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  ShoppingBag,
-  CreditCard,
-  Wallet,
-  MapPin,
-  AlertTriangle,
-} from "lucide-react";
+import { ShoppingBag, CreditCard, Wallet, MapPin, AlertTriangle, Tag, X } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useOrders } from "../context/OrdersContext";
 import { useAuth } from "../context/AuthContext";
@@ -15,7 +9,7 @@ import { formatPrice } from "../utils/formatPrice";
 
 // ======================================================
 // Checkout
-// فرم نهایی‌سازی خرید (آدرس + روش پرداخت)
+// فرم نهایی‌سازی خرید (آدرس + روش پرداخت + کد تخفیف)
 //
 // نکته: چون هنوز به یک درگاه پرداخت واقعی وصل نیستیم، این صفحه
 // یک فرآیند "fake" رو شبیه‌سازی می‌کنه: فرم رو اعتبارسنجی می‌کنه،
@@ -23,6 +17,15 @@ import { formatPrice } from "../utils/formatPrice";
 // می‌کنه و کاربر رو به صفحه‌ی "سفارش ثبت شد" هدایت می‌کنه.
 // وقتی یک API واقعی آماده شد، فقط باید تابع handleSubmit عوض بشه.
 // ======================================================
+
+// ---------- کدهای تخفیف ----------
+// فعلاً یک لیست ثابت توی خودِ فرانت‌اند. در یک پروژه‌ی واقعی این
+// لیست باید سمت سرور اعتبارسنجی بشه (وگرنه هرکسی با نگاه کردن به
+// کد جاوااسکریپت می‌تونه کدهای تخفیف رو ببینه).
+const COUPONS = {
+  WELCOME10: { type: "percent", value: 10, description: "۱۰٪ تخفیف" },
+  TECH50: { type: "fixed", value: 5000000, description: "۵,۰۰۰,۰۰۰ تومان تخفیف" },
+};
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -44,15 +47,54 @@ export default function Checkout() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [stockError, setStockError] = useState("");
 
+  // ---------- کد تخفیف ----------
+  const [couponInput, setCouponInput] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null); // { code, type, value, description }
+  const [couponError, setCouponError] = useState("");
+
+  const discountAmount = (() => {
+    if (!appliedCoupon) return 0;
+    const raw =
+      appliedCoupon.type === "percent"
+        ? (totalPrice * appliedCoupon.value) / 100
+        : appliedCoupon.value;
+    // تخفیف هیچ‌وقت نباید از مبلغ کل بیشتر بشه (مثلاً یه کد تخفیف ثابت
+    // روی یه سبد خیلی کوچیک)
+    return Math.min(raw, totalPrice);
+  })();
+
+  const finalTotal = totalPrice - discountAmount;
+
+  const handleApplyCoupon = () => {
+    const code = couponInput.trim().toUpperCase();
+
+    if (!code) {
+      setCouponError("یک کد تخفیف وارد کنید");
+      return;
+    }
+
+    const coupon = COUPONS[code];
+
+    if (!coupon) {
+      setCouponError("کد تخفیف معتبر نیست");
+      return;
+    }
+
+    setAppliedCoupon({ code, ...coupon });
+    setCouponError("");
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponInput("");
+    setCouponError("");
+  };
+
   // ---------- اگر سبد خالی بود ----------
   if (cart.length === 0) {
     return (
       <section style={{ padding: "100px 20px", textAlign: "center" }}>
-        <ShoppingBag
-          size={64}
-          color="#94a3b8"
-          style={{ margin: "0 auto 24px" }}
-        />
+        <ShoppingBag size={64} color="#94a3b8" style={{ margin: "0 auto 24px" }} />
         <h1
           style={{
             fontSize: "1.8rem",
@@ -161,7 +203,10 @@ export default function Checkout() {
         orderNumber,
         userId: user.id,
         items: cart,
-        totalPrice,
+        subtotal: totalPrice,
+        couponCode: appliedCoupon?.code || null,
+        discountAmount,
+        totalPrice: finalTotal,
         totalItems,
         paymentMethod,
         customerName: formData.fullName,
@@ -178,9 +223,7 @@ export default function Checkout() {
         const liveProduct = products.find((p) => p.id === item.id);
         if (liveProduct) {
           const currentStock = getStock(liveProduct);
-          updateProduct(item.id, {
-            stock: Math.max(0, currentStock - item.quantity),
-          });
+          updateProduct(item.id, { stock: Math.max(0, currentStock - item.quantity) });
         }
       });
 
@@ -190,7 +233,8 @@ export default function Checkout() {
       navigate("/order-success", {
         state: {
           orderNumber,
-          totalPrice,
+          totalPrice: finalTotal,
+          discountAmount,
           totalItems,
           paymentMethod,
           customerName: formData.fullName,
@@ -281,9 +325,7 @@ export default function Checkout() {
             className="checkout-layout"
           >
             {/* ===================== فرم آدرس + پرداخت ===================== */}
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "20px" }}
-            >
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
               {/* اطلاعات گیرنده */}
               <div
                 style={{
@@ -302,13 +344,7 @@ export default function Checkout() {
                   }}
                 >
                   <MapPin size={20} color="#2563eb" />
-                  <h2
-                    style={{
-                      fontSize: "1.15rem",
-                      fontWeight: 800,
-                      color: "#0f172a",
-                    }}
-                  >
+                  <h2 style={{ fontSize: "1.15rem", fontWeight: 800, color: "#0f172a" }}>
                     اطلاعات ارسال
                   </h2>
                 </div>
@@ -331,9 +367,7 @@ export default function Checkout() {
                       placeholder="مثلاً: مینا قرضی"
                       style={inputStyle(!!errors.fullName)}
                     />
-                    {errors.fullName && (
-                      <span style={errorStyle}>{errors.fullName}</span>
-                    )}
+                    {errors.fullName && <span style={errorStyle}>{errors.fullName}</span>}
                   </div>
 
                   <div>
@@ -346,9 +380,7 @@ export default function Checkout() {
                       placeholder="09xxxxxxxxx"
                       style={inputStyle(!!errors.phone)}
                     />
-                    {errors.phone && (
-                      <span style={errorStyle}>{errors.phone}</span>
-                    )}
+                    {errors.phone && <span style={errorStyle}>{errors.phone}</span>}
                   </div>
                 </div>
 
@@ -370,9 +402,7 @@ export default function Checkout() {
                       placeholder="مثلاً: تهران"
                       style={inputStyle(!!errors.city)}
                     />
-                    {errors.city && (
-                      <span style={errorStyle}>{errors.city}</span>
-                    )}
+                    {errors.city && <span style={errorStyle}>{errors.city}</span>}
                   </div>
 
                   <div>
@@ -407,9 +437,7 @@ export default function Checkout() {
                       lineHeight: 1.7,
                     }}
                   />
-                  {errors.address && (
-                    <span style={errorStyle}>{errors.address}</span>
-                  )}
+                  {errors.address && <span style={errorStyle}>{errors.address}</span>}
                 </div>
               </div>
 
@@ -433,13 +461,7 @@ export default function Checkout() {
                   روش پرداخت
                 </h2>
 
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "12px",
-                  }}
-                >
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                   {/* پرداخت آنلاین */}
                   <label
                     style={{
@@ -450,8 +472,7 @@ export default function Checkout() {
                       border: `1.5px solid ${
                         paymentMethod === "online" ? "#2563eb" : "#e2e8f0"
                       }`,
-                      background:
-                        paymentMethod === "online" ? "#eff6ff" : "#f8fafc",
+                      background: paymentMethod === "online" ? "#eff6ff" : "#f8fafc",
                       borderRadius: "14px",
                       cursor: "pointer",
                     }}
@@ -462,21 +483,11 @@ export default function Checkout() {
                       value="online"
                       checked={paymentMethod === "online"}
                       onChange={(e) => setPaymentMethod(e.target.value)}
-                      style={{
-                        width: "18px",
-                        height: "18px",
-                        cursor: "pointer",
-                      }}
+                      style={{ width: "18px", height: "18px", cursor: "pointer" }}
                     />
                     <CreditCard size={20} color="#2563eb" />
                     <div>
-                      <div
-                        style={{
-                          fontWeight: 700,
-                          color: "#0f172a",
-                          fontSize: "0.95rem",
-                        }}
-                      >
+                      <div style={{ fontWeight: 700, color: "#0f172a", fontSize: "0.95rem" }}>
                         پرداخت آنلاین (کارت بانکی)
                       </div>
                       <div style={{ color: "#64748b", fontSize: "0.82rem" }}>
@@ -495,8 +506,7 @@ export default function Checkout() {
                       border: `1.5px solid ${
                         paymentMethod === "cod" ? "#2563eb" : "#e2e8f0"
                       }`,
-                      background:
-                        paymentMethod === "cod" ? "#eff6ff" : "#f8fafc",
+                      background: paymentMethod === "cod" ? "#eff6ff" : "#f8fafc",
                       borderRadius: "14px",
                       cursor: "pointer",
                     }}
@@ -507,21 +517,11 @@ export default function Checkout() {
                       value="cod"
                       checked={paymentMethod === "cod"}
                       onChange={(e) => setPaymentMethod(e.target.value)}
-                      style={{
-                        width: "18px",
-                        height: "18px",
-                        cursor: "pointer",
-                      }}
+                      style={{ width: "18px", height: "18px", cursor: "pointer" }}
                     />
                     <Wallet size={20} color="#2563eb" />
                     <div>
-                      <div
-                        style={{
-                          fontWeight: 700,
-                          color: "#0f172a",
-                          fontSize: "0.95rem",
-                        }}
-                      >
+                      <div style={{ fontWeight: 700, color: "#0f172a", fontSize: "0.95rem" }}>
                         پرداخت در محل
                       </div>
                       <div style={{ color: "#64748b", fontSize: "0.82rem" }}>
@@ -578,21 +578,102 @@ export default function Checkout() {
                   >
                     <span style={{ color: "#334155" }}>
                       {item.name}
-                      {item.selectedColor
-                        ? ` (${item.selectedColor})`
-                        : ""} × {item.quantity}
+                      {item.selectedColor ? ` (${item.selectedColor})` : ""} ×{" "}
+                      {item.quantity}
                     </span>
-                    <span
-                      style={{
-                        color: "#0f172a",
-                        fontWeight: 700,
-                        whiteSpace: "nowrap",
-                      }}
-                    >
+                    <span style={{ color: "#0f172a", fontWeight: 700, whiteSpace: "nowrap" }}>
                       {formatPrice(item.price * item.quantity)}
                     </span>
                   </div>
                 ))}
+              </div>
+
+              {/* ---------- کد تخفیف ---------- */}
+              <div style={{ marginBottom: "18px", paddingTop: "14px", borderTop: "1px solid #e2e8f0" }}>
+                {appliedCoupon ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      background: "#f0fdf4",
+                      border: "1px solid #bbf7d0",
+                      borderRadius: "10px",
+                      padding: "10px 12px",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <Tag size={15} color="#16a34a" />
+                      <span style={{ fontWeight: 700, color: "#16a34a", fontSize: "0.85rem" }}>
+                        {appliedCoupon.code} ({appliedCoupon.description})
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleRemoveCoupon}
+                      aria-label="حذف کد تخفیف"
+                      style={{
+                        color: "#64748b",
+                        cursor: "pointer",
+                        display: "flex",
+                      }}
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <div style={{ display: "flex", gap: "8px" }}>
+                      <input
+                        type="text"
+                        value={couponInput}
+                        onChange={(e) => {
+                          setCouponInput(e.target.value);
+                          if (couponError) setCouponError("");
+                        }}
+                        placeholder="کد تخفیف"
+                        style={{
+                          flex: 1,
+                          height: "42px",
+                          padding: "0 12px",
+                          border: `1.5px solid ${couponError ? "#fca5a5" : "#e2e8f0"}`,
+                          borderRadius: "10px",
+                          fontSize: "0.85rem",
+                          outline: "none",
+                          background: couponError ? "#fef2f2" : "#f8fafc",
+                          fontFamily: "inherit",
+                          color: "#0f172a",
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={handleApplyCoupon}
+                        style={{
+                          padding: "0 16px",
+                          background: "#f1f5f9",
+                          color: "#334155",
+                          border: "none",
+                          borderRadius: "10px",
+                          fontWeight: 700,
+                          fontSize: "0.85rem",
+                          cursor: "pointer",
+                          fontFamily: "inherit",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        اعمال کد
+                      </button>
+                    </div>
+                    {couponError && (
+                      <span style={{ display: "block", marginTop: "6px", color: "#ef4444", fontSize: "0.78rem", fontWeight: 600 }}>
+                        {couponError}
+                      </span>
+                    )}
+                    <span style={{ display: "block", marginTop: "6px", color: "#94a3b8", fontSize: "0.75rem" }}>
+                      کدهای نمونه: WELCOME10 یا TECH50
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div
@@ -601,13 +682,40 @@ export default function Checkout() {
                   justifyContent: "space-between",
                   marginBottom: "12px",
                   color: "#64748b",
-                  paddingTop: "14px",
-                  borderTop: "1px solid #e2e8f0",
                 }}
               >
                 <span>تعداد کالا</span>
                 <span>{totalItems}</span>
               </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: "12px",
+                  color: "#64748b",
+                  fontSize: "0.92rem",
+                }}
+              >
+                <span>مبلغ کل</span>
+                <span>{formatPrice(totalPrice)}</span>
+              </div>
+
+              {appliedCoupon && (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginBottom: "12px",
+                    color: "#16a34a",
+                    fontSize: "0.92rem",
+                    fontWeight: 700,
+                  }}
+                >
+                  <span>تخفیف</span>
+                  <span>-{formatPrice(discountAmount)}</span>
+                </div>
+              )}
 
               <div
                 style={{
@@ -622,9 +730,7 @@ export default function Checkout() {
                 }}
               >
                 <span>مبلغ قابل پرداخت</span>
-                <span style={{ color: "#2563eb" }}>
-                  {formatPrice(totalPrice)}
-                </span>
+                <span style={{ color: "#2563eb" }}>{formatPrice(finalTotal)}</span>
               </div>
 
               <button
