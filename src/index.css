@@ -57,14 +57,14 @@ button {
 }
 
 @font-face {
-  font-family: Far_Dalal;
-  src: url("/fonts/Far_Dalal.ttf") format("truetype");
+  font-family: Far_Casablanca;
+  src: url("/fonts/Far_Casablanca.ttf") format("truetype");
   font-weight: 700;
   font-display: swap;
 }
 
 body {
-  font-family:Far_Dalal, system-ui, sans-serif;
+  font-family:Far_Casablanca, system-ui, sans-serif;
   background-color: #f8fafc;
   color: #0f172a;
   line-height: 1.6;
