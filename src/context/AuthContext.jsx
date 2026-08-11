@@ -78,6 +78,19 @@ export function AuthProvider({ children }) {
     }
   });
 
+  // ---------- لیست کل کاربرها (برای پنل مدیریت ادمین) ----------
+  // قبلاً readUsers/writeUsers فقط توابع کمکی خام بودن که مستقیم
+  // localStorage رو می‌خوندن/می‌نوشتن - یعنی React هیچ‌وقت متوجه
+  // تغییرشون نمی‌شد و AdminDashboard نمی‌تونست لیست کاربرها رو
+  // reactive نمایش بده. الان یک state واقعی نگه می‌داریم که با
+  // هر تغییر (ثبت‌نام، حذف، تغییر نقش و...) sync می‌مونه.
+  const [users, setUsers] = useState(() => readUsers());
+
+  const persistUsers = (updatedUsers) => {
+    writeUsers(updatedUsers);
+    setUsers(updatedUsers);
+  };
+
   // هر بار user تغییر کرد، ذخیره‌ش کن
   useEffect(() => {
     try {
@@ -94,10 +107,10 @@ export function AuthProvider({ children }) {
   // ---------- ثبت‌نام ----------
   // برمی‌گرداند: { success: boolean, message?: string }
   const register = ({ fullName, email, phone, password }) => {
-    const users = readUsers();
+    const currentUsers = readUsers();
     const normalizedEmail = email.trim().toLowerCase();
 
-    const alreadyExists = users.some(
+    const alreadyExists = currentUsers.some(
       (u) => u.email.toLowerCase() === normalizedEmail,
     );
 
@@ -114,7 +127,7 @@ export function AuthProvider({ children }) {
       role: "customer", // ثبت‌نام از فرم همیشه کاربر عادی می‌سازه؛ ادمین فقط با seed پیش‌فرض بالا وجود داره
     };
 
-    writeUsers([...users, newUser]);
+    persistUsers([...currentUsers, newUser]);
 
     // بعد از ثبت‌نام موفق، خودکار لاگین کن
     const { password: _pw, ...safeUser } = newUser;
@@ -125,10 +138,10 @@ export function AuthProvider({ children }) {
 
   // ---------- ورود ----------
   const login = ({ email, password }) => {
-    const users = readUsers();
+    const currentUsers = readUsers();
     const normalizedEmail = email.trim().toLowerCase();
 
-    const matchedUser = users.find(
+    const matchedUser = currentUsers.find(
       (u) => u.email.toLowerCase() === normalizedEmail && u.password === password,
     );
 
@@ -154,11 +167,11 @@ export function AuthProvider({ children }) {
       return { success: false, message: "کاربر لاگین نیست" };
     }
 
-    const users = readUsers();
-    const updatedUsers = users.map((u) =>
+    const currentUsers = readUsers();
+    const updatedUsers = currentUsers.map((u) =>
       u.id === user.id ? { ...u, fullName: fullName.trim(), phone: phone.trim() } : u,
     );
-    writeUsers(updatedUsers);
+    persistUsers(updatedUsers);
 
     setUser((prev) => ({ ...prev, fullName: fullName.trim(), phone: phone.trim() }));
 
@@ -171,17 +184,17 @@ export function AuthProvider({ children }) {
       return { success: false, message: "کاربر لاگین نیست" };
     }
 
-    const users = readUsers();
-    const currentUserRecord = users.find((u) => u.id === user.id);
+    const currentUsers = readUsers();
+    const currentUserRecord = currentUsers.find((u) => u.id === user.id);
 
     if (!currentUserRecord || currentUserRecord.password !== currentPassword) {
       return { success: false, message: "رمز عبور فعلی اشتباه است" };
     }
 
-    const updatedUsers = users.map((u) =>
+    const updatedUsers = currentUsers.map((u) =>
       u.id === user.id ? { ...u, password: newPassword } : u,
     );
-    writeUsers(updatedUsers);
+    persistUsers(updatedUsers);
 
     return { success: true };
   };
@@ -193,11 +206,11 @@ export function AuthProvider({ children }) {
   // جایگزین ساده‌ی fake‌ست؛ در پروژه‌ی واقعی باید یک لینک یک‌بارمصرف
   // با محدودیت زمانی از طریق ایمیل/پیامک فرستاده بشه.
   const resetPassword = ({ email, phone, newPassword }) => {
-    const users = readUsers();
+    const currentUsers = readUsers();
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedPhone = phone.trim();
 
-    const matchedUser = users.find(
+    const matchedUser = currentUsers.find(
       (u) => u.email.toLowerCase() === normalizedEmail && u.phone === normalizedPhone,
     );
 
@@ -208,13 +221,67 @@ export function AuthProvider({ children }) {
       };
     }
 
-    const updatedUsers = users.map((u) =>
+    const updatedUsers = currentUsers.map((u) =>
       u.id === matchedUser.id ? { ...u, password: newPassword } : u,
     );
-    writeUsers(updatedUsers);
+    persistUsers(updatedUsers);
 
     return { success: true };
   };
+
+  // ---------- مدیریت کاربران (فقط ادمین) ----------
+
+  // تعداد ادمین‌های فعلی - برای جلوگیری از حذف/تنزل آخرین ادمین
+  const countAdmins = (list) => list.filter((u) => u.role === "admin").length;
+
+  // حذف یک کاربر
+  const deleteUser = (userId) => {
+    if (user && userId === user.id) {
+      return { success: false, message: "نمی‌توانید حساب خودتان را حذف کنید" };
+    }
+
+    const currentUsers = readUsers();
+    const target = currentUsers.find((u) => u.id === userId);
+
+    if (!target) {
+      return { success: false, message: "کاربر پیدا نشد" };
+    }
+
+    if (target.role === "admin" && countAdmins(currentUsers) <= 1) {
+      return { success: false, message: "نمی‌توانید آخرین حساب ادمین را حذف کنید" };
+    }
+
+    persistUsers(currentUsers.filter((u) => u.id !== userId));
+    return { success: true };
+  };
+
+  // تغییر نقش یک کاربر (ادمین <-> کاربر عادی)
+  const setUserRole = (userId, role) => {
+    if (user && userId === user.id) {
+      return { success: false, message: "نمی‌توانید نقش خودتان را تغییر دهید" };
+    }
+
+    const currentUsers = readUsers();
+    const target = currentUsers.find((u) => u.id === userId);
+
+    if (!target) {
+      return { success: false, message: "کاربر پیدا نشد" };
+    }
+
+    if (target.role === "admin" && role === "customer" && countAdmins(currentUsers) <= 1) {
+      return { success: false, message: "نمی‌توانید نقش آخرین ادمین را تغییر دهید" };
+    }
+
+    const updatedUsers = currentUsers.map((u) =>
+      u.id === userId ? { ...u, role } : u,
+    );
+    persistUsers(updatedUsers);
+
+    return { success: true };
+  };
+
+  // لیست کاربرها بدون پسورد - برای نمایش در پنل ادمین
+  const safeUsers = users.map(({ password: _pw, ...rest }) => rest);
 
   const value = {
     user,
@@ -226,6 +293,9 @@ export function AuthProvider({ children }) {
     updateProfile,
     changePassword,
     resetPassword,
+    users: safeUsers,
+    deleteUser,
+    setUserRole,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
