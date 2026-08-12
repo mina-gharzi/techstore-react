@@ -610,7 +610,8 @@ export default function AdminDashboard() {
       </div>
     </section>
   );
-}import { useState } from "react";
+}
+import { useState } from "react";
 import {
   Plus,
   Pencil,
