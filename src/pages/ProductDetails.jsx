@@ -11,8 +11,8 @@ import {
   Minus,
   Plus,
 } from "lucide-react";
-import { categories } from "../data/products";
 import { useProducts, getStock } from "../context/ProductsContext";
+import { useCategories } from "../context/CategoriesContext";
 import { useCart } from "../context/CartContext";
 import { useFavorites } from "../context/FavoritesContext";
 import { formatPrice } from "../utils/formatPrice";
@@ -26,6 +26,7 @@ import ProductCard from "../components/product/ProductCard";
 export default function ProductDetails() {
   const { id } = useParams();
   const { products } = useProducts();
+  const { categories } = useCategories();
   const { addToCart } = useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
 
@@ -56,7 +57,7 @@ export default function ProductDetails() {
   const categoryName = useMemo(() => {
     if (!product) return "";
     return categories.find((c) => c.id === product.category)?.name || "";
-  }, [product]);
+  }, [product, categories]);
 
   const discountPercent = useMemo(() => {
     if (!product?.oldPrice || product.oldPrice <= product.price) return 0;

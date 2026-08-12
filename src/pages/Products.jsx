@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, X } from "lucide-react";
-import { categories } from "../data/products";
 import { useProducts } from "../context/ProductsContext";
+import { useCategories } from "../context/CategoriesContext";
 import ProductCard from "../components/product/ProductCard";
 
 // ======================================================
@@ -16,6 +16,7 @@ import ProductCard from "../components/product/ProductCard";
 
 export default function Products() {
   const { products } = useProducts();
+  const { categories } = useCategories();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // ---------- State ----------
@@ -92,7 +93,7 @@ export default function Products() {
       return cat ? cat.name : "محصولات";
     }
     return "همه محصولات";
-  }, [activeCategory, activeFilter]);
+  }, [activeCategory, activeFilter, categories]);
 
   // ---------- پاک کردن فیلترها ----------
   const clearFilters = () => {

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { categories } from "../data/products";
 import { useProducts } from "../context/ProductsContext";
+import { useCategories } from "../context/CategoriesContext";
 import ProductCard from "../components/product/ProductCard";
 
 // ======================================================
@@ -16,6 +16,7 @@ import ProductCard from "../components/product/ProductCard";
 
 export default function Home() {
   const { products } = useProducts();
+  const { categories } = useCategories();
 
   const featuredProducts = products.slice(0, 4);
   const newProducts = products.filter((p) => p.isNew).slice(0, 4);

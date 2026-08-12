@@ -11,17 +11,18 @@ import {
   Users,
   ShieldCheck,
   ShieldOff,
+  Tags,
+  Check,
 } from "lucide-react";
 import { useProducts, getStock } from "../context/ProductsContext";
+import { useCategories } from "../context/CategoriesContext";
 import { useOrders } from "../context/OrdersContext";
 import { useAuth } from "../context/AuthContext";
-import { categories } from "../data/products";
 import { formatPrice } from "../utils/formatPrice";
 
 // ======================================================
 // AdminDashboard
-// پنل مدیریت: دو تب - محصولات (افزودن/ویرایش/حذف/موجودی) و
-// سفارش‌ها (مشاهده و تغییر وضعیت)
+// پنل مدیریت: چهار تب - محصولات، سفارش‌ها، کاربران، دسته‌بندی‌ها
 //
 // نکته: چون بک‌اند واقعی نداریم، هر تغییری که اینجا انجام بشه
 // فقط توی همین مرورگر (localStorage) ذخیره می‌شه. یعنی اگه یه
@@ -39,10 +40,16 @@ const statusColor = (status) => {
   return { bg: "#fffbeb", text: "#d97706" }; // در حال پردازش
 };
 
+// نکته: قبلاً "category: categories[0]?.id" مستقیم توی این آبجکت
+// در سطح ماژول محاسبه می‌شد، چون categories از یک import ثابت
+// میومد. الان که categories از useCategories() (یک هوک، فقط
+// داخل کامپوننت قابل‌فراخوانی) میاد، این مقدار دیگه اینجا در
+// دسترس نیست؛ پس فیلد category خالی می‌مونه و در openAddForm
+// (داخل خودِ کامپوننت) با اولین دسته‌بندی موجود پر می‌شه.
 const emptyForm = {
   name: "",
   brand: "",
-  category: categories[0]?.id || "",
+  category: "",
   price: "",
   oldPrice: "",
   rating: "4.5",
@@ -54,10 +61,11 @@ const emptyForm = {
 
 export default function AdminDashboard() {
   const { products, addProduct, updateProduct, deleteProduct } = useProducts();
+  const { categories, addCategory, updateCategory, deleteCategory } = useCategories();
   const { orders, updateOrderStatus } = useOrders();
   const { users, deleteUser, setUserRole, user: currentUser } = useAuth();
 
-  const [activeTab, setActiveTab] = useState("products"); // "products" | "orders" | "users"
+  const [activeTab, setActiveTab] = useState("products"); // "products" | "orders" | "users" | "categories"
   const [userActionError, setUserActionError] = useState("");
 
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -68,7 +76,7 @@ export default function AdminDashboard() {
   // ---------- باز کردن فرم برای افزودن ----------
   const openAddForm = () => {
     setEditingId(null);
-    setFormData(emptyForm);
+    setFormData({ ...emptyForm, category: categories[0]?.id || "" });
     setErrors({});
     setIsFormOpen(true);
   };
@@ -195,6 +203,72 @@ export default function AdminDashboard() {
     }
   };
 
+  // ---------- Handlers: مدیریت دسته‌بندی‌ها ----------
+  const [isCategoryFormOpen, setIsCategoryFormOpen] = useState(false);
+  const [editingCategoryId, setEditingCategoryId] = useState(null);
+  const [categoryNameInput, setCategoryNameInput] = useState("");
+  const [categoryError, setCategoryError] = useState("");
+
+  const openAddCategoryForm = () => {
+    setEditingCategoryId(null);
+    setCategoryNameInput("");
+    setCategoryError("");
+    setIsCategoryFormOpen(true);
+  };
+
+  const openEditCategoryForm = (category) => {
+    setEditingCategoryId(category.id);
+    setCategoryNameInput(category.name);
+    setCategoryError("");
+    setIsCategoryFormOpen(true);
+  };
+
+  const closeCategoryForm = () => {
+    setIsCategoryFormOpen(false);
+    setEditingCategoryId(null);
+    setCategoryNameInput("");
+    setCategoryError("");
+  };
+
+  const handleCategorySubmit = (e) => {
+    e.preventDefault();
+
+    const result = editingCategoryId
+      ? updateCategory(editingCategoryId, categoryNameInput)
+      : addCategory(categoryNameInput);
+
+    if (!result.success) {
+      setCategoryError(result.message);
+      return;
+    }
+
+    closeCategoryForm();
+  };
+
+  // تعداد محصولاتی که توی این دسته‌بندی هستن - برای جلوگیری از
+  // حذف یک دسته‌بندی درحالی‌که هنوز محصولی داخلش وجود داره
+  // (وگرنه اون محصولات یه category یتیم پیدا می‌کردن که هیچ‌جا
+  // نمایش داده نمی‌شن)
+  const countProductsInCategory = (categoryId) =>
+    products.filter((p) => p.category === categoryId).length;
+
+  const handleDeleteCategory = (category) => {
+    const productCount = countProductsInCategory(category.id);
+
+    if (productCount > 0) {
+      setCategoryError(
+        `${productCount} محصول در دسته‌بندی «${category.name}» وجود دارد. ابتدا آن‌ها را حذف یا به دسته‌ی دیگری منتقل کنید.`,
+      );
+      setTimeout(() => setCategoryError(""), 4000);
+      return;
+    }
+
+    const confirmed = window.confirm(`دسته‌بندی «${category.name}» حذف شود؟`);
+    if (confirmed) {
+      deleteCategory(category.id);
+    }
+  };
+
   // ---------- کمکی: فرمت تاریخ فارسی برای سفارش‌ها ----------
   const formatOrderDate = (isoString) => {
     try {
@@ -250,6 +324,7 @@ export default function AdminDashboard() {
             {activeTab === "products" && `${products.length} محصول در فروشگاه`}
             {activeTab === "orders" && `${orders.length} سفارش ثبت‌شده`}
             {activeTab === "users" && `${users.length} کاربر ثبت‌نام‌شده`}
+            {activeTab === "categories" && `${categories.length} دسته‌بندی`}
           </p>
         </div>
 
@@ -338,6 +413,28 @@ export default function AdminDashboard() {
           >
             <Users size={17} />
             کاربران
+          </button>
+
+          <button
+            onClick={() => setActiveTab("categories")}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "12px 18px",
+              background: "none",
+              border: "none",
+              borderBottom: activeTab === "categories" ? "2px solid #2563eb" : "2px solid transparent",
+              color: activeTab === "categories" ? "#2563eb" : "#64748b",
+              fontWeight: 700,
+              fontSize: "0.95rem",
+              cursor: "pointer",
+              fontFamily: "inherit",
+              marginBottom: "-1px",
+            }}
+          >
+            <Tags size={17} />
+            دسته‌بندی‌ها
           </button>
         </div>
 
@@ -1046,6 +1143,233 @@ export default function AdminDashboard() {
                             background: "#fff",
                             opacity: isSelf ? 0.6 : 1,
                           }}
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ===================== تب دسته‌بندی‌ها ===================== */}
+        {activeTab === "categories" && (
+          <>
+            <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "20px" }}>
+              <button
+                onClick={openAddCategoryForm}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "12px 22px",
+                  background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
+                  color: "#fff",
+                  borderRadius: "12px",
+                  fontWeight: 700,
+                  border: "none",
+                  cursor: "pointer",
+                  fontFamily: "inherit",
+                  boxShadow: "0 10px 25px rgba(37, 99, 235, 0.25)",
+                }}
+              >
+                <Plus size={18} />
+                افزودن دسته‌بندی
+              </button>
+            </div>
+
+            {categoryError && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  background: "#fef2f2",
+                  border: "1px solid #fecaca",
+                  color: "#ef4444",
+                  borderRadius: "12px",
+                  padding: "12px 16px",
+                  fontSize: "0.88rem",
+                  fontWeight: 600,
+                  marginBottom: "18px",
+                }}
+              >
+                <AlertTriangle size={16} />
+                {categoryError}
+              </div>
+            )}
+
+            {/* فرم افزودن/ویرایش دسته‌بندی */}
+            {isCategoryFormOpen && (
+              <div
+                style={{
+                  background: "#fff",
+                  border: "1px solid #e2e8f0",
+                  borderRadius: "18px",
+                  padding: "24px",
+                  marginBottom: "20px",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "16px",
+                  }}
+                >
+                  <h2 style={{ fontSize: "1.05rem", fontWeight: 800, color: "#0f172a" }}>
+                    {editingCategoryId ? "ویرایش دسته‌بندی" : "دسته‌بندی جدید"}
+                  </h2>
+                  <button
+                    onClick={closeCategoryForm}
+                    style={{
+                      width: "34px",
+                      height: "34px",
+                      borderRadius: "10px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#64748b",
+                      cursor: "pointer",
+                    }}
+                    aria-label="بستن فرم"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                <form onSubmit={handleCategorySubmit}>
+                  <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                    <input
+                      type="text"
+                      value={categoryNameInput}
+                      onChange={(e) => setCategoryNameInput(e.target.value)}
+                      placeholder="مثلاً: تبلت"
+                      style={{ ...inputStyle(false), flex: 1, minWidth: "200px" }}
+                    />
+                    <button
+                      type="submit"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        padding: "0 22px",
+                        height: "46px",
+                        background: "#2563eb",
+                        color: "#fff",
+                        borderRadius: "10px",
+                        fontWeight: 700,
+                        border: "none",
+                        cursor: "pointer",
+                        fontFamily: "inherit",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Check size={16} />
+                      {editingCategoryId ? "ذخیره" : "افزودن"}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* لیست دسته‌بندی‌ها */}
+            {categories.length === 0 ? (
+              <div
+                style={{
+                  background: "#fff",
+                  border: "1px solid #e2e8f0",
+                  borderRadius: "18px",
+                  padding: "60px 20px",
+                  textAlign: "center",
+                }}
+              >
+                <Tags size={48} color="#94a3b8" style={{ margin: "0 auto 16px" }} />
+                <p style={{ color: "#64748b" }}>هنوز دسته‌بندی‌ای ثبت نشده است.</p>
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                {categories.map((cat) => {
+                  const count = countProductsInCategory(cat.id);
+                  return (
+                    <div
+                      key={cat.id}
+                      style={{
+                        background: "#fff",
+                        border: "1px solid #e2e8f0",
+                        borderRadius: "14px",
+                        padding: "14px 16px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "16px",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "40px",
+                          height: "40px",
+                          borderRadius: "10px",
+                          background: "#eff6ff",
+                          color: "#2563eb",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <Tags size={18} />
+                      </div>
+
+                      <div style={{ flex: 1, minWidth: "160px" }}>
+                        <div style={{ fontWeight: 700, color: "#0f172a", fontSize: "0.95rem" }}>
+                          {cat.name}
+                        </div>
+                        <div style={{ color: "#94a3b8", fontSize: "0.8rem" }}>
+                          {count} محصول
+                        </div>
+                      </div>
+
+                      <div style={{ display: "flex", gap: "8px" }}>
+                        <button
+                          onClick={() => openEditCategoryForm(cat)}
+                          style={{
+                            width: "38px",
+                            height: "38px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: "10px",
+                            border: "1px solid #e2e8f0",
+                            color: "#2563eb",
+                            cursor: "pointer",
+                            background: "#fff",
+                          }}
+                          aria-label="ویرایش"
+                          title="ویرایش"
+                        >
+                          <Pencil size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteCategory(cat)}
+                          style={{
+                            width: "38px",
+                            height: "38px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: "10px",
+                            border: "1px solid #fecaca",
+                            color: "#ef4444",
+                            cursor: "pointer",
+                            background: "#fff",
+                          }}
+                          aria-label="حذف"
+                          title="حذف"
                         >
                           <Trash2 size={16} />
                         </button>

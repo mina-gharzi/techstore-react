@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { APP_NAME } from "../../utils/constants";
-import { categories } from "../../data/products";
+import { useCategories } from "../../context/CategoriesContext";
 
 // ======================================================
 // Footer
@@ -8,6 +8,8 @@ import { categories } from "../../data/products";
 // ======================================================
 
 export default function Footer() {
+  const { categories } = useCategories();
+
   return (
     <footer
       style={{
