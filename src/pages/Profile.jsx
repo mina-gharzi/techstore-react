@@ -1,17 +1,9 @@
 import { useState } from "react";
-import {
-  User,
-  Phone,
-  Mail,
-  Lock,
-  Check,
-  Package,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+import { User, Phone, Mail, Lock, Check, Package, ChevronDown, ChevronUp, XCircle, AlertTriangle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useOrders } from "../context/OrdersContext";
+import { useProducts, getStock } from "../context/ProductsContext";
 import { formatPrice } from "../utils/formatPrice";
 
 // ======================================================
@@ -21,9 +13,36 @@ import { formatPrice } from "../utils/formatPrice";
 
 export default function Profile() {
   const { user, updateProfile, changePassword } = useAuth();
-  const { getOrdersByUser } = useOrders();
+  const { getOrdersByUser, updateOrderStatus } = useOrders();
+  const { products, updateProduct } = useProducts();
 
   const myOrders = getOrdersByUser(user.id);
+
+  // ---------- لغو سفارش توسط کاربر ----------
+  // فقط سفارش‌هایی که هنوز "در حال پردازش" هستن قابل لغوئن -
+  // بعد از اینکه ادمین وضعیت رو به "ارسال شد" یا جلوتر تغییر داد،
+  // دیگه منطقی نیست کاربر خودش لغوش کنه (باید با پشتیبانی تماس بگیره).
+  const [cancelError, setCancelError] = useState("");
+
+  const handleCancelOrder = (order) => {
+    const confirmed = window.confirm(
+      `سفارش «${order.orderNumber}» لغو شود؟ این عمل قابل بازگشت نیست.`,
+    );
+    if (!confirmed) return;
+
+    updateOrderStatus(order.id, "لغو شده");
+
+    // موجودی محصولات این سفارش رو برمی‌گردونیم، چون دیگه فروخته نشده
+    order.items?.forEach((item) => {
+      const liveProduct = products.find((p) => p.id === item.id);
+      if (liveProduct) {
+        const currentStock = getStock(liveProduct);
+        updateProduct(item.id, { stock: currentStock + item.quantity });
+      }
+    });
+
+    setCancelError("");
+  };
 
   // ---------- فرم اطلاعات شخصی ----------
   const [infoData, setInfoData] = useState({
@@ -46,11 +65,7 @@ export default function Profile() {
   const togglePasswordForm = () => {
     setIsPasswordFormOpen((prev) => !prev);
     setPasswordError("");
-    setPasswordData({
-      currentPassword: "",
-      newPassword: "",
-      confirmNewPassword: "",
-    });
+    setPasswordData({ currentPassword: "", newPassword: "", confirmNewPassword: "" });
   };
 
   // ---------- Handlers: اطلاعات شخصی ----------
@@ -115,11 +130,7 @@ export default function Profile() {
       return;
     }
 
-    setPasswordData({
-      currentPassword: "",
-      newPassword: "",
-      confirmNewPassword: "",
-    });
+    setPasswordData({ currentPassword: "", newPassword: "", confirmNewPassword: "" });
     setPasswordSaved(true);
     setIsPasswordFormOpen(false);
     setTimeout(() => setPasswordSaved(false), 2500);
@@ -186,14 +197,7 @@ export default function Profile() {
     <section style={{ padding: "50px 20px 80px" }}>
       <div style={{ maxWidth: "640px", margin: "0 auto" }}>
         {/* ---------- سربرگ ---------- */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "16px",
-            marginBottom: "32px",
-          }}
-        >
+        <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "32px" }}>
           <div
             style={{
               width: "64px",
@@ -212,14 +216,7 @@ export default function Profile() {
             {user.fullName?.charAt(0) || "?"}
           </div>
           <div>
-            <h1
-              style={{
-                fontSize: "1.4rem",
-                fontWeight: 800,
-                color: "#0f172a",
-                marginBottom: "4px",
-              }}
-            >
+            <h1 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#0f172a", marginBottom: "4px" }}>
               {user.fullName}
             </h1>
             <p style={{ color: "#64748b", fontSize: "0.9rem" }}>{user.email}</p>
@@ -229,14 +226,7 @@ export default function Profile() {
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           {/* ===================== اطلاعات شخصی ===================== */}
           <div style={cardStyle}>
-            <h2
-              style={{
-                fontSize: "1.1rem",
-                fontWeight: 800,
-                color: "#0f172a",
-                marginBottom: "20px",
-              }}
-            >
+            <h2 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#0f172a", marginBottom: "20px" }}>
               اطلاعات شخصی
             </h2>
 
@@ -253,9 +243,7 @@ export default function Profile() {
                     style={inputStyle(!!infoErrors.fullName)}
                   />
                 </div>
-                {infoErrors.fullName && (
-                  <span style={errorStyle}>{infoErrors.fullName}</span>
-                )}
+                {infoErrors.fullName && <span style={errorStyle}>{infoErrors.fullName}</span>}
               </div>
 
               <div style={{ marginBottom: "16px" }}>
@@ -270,9 +258,7 @@ export default function Profile() {
                     style={inputStyle(!!infoErrors.phone)}
                   />
                 </div>
-                {infoErrors.phone && (
-                  <span style={errorStyle}>{infoErrors.phone}</span>
-                )}
+                {infoErrors.phone && <span style={errorStyle}>{infoErrors.phone}</span>}
               </div>
 
               {/* ایمیل عمداً غیرقابل ویرایش - چون شناسه‌ی ورود کاربره */}
@@ -292,14 +278,7 @@ export default function Profile() {
                     }}
                   />
                 </div>
-                <span
-                  style={{
-                    display: "block",
-                    marginTop: "6px",
-                    color: "#94a3b8",
-                    fontSize: "0.78rem",
-                  }}
-                >
+                <span style={{ display: "block", marginTop: "6px", color: "#94a3b8", fontSize: "0.78rem" }}>
                   ایمیل قابل تغییر نیست
                 </span>
               </div>
@@ -343,17 +322,9 @@ export default function Profile() {
                 padding: 0,
               }}
             >
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "10px" }}
-              >
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <Lock size={18} color="#2563eb" />
-                <span
-                  style={{
-                    fontSize: "1.1rem",
-                    fontWeight: 800,
-                    color: "#0f172a",
-                  }}
-                >
+                <span style={{ fontSize: "1.1rem", fontWeight: 800, color: "#0f172a" }}>
                   تغییر رمز عبور
                 </span>
               </div>
@@ -498,13 +469,7 @@ export default function Profile() {
               <Package size={18} color="#2563eb" />
               تاریخچه خرید
               {myOrders.length > 0 && (
-                <span
-                  style={{
-                    color: "#94a3b8",
-                    fontWeight: 600,
-                    fontSize: "0.85rem",
-                  }}
-                >
+                <span style={{ color: "#94a3b8", fontWeight: 600, fontSize: "0.85rem" }}>
                   ({myOrders.length} سفارش)
                 </span>
               )}
@@ -532,13 +497,7 @@ export default function Profile() {
                 </Link>
               </div>
             ) : (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "12px",
-                }}
-              >
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                 {myOrders.map((order) => (
                   <div
                     key={order.id}
@@ -559,29 +518,31 @@ export default function Profile() {
                       }}
                     >
                       <div>
-                        <div
-                          style={{
-                            fontWeight: 700,
-                            color: "#0f172a",
-                            fontSize: "0.92rem",
-                          }}
-                        >
+                        <div style={{ fontWeight: 700, color: "#0f172a", fontSize: "0.92rem" }}>
                           کد پیگیری: {order.orderNumber}
                         </div>
-                        <div
-                          style={{
-                            color: "#94a3b8",
-                            fontSize: "0.8rem",
-                            marginTop: "2px",
-                          }}
-                        >
+                        <div style={{ color: "#94a3b8", fontSize: "0.8rem", marginTop: "2px" }}>
                           {formatOrderDate(order.createdAt)}
                         </div>
                       </div>
                       <span
                         style={{
-                          background: "#eff6ff",
-                          color: "#2563eb",
+                          background:
+                            order.status === "تحویل داده شد"
+                              ? "#f0fdf4"
+                              : order.status === "لغو شده"
+                                ? "#fef2f2"
+                                : order.status === "ارسال شد"
+                                  ? "#eff6ff"
+                                  : "#fffbeb",
+                          color:
+                            order.status === "تحویل داده شد"
+                              ? "#16a34a"
+                              : order.status === "لغو شده"
+                                ? "#ef4444"
+                                : order.status === "ارسال شد"
+                                  ? "#2563eb"
+                                  : "#d97706",
                           fontSize: "0.78rem",
                           fontWeight: 700,
                           padding: "4px 12px",
@@ -616,10 +577,8 @@ export default function Profile() {
                         >
                           <span>
                             {item.name}
-                            {item.selectedColor
-                              ? ` (${item.selectedColor})`
-                              : ""}{" "}
-                            × {item.quantity}
+                            {item.selectedColor ? ` (${item.selectedColor})` : ""} ×{" "}
+                            {item.quantity}
                           </span>
                         </div>
                       ))}
@@ -641,6 +600,32 @@ export default function Profile() {
                         {formatPrice(order.totalPrice)}
                       </span>
                     </div>
+
+                    {/* لغو سفارش - فقط تا وقتی هنوز "در حال پردازش"ه */}
+                    {order.status === "در حال پردازش" && (
+                      <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px dashed #f1f5f9" }}>
+                        <button
+                          onClick={() => handleCancelOrder(order)}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px",
+                            padding: "8px 16px",
+                            background: "#fef2f2",
+                            color: "#ef4444",
+                            border: "1px solid #fecaca",
+                            borderRadius: "10px",
+                            fontWeight: 700,
+                            fontSize: "0.82rem",
+                            cursor: "pointer",
+                            fontFamily: "inherit",
+                          }}
+                        >
+                          <XCircle size={15} />
+                          لغو سفارش
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
