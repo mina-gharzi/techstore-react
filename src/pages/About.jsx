@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Shield, Truck, Headphones, Award, Target, Eye } from "lucide-react";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 // ======================================================
 // About
@@ -7,6 +8,8 @@ import { Shield, Truck, Headphones, Award, Target, Eye } from "lucide-react";
 // ======================================================
 
 export default function About() {
+  usePageTitle("درباره ما");
+
   const features = [
     {
       icon: <Shield size={26} color="#2563eb" />,

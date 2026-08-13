@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useProducts } from "../context/ProductsContext";
 import { useCategories } from "../context/CategoriesContext";
+import { usePageTitle } from "../hooks/usePageTitle";
 import ProductCard from "../components/product/ProductCard";
 
 // ======================================================
@@ -15,6 +16,7 @@ import ProductCard from "../components/product/ProductCard";
 // ======================================================
 
 export default function Home() {
+  usePageTitle(); // صفحه‌ی اصلی فقط اسم فروشگاه رو نشون میده، بدون پیشوند
   const { products } = useProducts();
   const { categories } = useCategories();
 

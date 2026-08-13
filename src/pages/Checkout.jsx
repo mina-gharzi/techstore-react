@@ -5,6 +5,7 @@ import { useCart } from "../context/CartContext";
 import { useOrders } from "../context/OrdersContext";
 import { useAuth } from "../context/AuthContext";
 import { useProducts, getStock } from "../context/ProductsContext";
+import { usePageTitle } from "../hooks/usePageTitle";
 import { formatPrice } from "../utils/formatPrice";
 
 // ======================================================
@@ -28,6 +29,8 @@ const COUPONS = {
 };
 
 export default function Checkout() {
+  usePageTitle("تکمیل خرید");
+
   const navigate = useNavigate();
   const { cart, totalItems, totalPrice, clearCart } = useCart();
   const { addOrder } = useOrders();

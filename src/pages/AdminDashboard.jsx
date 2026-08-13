@@ -13,8 +13,11 @@ import {
   ShieldOff,
   Tags,
   Check,
+  Image as ImageIcon,
+  ImageOff,
 } from "lucide-react";
 import { useProducts, getStock } from "../context/ProductsContext";
+import { usePageTitle } from "../hooks/usePageTitle";
 import { useCategories } from "../context/CategoriesContext";
 import { useOrders } from "../context/OrdersContext";
 import { useAuth } from "../context/AuthContext";
@@ -60,6 +63,7 @@ const emptyForm = {
 };
 
 export default function AdminDashboard() {
+  usePageTitle("پنل مدیریت");
   const { products, addProduct, updateProduct, deleteProduct } = useProducts();
   const { categories, addCategory, updateCategory, deleteCategory } = useCategories();
   const { orders, updateOrderStatus } = useOrders();
@@ -73,11 +77,17 @@ export default function AdminDashboard() {
   const [formData, setFormData] = useState(emptyForm);
   const [errors, setErrors] = useState({});
 
+  // ---------- پیش‌نمایش تصویر ----------
+  // true وقتی <img> نتونه آدرس فعلی رو لود کنه (لینک خراب/اشتباه).
+  // با هر تغییر آدرس، دوباره false می‌شه تا یه شانس جدید امتحان بشه.
+  const [imagePreviewError, setImagePreviewError] = useState(false);
+
   // ---------- باز کردن فرم برای افزودن ----------
   const openAddForm = () => {
     setEditingId(null);
     setFormData({ ...emptyForm, category: categories[0]?.id || "" });
     setErrors({});
+    setImagePreviewError(false);
     setIsFormOpen(true);
   };
 
@@ -97,6 +107,7 @@ export default function AdminDashboard() {
       image: product.image || "",
     });
     setErrors({});
+    setImagePreviewError(false);
     setIsFormOpen(true);
   };
 
@@ -113,6 +124,11 @@ export default function AdminDashboard() {
     }));
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: null }));
+    }
+    // با هر تغییر توی آدرس تصویر، وضعیت خطای پیش‌نمایش رو ریست کن
+    // تا دوباره امتحان بشه لود بشه
+    if (name === "image") {
+      setImagePreviewError(false);
     }
   };
 
@@ -632,15 +648,63 @@ export default function AdminDashboard() {
 
               <div style={{ marginBottom: "16px" }}>
                 <label style={labelStyle}>آدرس تصویر</label>
-                <input
-                  type="text"
-                  name="image"
-                  value={formData.image}
-                  onChange={handleChange}
-                  placeholder="/assets/images/product/example.jpg"
-                  style={inputStyle(!!errors.image)}
-                />
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "12px",
+                    alignItems: "flex-start",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <input
+                    type="text"
+                    name="image"
+                    value={formData.image}
+                    onChange={handleChange}
+                    placeholder="/assets/images/product/example.jpg"
+                    style={{ ...inputStyle(!!errors.image), flex: 1, minWidth: "200px" }}
+                  />
+
+                  {/* پیش‌نمایش زنده - با هر تغییر آدرس، همین‌جا آپدیت میشه */}
+                  <div
+                    style={{
+                      width: "72px",
+                      height: "72px",
+                      borderRadius: "12px",
+                      border: "1.5px dashed #e2e8f0",
+                      background: "#f8fafc",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                      overflow: "hidden",
+                    }}
+                  >
+                    {!formData.image.trim() ? (
+                      <ImageIcon size={22} color="#cbd5e1" />
+                    ) : imagePreviewError ? (
+                      <div style={{ textAlign: "center", padding: "4px" }}>
+                        <ImageOff size={18} color="#f59e0b" style={{ margin: "0 auto 2px" }} />
+                        <span style={{ fontSize: "0.6rem", color: "#f59e0b", fontWeight: 700 }}>
+                          نامعتبر
+                        </span>
+                      </div>
+                    ) : (
+                      <img
+                        src={formData.image}
+                        alt="پیش‌نمایش محصول"
+                        style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                        onError={() => setImagePreviewError(true)}
+                      />
+                    )}
+                  </div>
+                </div>
                 {errors.image && <span style={errorStyle}>{errors.image}</span>}
+                {!errors.image && formData.image.trim() && imagePreviewError && (
+                  <span style={errorStyle}>
+                    این آدرس تصویر بارگذاری نشد - لینک را بررسی کنید
+                  </span>
+                )}
               </div>
 
               <div style={{ marginBottom: "16px" }}>

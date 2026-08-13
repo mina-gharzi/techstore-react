@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Trash2, Plus, Minus, ShoppingBag, AlertTriangle } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useProducts, getStock } from "../context/ProductsContext";
+import { usePageTitle } from "../hooks/usePageTitle";
 import { formatPrice } from "../utils/formatPrice";
 
 // ======================================================
@@ -10,6 +11,8 @@ import { formatPrice } from "../utils/formatPrice";
 // ======================================================
 
 export default function Cart() {
+  usePageTitle("سبد خرید");
+
   // ---------- Context ----------
   const {
     cart,

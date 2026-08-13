@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { useProducts } from "../context/ProductsContext";
 import { useCategories } from "../context/CategoriesContext";
+import { usePageTitle } from "../hooks/usePageTitle";
 import ProductCard from "../components/product/ProductCard";
 
 // ======================================================
@@ -94,6 +95,12 @@ export default function Products() {
     }
     return "همه محصولات";
   }, [activeCategory, activeFilter, categories]);
+
+  // عنوان صفحه هم توی UI نشون داده میشه (پایین‌تر توی <h1>) هم
+  // توی تب مرورگر - این‌جوری اگه کاربر چند تب باز کرده باشه
+  // (مثلاً یکی فیلتر "جدید"، یکی فیلتر "تخفیفی")، از روی خودِ تب
+  // فرقشون رو تشخیص میده.
+  usePageTitle(pageTitle);
 
   // ---------- پاک کردن فیلترها ----------
   const clearFilters = () => {

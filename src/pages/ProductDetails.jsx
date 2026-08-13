@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useProducts, getStock } from "../context/ProductsContext";
 import { useCategories } from "../context/CategoriesContext";
+import { usePageTitle } from "../hooks/usePageTitle";
 import { useCart } from "../context/CartContext";
 import { useFavorites } from "../context/FavoritesContext";
 import { formatPrice } from "../utils/formatPrice";
@@ -34,6 +35,10 @@ export default function ProductDetails() {
   const [added, setAdded] = useState(false);
 
   const product = products.find((item) => item.id === Number(id));
+
+  // اگه محصول پیدا نشد، عنوان "محصول پیدا نشد" میشه؛ وگرنه اسم
+  // خودِ محصول توی تب مرورگر نشون داده میشه.
+  usePageTitle(product ? product.name : "محصول پیدا نشد");
   const [selectedColor, setSelectedColor] = useState(null);
 
   useEffect(() => {

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { KeyRound, Mail, Phone, Lock, Check } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { usePageTitle } from "../hooks/usePageTitle";
 import "../styles/auth.css";
 
 // ======================================================
@@ -14,6 +15,7 @@ import "../styles/auth.css";
 // ======================================================
 
 export default function ForgotPassword() {
+  usePageTitle("فراموشی رمز عبور");
   const { resetPassword } = useAuth();
   const navigate = useNavigate();
 

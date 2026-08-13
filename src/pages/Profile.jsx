@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useOrders } from "../context/OrdersContext";
 import { useProducts, getStock } from "../context/ProductsContext";
+import { usePageTitle } from "../hooks/usePageTitle";
 import { formatPrice } from "../utils/formatPrice";
 
 // ======================================================
@@ -12,6 +13,7 @@ import { formatPrice } from "../utils/formatPrice";
 // ======================================================
 
 export default function Profile() {
+  usePageTitle("پروفایل من");
   const { user, updateProfile, changePassword } = useAuth();
   const { getOrdersByUser, updateOrderStatus } = useOrders();
   const { products, updateProduct } = useProducts();

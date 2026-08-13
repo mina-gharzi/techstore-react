@@ -1,5 +1,6 @@
 import { Link, useLocation, Navigate } from "react-router-dom";
 import { CheckCircle2, Package, CreditCard, Wallet } from "lucide-react";
+import { usePageTitle } from "../hooks/usePageTitle";
 import { formatPrice } from "../utils/formatPrice";
 
 // ======================================================
@@ -14,6 +15,8 @@ import { formatPrice } from "../utils/formatPrice";
 // ======================================================
 
 export default function OrderSuccess() {
+  usePageTitle("سفارش ثبت شد");
+
   const location = useLocation();
   const orderInfo = location.state;
 
