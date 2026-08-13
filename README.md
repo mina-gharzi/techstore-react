@@ -9,6 +9,7 @@ This project is the React rewrite of the original [TechStore (Vanilla JS version
 ## ✨ Features
 
 ### Shopping experience
+
 - Fully responsive design (Desktop, Tablet, Mobile)
 - Home page with featured, new, and discounted product sections (horizontal scroll on mobile)
 - Product listing page with search, category filters, and sorting
@@ -19,12 +20,14 @@ This project is the React rewrite of the original [TechStore (Vanilla JS version
 - Order confirmation page and full purchase history in the user's profile
 
 ### Inventory & orders
+
 - Per-product stock tracking — out-of-stock products are clearly marked and can't be added to the cart
 - Stock is re-validated at checkout and automatically decremented after a successful order
 - Coupon system (percentage or fixed-amount discounts)
 - Order history with tracking number, items, shipping address, and status
 
 ### Accounts & access
+
 - User authentication (Login & Register) — no backend, accounts are stored locally
 - Forgot-password flow (identity verification via email + phone, then password reset)
 - User profile: edit name/phone, change password, view order history
@@ -32,10 +35,12 @@ This project is the React rewrite of the original [TechStore (Vanilla JS version
 - Role-based access: a seeded admin account (`admin@techstore.com` / `admin123`) unlocks the admin panel
 
 ### Admin panel
+
 - Product management: add, edit, delete, set stock and pricing
 - Order management: view every order and update its status (processing, shipped, delivered, cancelled)
 
 ### Engineering
+
 - Context API for global state (Auth, Products, Cart, Orders, Favorites)
 - `ErrorBoundary` around all routes so a render crash shows a recovery screen instead of a blank page
 - `ScrollToTop` on every route change
