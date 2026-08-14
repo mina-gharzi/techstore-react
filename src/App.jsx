@@ -7,6 +7,7 @@ import { CategoriesProvider } from "./context/CategoriesContext";
 import { CartProvider } from "./context/CartContext";
 import { OrdersProvider } from "./context/OrdersContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
+import { ReviewsProvider } from "./context/ReviewsContext";
 
 // ---------- مسیرها ----------
 import AppRoutes from "./routes";
@@ -21,14 +22,13 @@ import Footer from "./components/layout/Footer";
 // App
 // کامپوننت اصلی اپلیکیشن
 //
-// نکته: AuthProvider بیرون‌ترین Provider است چون Cart/Favorites
-// می‌توانند در آینده به وضعیت کاربر لاگین‌شده وابسته بشن (مثلاً
-// سبد خرید مخصوص هر کاربر). فعلاً این وابستگی وجود نداره، ولی
-// این ترتیب مسیر رو برای اون توسعه‌ی بعدی باز نگه می‌داره.
+// نکته: AuthProvider بیرون‌ترین Provider است چون Cart/Favorites/
+// Reviews می‌توانند به وضعیت کاربر لاگین‌شده وابسته باشن (مثلاً
+// نظر دادن فقط برای کاربر لاگین‌شده معنا داره).
 //
-// CategoriesProvider قبل از ProductsProvider نیومده و بعدش هم
-// نیومده - ترتیبشون مهم نیست چون به هم وابسته نیستن، فقط هر دو
-// باید بالاتر از AppRoutes باشن.
+// ترتیب Provider های دیگه (Categories, Products, Cart, Orders,
+// Favorites, Reviews) نسبت به هم مهم نیست چون مستقل از همدیگه‌ن،
+// فقط همه باید بالاتر از AppRoutes باشن.
 // ======================================================
 
 function App() {
@@ -41,20 +41,22 @@ function App() {
             <CartProvider>
               <OrdersProvider>
                 <FavoritesProvider>
-                  <div className="app">
-                    {/* هدر ثابت در همه صفحات */}
-                    <Navbar />
+                  <ReviewsProvider>
+                    <div className="app">
+                      {/* هدر ثابت در همه صفحات */}
+                      <Navbar />
 
-                    {/* محتوای اصلی هر صفحه */}
-                    <main className="main-content">
-                      <ErrorBoundary>
-                        <AppRoutes />
-                      </ErrorBoundary>
-                    </main>
+                      {/* محتوای اصلی هر صفحه */}
+                      <main className="main-content">
+                        <ErrorBoundary>
+                          <AppRoutes />
+                        </ErrorBoundary>
+                      </main>
 
-                    {/* فوتر ثابت در همه صفحات */}
-                    <Footer />
-                  </div>
+                      {/* فوتر ثابت در همه صفحات */}
+                      <Footer />
+                    </div>
+                  </ReviewsProvider>
                 </FavoritesProvider>
               </OrdersProvider>
             </CartProvider>

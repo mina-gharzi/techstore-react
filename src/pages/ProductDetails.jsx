@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import {
   ShoppingCart,
   Heart,
@@ -10,12 +10,18 @@ import {
   RotateCcw,
   Minus,
   Plus,
+  MessageSquare,
+  BadgeCheck,
+  Trash2,
 } from "lucide-react";
 import { useProducts, getStock } from "../context/ProductsContext";
 import { useCategories } from "../context/CategoriesContext";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { useCart } from "../context/CartContext";
 import { useFavorites } from "../context/FavoritesContext";
+import { useAuth } from "../context/AuthContext";
+import { useOrders } from "../context/OrdersContext";
+import { useReviews } from "../context/ReviewsContext";
 import { formatPrice } from "../utils/formatPrice";
 import ProductCard from "../components/product/ProductCard";
 
@@ -26,13 +32,30 @@ import ProductCard from "../components/product/ProductCard";
 
 export default function ProductDetails() {
   const { id } = useParams();
+  const location = useLocation();
   const { products } = useProducts();
   const { categories } = useCategories();
   const { addToCart } = useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { user, isAuthenticated } = useAuth();
+  const { getOrdersByUser } = useOrders();
+  const {
+    getReviewsByProduct,
+    getAverageRating,
+    getUserReview,
+    submitReview,
+    deleteReview,
+  } = useReviews();
 
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+
+  // ---------- فرم نظر ----------
+  const [reviewRating, setReviewRating] = useState(0);
+  const [hoveredStar, setHoveredStar] = useState(0);
+  const [reviewComment, setReviewComment] = useState("");
+  const [reviewSaved, setReviewSaved] = useState(false);
+  const [reviewError, setReviewError] = useState("");
 
   const product = products.find((item) => item.id === Number(id));
 
@@ -50,6 +73,29 @@ export default function ProductDetails() {
     setQuantity(1);
     setAdded(false);
   }, [product]);
+
+  // پر کردن فرم نظر با نظر قبلی کاربر (اگه قبلاً برای همین محصول
+  // نظر داده بود) - این‌جوری وقتی برای ویرایش برمی‌گرده، فرم خالی
+  // نیست. این افکت باید قبل از "return" شرطی زیر باشه (Rules of
+  // Hooks: هوک‌ها نباید بعد از یک return شرطی صدا زده بشن، وگرنه
+  // اگه بعداً product تغییر کنه/حذف بشه، تعداد هوک‌های رندرشده
+  // فرق می‌کنه و React ارور می‌ده).
+  useEffect(() => {
+    if (!product || !isAuthenticated) {
+      setReviewRating(0);
+      setReviewComment("");
+      return;
+    }
+    const existing = getUserReview(product.id, user.id);
+    if (existing) {
+      setReviewRating(existing.rating);
+      setReviewComment(existing.comment);
+    } else {
+      setReviewRating(0);
+      setReviewComment("");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.id, isAuthenticated, user?.id]);
 
   // محصولات مرتبط (همان دسته‌بندی)
   const relatedProducts = useMemo(() => {
@@ -91,6 +137,56 @@ export default function ProductDetails() {
 
   const stock = getStock(product);
   const isOutOfStock = stock <= 0;
+
+  // ---------- نظرها و امتیاز ----------
+  const productReviews = getReviewsByProduct(product.id);
+  const ratingInfo = getAverageRating(product.id, product.rating);
+  const myReview = isAuthenticated ? getUserReview(product.id, user.id) : null;
+
+  // "خریدار تایید شده": آیا این کاربر واقعاً این محصول رو خریده؟
+  // (فقط برای نمایش یه نشان اعتماد کنار نظر، محدودیتی برای ثبت
+  // نظر ایجاد نمی‌کنه - خیلی از سایت‌های واقعی هم همینطورن)
+  const hasPurchased =
+    isAuthenticated &&
+    getOrdersByUser(user.id).some(
+      (order) =>
+        order.status !== "لغو شده" &&
+        order.items?.some((item) => item.id === product.id),
+    );
+
+  const handleReviewSubmit = (e) => {
+    e.preventDefault();
+    if (!isAuthenticated) return;
+
+    // قبلاً وقتی کاربر فقط متن نظر رو تایپ می‌کرد ولی روی هیچ
+    // ستاره‌ای کلیک نکرده بود، دکمه‌ی "ثبت نظر" غیرفعال (disabled)
+    // می‌موند و کلیک روش هیچ اتفاقی نمی‌افتاد - بدون هیچ توضیحی
+    // که چرا. الان دکمه همیشه فعاله، ولی اگه امتیازی انتخاب نشده
+    // باشه، یک پیام خطای واضح نشون داده می‌شه.
+    if (reviewRating === 0) {
+      setReviewError("لطفاً یک امتیاز (حداقل ۱ ستاره) انتخاب کنید");
+      return;
+    }
+
+    setReviewError("");
+    submitReview(product.id, user.id, user.fullName, {
+      rating: reviewRating,
+      comment: reviewComment.trim(),
+    });
+
+    setReviewSaved(true);
+    setTimeout(() => setReviewSaved(false), 2000);
+  };
+
+  const handleDeleteReview = () => {
+    if (!myReview) return;
+    const confirmed = window.confirm("نظر شما حذف شود؟");
+    if (confirmed) {
+      deleteReview(myReview.id);
+      setReviewRating(0);
+      setReviewComment("");
+    }
+  };
 
   // ---------- افزودن به سبد ----------
   // قبلاً اینجا یک حلقه‌ی for اجرا می‌شد و addToCart را quantity بار صدا می‌زد
@@ -268,7 +364,10 @@ export default function ProductDetails() {
                 {product.name}
               </h1>
 
-              {/* امتیاز */}
+              {/* امتیاز - قبلاً از product.rating (عدد ثابت توی
+                  data/products.js) میومد. الان از میانگین نظرهای
+                  واقعی محاسبه میشه (ratingInfo)؛ اگه هنوز نظری
+                  ثبت نشده، همون امتیاز پیش‌فرض seed رو نشون میده. */}
               <div
                 style={{
                   display: "flex",
@@ -284,7 +383,9 @@ export default function ProductDetails() {
                       size={18}
                       color="#f59e0b"
                       fill={
-                        star <= Math.round(product.rating) ? "#f59e0b" : "none"
+                        star <= Math.round(ratingInfo.average)
+                          ? "#f59e0b"
+                          : "none"
                       }
                     />
                   ))}
@@ -296,7 +397,8 @@ export default function ProductDetails() {
                     fontSize: "0.95rem",
                   }}
                 >
-                  {product.rating} از ۵
+                  {ratingInfo.average.toFixed(1)} از ۵
+                  {ratingInfo.count > 0 && ` (${ratingInfo.count} نظر)`}
                 </span>
               </div>
 
@@ -466,7 +568,13 @@ export default function ProductDetails() {
                   </button>
                 </div>
                 {!isOutOfStock && stock <= 5 && (
-                  <span style={{ color: "#f59e0b", fontWeight: 700, fontSize: "0.85rem" }}>
+                  <span
+                    style={{
+                      color: "#f59e0b",
+                      fontWeight: 700,
+                      fontSize: "0.85rem",
+                    }}
+                  >
                     تنها {stock} عدد موجود است
                   </span>
                 )}
@@ -504,11 +612,17 @@ export default function ProductDetails() {
                     cursor: isOutOfStock ? "not-allowed" : "pointer",
                     border: "none",
                     fontFamily: "inherit",
-                    boxShadow: isOutOfStock ? "none" : "0 12px 28px rgba(37, 99, 235, 0.28)",
+                    boxShadow: isOutOfStock
+                      ? "none"
+                      : "0 12px 28px rgba(37, 99, 235, 0.28)",
                   }}
                 >
                   <ShoppingCart size={20} />
-                  {isOutOfStock ? "ناموجود" : added ? "به سبد اضافه شد ✓" : "افزودن به سبد"}
+                  {isOutOfStock
+                    ? "ناموجود"
+                    : added
+                      ? "به سبد اضافه شد ✓"
+                      : "افزودن به سبد"}
                 </button>
 
                 <button
@@ -597,7 +711,10 @@ export default function ProductDetails() {
               {[
                 { label: "برند", value: product.brand },
                 { label: "دسته‌بندی", value: categoryName },
-                { label: "امتیاز", value: `${product.rating} از ۵` },
+                {
+                  label: "امتیاز",
+                  value: `${ratingInfo.average.toFixed(1)} از ۵`,
+                },
                 {
                   label: "وضعیت",
                   value: product.isNew ? "جدید" : "موجود",
@@ -623,6 +740,376 @@ export default function ProductDetails() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* ===================== نظرات کاربران ===================== */}
+          <div
+            style={{
+              background: "#fff",
+              border: "1px solid #e2e8f0",
+              borderRadius: "20px",
+              padding: "28px 24px",
+              marginBottom: "50px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                marginBottom: "24px",
+              }}
+            >
+              <MessageSquare size={20} color="#2563eb" />
+              <h2
+                style={{
+                  fontSize: "1.3rem",
+                  fontWeight: 800,
+                  color: "#0f172a",
+                }}
+              >
+                نظرات کاربران
+                {ratingInfo.count > 0 && (
+                  <span
+                    style={{
+                      color: "#94a3b8",
+                      fontWeight: 600,
+                      fontSize: "0.95rem",
+                    }}
+                  >
+                    {" "}
+                    ({ratingInfo.count})
+                  </span>
+                )}
+              </h2>
+            </div>
+
+            {/* ---------- فرم ثبت/ویرایش نظر ---------- */}
+            {isAuthenticated ? (
+              <form
+                onSubmit={handleReviewSubmit}
+                style={{
+                  background: "#f8fafc",
+                  border: "1px solid #e2e8f0",
+                  borderRadius: "16px",
+                  padding: "20px",
+                  marginBottom: "28px",
+                }}
+              >
+                <div style={{ marginBottom: "14px" }}>
+                  <span
+                    style={{
+                      display: "block",
+                      fontWeight: 700,
+                      color: "#334155",
+                      marginBottom: "8px",
+                      fontSize: "0.92rem",
+                    }}
+                  >
+                    {myReview ? "ویرایش امتیاز شما" : "امتیاز شما"}
+                  </span>
+                  <div style={{ display: "flex", gap: "4px" }}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => {
+                          setReviewRating(star);
+                          setReviewError("");
+                        }}
+                        onMouseEnter={() => setHoveredStar(star)}
+                        onMouseLeave={() => setHoveredStar(0)}
+                        style={{ cursor: "pointer", padding: "2px" }}
+                        aria-label={`امتیاز ${star} از ۵`}
+                      >
+                        <Star
+                          size={26}
+                          color="#f59e0b"
+                          fill={
+                            star <= (hoveredStar || reviewRating)
+                              ? "#f59e0b"
+                              : "none"
+                          }
+                        />
+                      </button>
+                    ))}
+                  </div>
+                  {reviewError && (
+                    <span
+                      style={{
+                        display: "block",
+                        marginTop: "8px",
+                        color: "#ef4444",
+                        fontSize: "0.82rem",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {reviewError}
+                    </span>
+                  )}
+                </div>
+
+                <div style={{ marginBottom: "14px" }}>
+                  <textarea
+                    value={reviewComment}
+                    onChange={(e) => setReviewComment(e.target.value)}
+                    placeholder="نظر خود را درباره این محصول بنویسید (اختیاری)..."
+                    rows={3}
+                    style={{
+                      width: "100%",
+                      padding: "12px 14px",
+                      border: "1.5px solid #e2e8f0",
+                      borderRadius: "12px",
+                      fontSize: "0.92rem",
+                      outline: "none",
+                      background: "#fff",
+                      fontFamily: "inherit",
+                      color: "#0f172a",
+                      resize: "vertical",
+                      lineHeight: 1.7,
+                    }}
+                  />
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <button
+                    type="submit"
+                    style={{
+                      padding: "11px 26px",
+                      background: reviewSaved ? "#16a34a" : "#2563eb",
+                      color: "#fff",
+                      borderRadius: "12px",
+                      fontWeight: 700,
+                      fontSize: "0.9rem",
+                      border: "none",
+                      cursor: "pointer",
+                      fontFamily: "inherit",
+                    }}
+                  >
+                    {reviewSaved
+                      ? "ثبت شد ✓"
+                      : myReview
+                        ? "ذخیره ویرایش"
+                        : "ثبت نظر"}
+                  </button>
+
+                  {myReview && (
+                    <button
+                      type="button"
+                      onClick={handleDeleteReview}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        color: "#ef4444",
+                        fontWeight: 600,
+                        fontSize: "0.85rem",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <Trash2 size={14} />
+                      حذف نظر من
+                    </button>
+                  )}
+                </div>
+              </form>
+            ) : (
+              <div
+                style={{
+                  background: "#f8fafc",
+                  border: "1px solid #e2e8f0",
+                  borderRadius: "16px",
+                  padding: "18px 20px",
+                  marginBottom: "28px",
+                  textAlign: "center",
+                }}
+              >
+                <p
+                  style={{
+                    color: "#64748b",
+                    marginBottom: "12px",
+                    fontSize: "0.9rem",
+                  }}
+                >
+                  برای ثبت نظر و امتیاز، ابتدا وارد حساب کاربری خود شوید.
+                </p>
+                <Link
+                  to="/login"
+                  state={{ from: location.pathname }}
+                  style={{
+                    display: "inline-block",
+                    padding: "9px 22px",
+                    background: "#2563eb",
+                    color: "#fff",
+                    borderRadius: "10px",
+                    fontWeight: 700,
+                    fontSize: "0.85rem",
+                    textDecoration: "none",
+                  }}
+                >
+                  ورود به حساب
+                </Link>
+              </div>
+            )}
+
+            {/* ---------- لیست نظرها ---------- */}
+            {productReviews.length === 0 ? (
+              <p
+                style={{
+                  color: "#94a3b8",
+                  textAlign: "center",
+                  padding: "20px 0",
+                  fontSize: "0.9rem",
+                }}
+              >
+                هنوز نظری برای این محصول ثبت نشده - اولین نفر باشید!
+              </p>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "16px",
+                }}
+              >
+                {productReviews.map((review) => (
+                  <div
+                    key={review.id}
+                    style={{
+                      paddingBottom: "16px",
+                      borderBottom: "1px solid #f1f5f9",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "flex-start",
+                        gap: "10px",
+                        marginBottom: "8px",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "34px",
+                            height: "34px",
+                            borderRadius: "50%",
+                            background: "#eff6ff",
+                            color: "#2563eb",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontWeight: 800,
+                            fontSize: "0.85rem",
+                            flexShrink: 0,
+                          }}
+                        >
+                          {review.userName?.charAt(0) || "?"}
+                        </div>
+                        <div>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "6px",
+                            }}
+                          >
+                            <span
+                              style={{
+                                fontWeight: 700,
+                                color: "#0f172a",
+                                fontSize: "0.88rem",
+                              }}
+                            >
+                              {review.userName}
+                            </span>
+                            {hasPurchased && review.userId === user?.id && (
+                              <span
+                                title="خریدار تایید شده"
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "3px",
+                                  color: "#16a34a",
+                                  fontSize: "0.72rem",
+                                  fontWeight: 700,
+                                }}
+                              >
+                                <BadgeCheck size={13} />
+                                خریدار
+                              </span>
+                            )}
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: "1px",
+                              marginTop: "2px",
+                            }}
+                          >
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                size={13}
+                                color="#f59e0b"
+                                fill={
+                                  star <= review.rating ? "#f59e0b" : "none"
+                                }
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      <span
+                        style={{
+                          color: "#94a3b8",
+                          fontSize: "0.78rem",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {new Date(review.createdAt).toLocaleDateString(
+                          "fa-IR",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          },
+                        )}
+                      </span>
+                    </div>
+
+                    {review.comment && (
+                      <p
+                        style={{
+                          color: "#475569",
+                          fontSize: "0.9rem",
+                          lineHeight: 1.8,
+                          marginRight: "42px",
+                        }}
+                      >
+                        {review.comment}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* محصولات مرتبط */}

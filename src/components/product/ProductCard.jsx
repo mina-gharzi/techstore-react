@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Heart, ShoppingCart, Check, Ban } from "lucide-react";
+import { Heart, ShoppingCart, Check, Ban, Star } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { useFavorites } from "../../context/FavoritesContext";
 import { getStock } from "../../context/ProductsContext";
+import { useReviews } from "../../context/ReviewsContext";
 import { formatPrice } from "../../utils/formatPrice";
 
 // ======================================================
@@ -15,6 +16,7 @@ export default function ProductCard({ product }) {
   // ---------- Context ----------
   const { addToCart } = useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { getAverageRating } = useReviews();
 
   // ---------- State ----------
   // فیدبک کوتاه بعد از افزودن به سبد، هم‌راستا با همین رفتار در ProductDetails
@@ -22,6 +24,9 @@ export default function ProductCard({ product }) {
 
   const stock = getStock(product);
   const isOutOfStock = stock <= 0;
+  // امتیاز واقعی از نظرهای ثبت‌شده (اگه نظری نبود، از رتینگ ثابت
+  // seed استفاده می‌کنیم تا کارت خالی به‌نظر نرسه)
+  const ratingInfo = getAverageRating(product.id, product.rating);
 
   // ---------- Handlers ----------
   const handleAddToCart = (e) => {
@@ -157,6 +162,19 @@ export default function ProductCard({ product }) {
         >
           {product.name}
         </Link>
+
+        {/* امتیاز - از میانگین نظرهای واقعی (ReviewsContext) */}
+        <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+          <Star size={14} color="#f59e0b" fill="#f59e0b" />
+          <span style={{ fontSize: "0.82rem", fontWeight: 700, color: "#334155" }}>
+            {ratingInfo.average.toFixed(1)}
+          </span>
+          {ratingInfo.count > 0 && (
+            <span style={{ fontSize: "0.78rem", color: "#94a3b8" }}>
+              ({ratingInfo.count})
+            </span>
+          )}
+        </div>
 
         {/* قیمت */}
         <div style={{ marginTop: "auto" }}>
