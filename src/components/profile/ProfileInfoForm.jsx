@@ -37,12 +37,14 @@ export default function ProfileInfoForm({
               type="text"
               name="fullName"
               id="fullName"
+              aria-describedby={infoErrors.fullName ? "profile-fullName-error" : undefined}
+              aria-invalid={!!infoErrors.fullName}
               value={infoData.fullName}
               onChange={handleInfoChange}
-              className={!!infoErrors.fullName ? "form-input form-input--error" : "form-input"}
+              className={infoErrors.fullName ? "form-input form-input--error" : "form-input"}
             />
           </div>
-          {infoErrors.fullName && <span className="form-error">{infoErrors.fullName}</span>}
+          {infoErrors.fullName && <span className="form-error" id="profile-fullName-error">{infoErrors.fullName}</span>}
         </div>
 
         <div style={{ marginBottom: "16px" }}>
@@ -53,12 +55,14 @@ export default function ProfileInfoForm({
               type="tel"
               name="phone"
               id="phone"
+              aria-describedby={infoErrors.phone ? "profile-phone-error" : undefined}
+              aria-invalid={!!infoErrors.phone}
               value={infoData.phone}
               onChange={handleInfoChange}
-              className={!!infoErrors.phone ? "form-input form-input--error" : "form-input"}
+              className={infoErrors.phone ? "form-input form-input--error" : "form-input"}
             />
           </div>
-          {infoErrors.phone && <span className="form-error">{infoErrors.phone}</span>}
+          {infoErrors.phone && <span className="form-error" id="profile-phone-error">{infoErrors.phone}</span>}
         </div>
 
         <div style={{ marginBottom: "22px" }}>
@@ -68,6 +72,7 @@ export default function ProfileInfoForm({
             <input
               type="email"
               id="email"
+              aria-describedby="profile-email-hint"
               value={user.email}
               disabled
               className="form-input"
@@ -78,7 +83,7 @@ export default function ProfileInfoForm({
               }}
             />
           </div>
-          <span className="form-error" style={{ color: "var(--color-text-faint)" }}>
+          <span className="form-error" id="profile-email-hint" style={{ color: "var(--color-text-faint)" }}>
             ایمیل قابل تغییر نیست
           </span>
         </div>

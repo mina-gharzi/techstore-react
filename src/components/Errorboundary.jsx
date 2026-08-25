@@ -82,6 +82,7 @@ export default class ErrorBoundary extends Component {
 
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", justifyContent: "center" }}>
             <button
+              type="button"
               onClick={this.handleReload}
               style={{
                 display: "flex",

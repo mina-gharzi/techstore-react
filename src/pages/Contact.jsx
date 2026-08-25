@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 // ======================================================
 // Contact
@@ -7,22 +8,36 @@ import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 // ======================================================
 
 export default function Contact() {
+  usePageTitle("تماس با ما");
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: "",
   });
+  const [errors, setErrors] = useState({});
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: null }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const newErrors = {};
+    if (!formData.name.trim()) newErrors.name = "نام را وارد کنید";
+    if (!formData.email.trim()) newErrors.email = "ایمیل را وارد کنید";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) newErrors.email = "ایمیل معتبر نیست";
+    if (!formData.subject.trim()) newErrors.subject = "موضوع را وارد کنید";
+    if (!formData.message.trim()) newErrors.message = "پیام را وارد کنید";
+
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+
     console.log("فرم ارسال شد:", formData);
     setIsSubmitted(true);
     setFormData({ name: "", email: "", subject: "", message: "" });
@@ -285,8 +300,9 @@ export default function Contact() {
                     onChange={handleChange}
                     required
                     placeholder="مثلاً: مینا"
-                    className="form-input"
+                    className={errors.name ? "form-input form-input--error" : "form-input"}
                   />
+                  {errors.name && <span className="form-error">{errors.name}</span>}
                 </div>
 
                 {/* ایمیل */}
@@ -311,8 +327,9 @@ export default function Contact() {
                     onChange={handleChange}
                     required
                     placeholder="example@email.com"
-                    className="form-input"
+                    className={errors.email ? "form-input form-input--error" : "form-input"}
                   />
+                  {errors.email && <span className="form-error">{errors.email}</span>}
                 </div>
 
                 {/* موضوع */}
@@ -337,8 +354,9 @@ export default function Contact() {
                     onChange={handleChange}
                     required
                     placeholder="موضوع پیام شما"
-                    className="form-input"
+                    className={errors.subject ? "form-input form-input--error" : "form-input"}
                   />
+                  {errors.subject && <span className="form-error">{errors.subject}</span>}
                 </div>
 
                 {/* پیام */}
@@ -363,7 +381,7 @@ export default function Contact() {
                     required
                     rows={5}
                     placeholder="متن پیام..."
-                    className="form-input form-textarea"
+                    className={errors.message ? "form-input form-textarea form-input--error" : "form-input form-textarea"}
                     style={{
                       height: "auto",
                       padding: "14px 16px",
@@ -371,6 +389,7 @@ export default function Contact() {
                       lineHeight: 1.7,
                     }}
                   />
+                  {errors.message && <span className="form-error">{errors.message}</span>}
                 </div>
 
                 {/* دکمه */}

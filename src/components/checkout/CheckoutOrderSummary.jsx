@@ -15,7 +15,6 @@ export default function CheckoutOrderSummary({
   handleApplyCoupon,
   handleRemoveCoupon,
   isSubmitting,
-  stockError,
 }) {
   return (
     <>
@@ -112,7 +111,6 @@ export default function CheckoutOrderSummary({
                   value={couponInput}
                   onChange={(e) => {
                     setCouponInput(e.target.value);
-                    if (couponError) setCouponError("");
                   }}
                   placeholder="کد تخفیف"
                   style={{

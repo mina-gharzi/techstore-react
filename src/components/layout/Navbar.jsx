@@ -85,6 +85,7 @@ export default function Navbar() {
           {isAuthenticated ? (
             <div style={{ position: "relative" }}>
               <button
+                type="button"
                 className="navbar__icon-btn"
                 onClick={toggleUserMenu}
                 title={user.fullName}
@@ -96,8 +97,10 @@ export default function Navbar() {
               {isUserMenuOpen && (
                 <>
                   {/* لایه‌ی نامرئی برای بستن منو با کلیک بیرون */}
-                  <div
+                  <button
+                    type="button"
                     onClick={closeUserMenu}
+                    aria-label="بستن منو"
                     style={{ position: "fixed", inset: 0, zIndex: 10 }}
                   />
                   <div
@@ -170,6 +173,7 @@ export default function Navbar() {
                     )}
 
                     <button
+                      type="button"
                       onClick={handleLogout}
                       style={{
                         width: "100%",
@@ -204,6 +208,7 @@ export default function Navbar() {
 
           {/* دکمه منوی موبایل */}
           <button
+            type="button"
             className="navbar__menu-toggle"
             onClick={toggleMenu}
             aria-label={isMenuOpen ? "بستن منو" : "باز کردن منو"}
@@ -267,6 +272,7 @@ export default function Navbar() {
               </NavLink>
             )}
             <button
+              type="button"
               onClick={handleLogout}
               className="navbar__mobile-link"
               style={{
@@ -298,7 +304,12 @@ export default function Navbar() {
 
       {/* ---------- Overlay موبایل ---------- */}
       {isMenuOpen && (
-        <div className="navbar__overlay" onClick={closeMenu}></div>
+        <button
+          type="button"
+          className="navbar__overlay"
+          onClick={closeMenu}
+          aria-label="بستن منو"
+        />
       )}
     </header>
   );

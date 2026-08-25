@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useOrders } from "../context/OrdersContext";
 import { useAuth } from "../context/AuthContext";
 import { useProducts } from "../context/ProductsContext";
 import { applyCoupon, calculateDiscount } from "../services/couponService";
+import { TIMEOUT_CHECKOUT } from "../utils/constants";
 
 // ======================================================
 // useCheckout
@@ -35,6 +36,11 @@ export function useCheckout() {
   // ---------- Submission State ----------
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [stockError, setStockError] = useState("");
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => { mountedRef.current = false; };
+  }, []);
 
   // ---------- Coupon State ----------
   const [couponInput, setCouponInput] = useState("");
@@ -146,6 +152,7 @@ export function useCheckout() {
 
       clearCart();
 
+      if (!mountedRef.current) return;
       navigate("/order-success", {
         state: {
           orderNumber,
@@ -156,7 +163,7 @@ export function useCheckout() {
           customerName: formData.fullName,
         },
       });
-    }, 900);
+    }, TIMEOUT_CHECKOUT);
   };
 
   return {

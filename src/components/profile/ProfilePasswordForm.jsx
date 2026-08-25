@@ -26,6 +26,7 @@ export default function ProfilePasswordForm({
   return (
     <div style={cardStyle}>
       <button
+        type="button"
         onClick={togglePasswordForm}
         style={{
           width: "100%",
@@ -62,7 +63,7 @@ export default function ProfilePasswordForm({
       {isPasswordFormOpen && (
         <div style={{ marginTop: "22px" }}>
           {passwordError && (
-            <div className="alert alert--error" style={{ marginBottom: "18px" }}>
+            <div className="alert alert--error" id="profile-password-error" style={{ marginBottom: "18px" }}>
               {passwordError}
             </div>
           )}
@@ -76,6 +77,7 @@ export default function ProfilePasswordForm({
                   type="password"
                   name="currentPassword"
                   id="currentPassword"
+                  aria-describedby={passwordError ? "profile-password-error" : undefined}
                   value={passwordData.currentPassword}
                   onChange={handlePasswordChange}
                   className="form-input"
@@ -91,6 +93,7 @@ export default function ProfilePasswordForm({
                   type="password"
                   name="newPassword"
                   id="newPassword"
+                  aria-describedby={passwordError ? "profile-password-error" : undefined}
                   value={passwordData.newPassword}
                   onChange={handlePasswordChange}
                   placeholder="حداقل ۶ کاراکتر"
@@ -107,6 +110,7 @@ export default function ProfilePasswordForm({
                   type="password"
                   name="confirmNewPassword"
                   id="confirmNewPassword"
+                  aria-describedby={passwordError ? "profile-password-error" : undefined}
                   value={passwordData.confirmNewPassword}
                   onChange={handlePasswordChange}
                   className="form-input"

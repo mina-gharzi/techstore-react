@@ -157,11 +157,11 @@ export default function AdminDashboard() {
             borderBottom: "1px solid var(--color-border)",
           }}
         >
-          <button onClick={() => setActiveTab("products")} style={tabBtnStyle("products")}>
+          <button type="button" onClick={() => setActiveTab("products")} style={tabBtnStyle("products")}>
             <Package size={17} />
             محصولات
           </button>
-          <button onClick={() => setActiveTab("orders")} style={tabBtnStyle("orders")}>
+          <button type="button" onClick={() => setActiveTab("orders")} style={tabBtnStyle("orders")}>
             <ClipboardList size={17} />
             سفارش‌ها
             {orders.length > 0 && (
@@ -179,15 +179,15 @@ export default function AdminDashboard() {
               </span>
             )}
           </button>
-          <button onClick={() => setActiveTab("users")} style={tabBtnStyle("users")}>
+          <button type="button" onClick={() => setActiveTab("users")} style={tabBtnStyle("users")}>
             <Users size={17} />
             کاربران
           </button>
-          <button onClick={() => setActiveTab("categories")} style={tabBtnStyle("categories")}>
+          <button type="button" onClick={() => setActiveTab("categories")} style={tabBtnStyle("categories")}>
             <Tags size={17} />
             دسته‌بندی‌ها
           </button>
-          <button onClick={() => setActiveTab("analytics")} style={tabBtnStyle("analytics")}>
+          <button type="button" onClick={() => setActiveTab("analytics")} style={tabBtnStyle("analytics")}>
             <BarChart3 size={17} />
             آمار
           </button>

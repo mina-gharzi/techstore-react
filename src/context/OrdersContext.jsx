@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { canTransition, STATUS_CANCELLED } from "../utils/orderStatus";
 import { readJSON, writeJSON } from "../utils/storage";
 
@@ -29,7 +29,7 @@ export function OrdersProvider({ children }) {
   }, [orders]);
 
   // ---------- ثبت سفارش جدید ----------
-  const addOrder = (orderData) => {
+  const addOrder = useCallback((orderData) => {
     const newOrder = {
       id: Date.now(),
       createdAt: new Date().toISOString(),
@@ -38,11 +38,12 @@ export function OrdersProvider({ children }) {
     };
     setOrders((prev) => [newOrder, ...prev]);
     return newOrder;
-  };
+  }, []);
 
   // ---------- سفارش‌های یک کاربر ----------
-  const getOrdersByUser = (userId) =>
-    orders.filter((order) => order.userId === userId);
+  const getOrdersByUser = useCallback((userId) =>
+    orders.filter((order) => order.userId === userId),
+  [orders]);
 
   // ---------- تغییر وضعیت سفارش ----------
   const updateOrderStatus = useCallback((orderId, newStatus) => {

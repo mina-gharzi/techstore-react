@@ -1,4 +1,4 @@
-import { Package, XCircle, AlertTriangle } from "lucide-react";
+import { Package, XCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { formatPrice } from "../../utils/formatPrice";
 
@@ -172,6 +172,7 @@ export default function ProfileOrderHistory({ myOrders, handleCancelOrder }) {
               {order.status === "در حال پردازش" && (
                 <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px dashed #f1f5f9" }}>
                   <button
+                    type="button"
                     onClick={() => handleCancelOrder(order)}
                     style={{
                       display: "flex",

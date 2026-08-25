@@ -42,7 +42,7 @@ export function ReviewsProvider({ children }) {
 
     const sum = productReviews.reduce((acc, r) => acc + r.rating, 0);
     return { average: sum / productReviews.length, count: productReviews.length };
-  }, [reviews]);
+  }, [getReviewsByProduct]);
 
   // ---------- نظر یک کاربر خاص برای یک محصول خاص ----------
   const getUserReview = useCallback((productId, userId) =>
@@ -50,32 +50,45 @@ export function ReviewsProvider({ children }) {
   [reviews]);
 
   // ---------- ثبت یا ویرایش نظر ----------
+  // نکته مهم: setReviews یک state updater آسنکرونه - تابعی که بهش می‌دیم
+  // همون لحظه اجرا نمی‌شه، بلکه موقع رندر بعدی اجرا می‌شه. پس نمی‌شه یه
+  // متغیر رو *داخل* updater ست کرد و بلافاصله بعدش (بیرون از setReviews)
+  // بخونیمش - همیشه مقدار اولیه‌ش (null) رو می‌گیریم.
+  // برای همین resultId رو قبل از فراخوانی setReviews، از روی همون
+  // `reviews`ی که از useState گرفتیم (نه از prev داخل updater) تعیین
+  // می‌کنیم. نوشتن واقعی همچنان از functional update با prev استفاده
+  // می‌کنه، پس مشکل duplicate-review (نسخه‌ی قبلی این باگ) ایجاد نمی‌شه.
   const submitReview = useCallback((productId, userId, userName, { rating, comment }) => {
-    const existing = getUserReview(productId, userId);
+    const existing = reviews.find(
+      (r) => r.productId === productId && r.userId === userId,
+    );
+    const resultId = existing ? existing.id : Date.now();
 
-    if (existing) {
-      setReviews((prev) =>
-        prev.map((r) =>
+    setReviews((prev) => {
+      if (existing) {
+        return prev.map((r) =>
           r.id === existing.id
             ? { ...r, rating, comment, createdAt: new Date().toISOString() }
             : r,
-        ),
-      );
-      return existing.id;
-    }
+        );
+      }
 
-    const newReview = {
-      id: Date.now(),
-      productId,
-      userId,
-      userName,
-      rating,
-      comment,
-      createdAt: new Date().toISOString(),
-    };
-    setReviews((prev) => [newReview, ...prev]);
-    return newReview.id;
-  }, []);
+      return [
+        {
+          id: resultId,
+          productId,
+          userId,
+          userName,
+          rating,
+          comment,
+          createdAt: new Date().toISOString(),
+        },
+        ...prev,
+      ];
+    });
+
+    return resultId;
+  }, [reviews]);
 
   // ---------- حذف نظر ----------
   const deleteReview = useCallback((reviewId) => {

@@ -19,7 +19,7 @@ export default function AdminUsersTab({ users, currentUser, deleteUser, setUserR
     if (currentUser && u.id === currentUser.id) return;
     try {
       setUserActionError("");
-      const newRole = u.role === "admin" ? "user" : "admin";
+      const newRole = u.role === "admin" ? "customer" : "admin";
       await setUserRole(u.id, newRole);
     } catch (err) {
       setUserActionError(err?.message || "خطا در تغییر نقش کاربر");
@@ -156,6 +156,7 @@ export default function AdminUsersTab({ users, currentUser, deleteUser, setUserR
 
                 <div style={{ display: "flex", gap: "8px" }}>
                   <button
+                    type="button"
                     onClick={() => handleToggleRole(u)}
                     disabled={isSelf}
                     title={
@@ -183,6 +184,7 @@ export default function AdminUsersTab({ users, currentUser, deleteUser, setUserR
                     )}
                   </button>
                   <button
+                    type="button"
                     onClick={() => handleDeleteUser(u)}
                     disabled={isSelf}
                     title="حذف کاربر"

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { KeyRound, Mail, Phone, Lock, Check } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { TIMEOUT_PASSWORD_RESET } from "../utils/constants";
 import "../styles/auth.css";
 
 // ======================================================
@@ -25,6 +26,11 @@ export default function ForgotPassword() {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDone, setIsDone] = useState(false);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => { mountedRef.current = false; };
+  }, []);
 
   // ---------- مرحله ۱: تایید هویت ----------
   const handleIdentityChange = (e) => {
@@ -81,16 +87,20 @@ export default function ForgotPassword() {
 
       if (!result.success) {
         // برگرد به مرحله ۱ چون یعنی ایمیل/موبایل با هم مطابقت نداشتن
+        if (!mountedRef.current) return;
         setError(result.message);
         setIsSubmitting(false);
         setStep(1);
         return;
       }
 
+      if (!mountedRef.current) return;
       setIsSubmitting(false);
       setIsDone(true);
-      setTimeout(() => navigate("/login"), 2000);
-    }, 600);
+      setTimeout(() => {
+        if (mountedRef.current) navigate("/login");
+      }, 2000);
+    }, TIMEOUT_PASSWORD_RESET);
   };
 
   if (isDone) {
@@ -137,15 +147,15 @@ export default function ForgotPassword() {
             <KeyRound size={23} />
           </div>
 
-          <h1>فراموشی رمز عبور</h1>
-          <p>
+          <h1 className="auth-header__title">فراموشی رمز عبور</h1>
+          <p className="auth-header__subtitle">
             {step === 1
               ? "ایمیل و شماره موبایلی که با آن ثبت‌نام کرده‌اید را وارد کنید"
               : "رمز عبور جدید خود را انتخاب کنید"}
           </p>
         </div>
 
-        {error && <div className="auth-general-error">{error}</div>}
+        {error && <div className="auth-general-error" id="forgot-error">{error}</div>}
 
         {step === 1 ? (
           <form className="auth-form" onSubmit={handleIdentitySubmit}>
@@ -161,6 +171,7 @@ export default function ForgotPassword() {
                   onChange={handleIdentityChange}
                   placeholder="example@email.com"
                   className="auth-input"
+                  aria-describedby={error ? "forgot-error" : undefined}
                 />
               </div>
             </div>
@@ -177,6 +188,7 @@ export default function ForgotPassword() {
                   onChange={handleIdentityChange}
                   placeholder="09xxxxxxxxx"
                   className="auth-input"
+                  aria-describedby={error ? "forgot-error" : undefined}
                 />
               </div>
             </div>
@@ -199,6 +211,7 @@ export default function ForgotPassword() {
                   onChange={handlePasswordChange}
                   placeholder="حداقل ۶ کاراکتر"
                   className="auth-input"
+                  aria-describedby={error ? "forgot-error" : undefined}
                 />
               </div>
             </div>
@@ -214,6 +227,7 @@ export default function ForgotPassword() {
                   value={newPassword.confirmPassword}
                   onChange={handlePasswordChange}
                   className="auth-input"
+                  aria-describedby={error ? "forgot-error" : undefined}
                 />
               </div>
             </div>
@@ -225,7 +239,7 @@ export default function ForgotPassword() {
         )}
 
         <p className="auth-switch">
-          رمز خود را به یاد آوردید؟ <Link to="/login">ورود به حساب</Link>
+          رمز خود را به یاد آوردید؟ <Link to="/login" className="auth-switch__link">ورود به حساب</Link>
         </p>
       </div>
     </section>

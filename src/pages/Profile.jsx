@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useOrders } from "../context/OrdersContext";
 import { useProducts, getStock } from "../context/ProductsContext";
@@ -50,6 +50,13 @@ export default function Profile() {
   });
   const [infoErrors, setInfoErrors] = useState({});
   const [infoSaved, setInfoSaved] = useState(false);
+
+  // اطلاعات فرم با تغییر کاربر ریست می‌شه (مثلاً بعد از ویرایش پروفایل)
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    setInfoData({ fullName: user.fullName, phone: user.phone });
+  }, [user.fullName, user.phone]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleInfoChange = (e) => {
     const { name, value } = e.target;

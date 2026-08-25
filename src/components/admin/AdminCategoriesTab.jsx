@@ -84,6 +84,7 @@ export default function AdminCategoriesTab({
         }}
       >
         <button
+          type="button"
           onClick={openAddCategoryForm}
           style={{
             display: "flex",
@@ -155,6 +156,7 @@ export default function AdminCategoriesTab({
               {editingCategoryId ? "ویرایش دسته‌بندی" : "دسته‌بندی جدید"}
             </h2>
             <button
+              type="button"
               onClick={closeCategoryForm}
               style={{
                 width: "34px",
@@ -292,6 +294,7 @@ export default function AdminCategoriesTab({
 
                 <div style={{ display: "flex", gap: "8px" }}>
                   <button
+                    type="button"
                     onClick={() => openEditCategoryForm(cat)}
                     style={{
                       width: "38px",
@@ -311,6 +314,7 @@ export default function AdminCategoriesTab({
                     <Pencil size={16} />
                   </button>
                   <button
+                    type="button"
                     onClick={() => handleDeleteCategory(cat)}
                     style={{
                       width: "38px",

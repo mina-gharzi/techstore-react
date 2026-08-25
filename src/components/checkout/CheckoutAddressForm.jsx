@@ -33,31 +33,35 @@ export default function CheckoutAddressForm({ formData, errors, handleChange }) 
         }}
       >
         <div>
-          <label className="form-label" htmlFor="fullName">نام و نام خانوادگی</label>
+          <label className="form-label" htmlFor="checkout-fullName">نام و نام خانوادگی</label>
           <input
             type="text"
             name="fullName"
-            id="fullName"
+            id="checkout-fullName"
+            aria-describedby={errors.fullName ? "checkout-fullName-error" : undefined}
+            aria-invalid={!!errors.fullName}
             value={formData.fullName}
             onChange={handleChange}
             placeholder="مثلاً: مینا قرضی"
             className={errors.fullName ? "form-input form-input--error" : "form-input"}
           />
-          {errors.fullName && <span className="form-error">{errors.fullName}</span>}
+          {errors.fullName && <span className="form-error" id="checkout-fullName-error">{errors.fullName}</span>}
         </div>
 
         <div>
-          <label className="form-label" htmlFor="phone">شماره موبایل</label>
+          <label className="form-label" htmlFor="checkout-phone">شماره موبایل</label>
           <input
             type="tel"
             name="phone"
-            id="phone"
+            id="checkout-phone"
+            aria-describedby={errors.phone ? "checkout-phone-error" : undefined}
+            aria-invalid={!!errors.phone}
             value={formData.phone}
             onChange={handleChange}
             placeholder="09xxxxxxxxx"
             className={errors.phone ? "form-input form-input--error" : "form-input"}
           />
-          {errors.phone && <span className="form-error">{errors.phone}</span>}
+          {errors.phone && <span className="form-error" id="checkout-phone-error">{errors.phone}</span>}
         </div>
       </div>
 
@@ -70,41 +74,47 @@ export default function CheckoutAddressForm({ formData, errors, handleChange }) 
         }}
       >
         <div>
-          <label className="form-label" htmlFor="city">شهر</label>
+          <label className="form-label" htmlFor="checkout-city">شهر</label>
           <input
             type="text"
             name="city"
-            id="city"
+            id="checkout-city"
+            aria-describedby={errors.city ? "checkout-city-error" : undefined}
+            aria-invalid={!!errors.city}
             value={formData.city}
             onChange={handleChange}
             placeholder="مثلاً: تهران"
             className={errors.city ? "form-input form-input--error" : "form-input"}
           />
-          {errors.city && <span className="form-error">{errors.city}</span>}
+          {errors.city && <span className="form-error" id="checkout-city-error">{errors.city}</span>}
         </div>
 
         <div>
-          <label className="form-label" htmlFor="postalCode">کد پستی</label>
+          <label className="form-label" htmlFor="checkout-postalCode">کد پستی</label>
           <input
             type="text"
             name="postalCode"
-            id="postalCode"
+            id="checkout-postalCode"
+            aria-describedby={errors.postalCode ? "checkout-postalCode-error" : undefined}
+            aria-invalid={!!errors.postalCode}
             value={formData.postalCode}
             onChange={handleChange}
             placeholder="۱۰ رقم"
             className={errors.postalCode ? "form-input form-input--error" : "form-input"}
           />
           {errors.postalCode && (
-            <span className="form-error">{errors.postalCode}</span>
+            <span className="form-error" id="checkout-postalCode-error">{errors.postalCode}</span>
           )}
         </div>
       </div>
 
       <div>
-        <label className="form-label" htmlFor="address">آدرس کامل</label>
+        <label className="form-label" htmlFor="checkout-address">آدرس کامل</label>
         <textarea
           name="address"
-          id="address"
+          id="checkout-address"
+          aria-describedby={errors.address ? "checkout-address-error" : undefined}
+          aria-invalid={!!errors.address}
           value={formData.address}
           onChange={handleChange}
           rows={3}
@@ -117,7 +127,7 @@ export default function CheckoutAddressForm({ formData, errors, handleChange }) 
             lineHeight: 1.7,
           }}
         />
-        {errors.address && <span className="form-error">{errors.address}</span>}
+        {errors.address && <span className="form-error" id="checkout-address-error">{errors.address}</span>}
       </div>
     </div>
   );

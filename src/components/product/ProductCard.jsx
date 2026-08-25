@@ -1,4 +1,4 @@
-import { useState, memo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Heart, ShoppingCart, Check, Ban, Star } from "lucide-react";
 import { useCart } from "../../context/CartContext";
@@ -6,6 +6,7 @@ import { useFavorites } from "../../context/FavoritesContext";
 import { getStock } from "../../context/ProductsContext";
 import { useReviews } from "../../context/ReviewsContext";
 import { formatPrice } from "../../utils/formatPrice";
+import { TIMEOUT_ADDED_TO_CART, LOW_STOCK_THRESHOLD } from "../../utils/constants";
 import "../../styles/product-card.css";
 
 // ======================================================
@@ -13,26 +14,31 @@ import "../../styles/product-card.css";
 // کارت نمایش یک محصول
 // ======================================================
 
-export default memo(function ProductCard({ product }) {
+export default function ProductCard({ product }) {
   const { addToCart } = useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { getAverageRating } = useReviews();
 
   const [added, setAdded] = useState(false);
 
+  useEffect(() => {
+    if (!added) return;
+    const id = setTimeout(() => setAdded(false), TIMEOUT_ADDED_TO_CART);
+    return () => clearTimeout(id);
+  }, [added]);
+
   const stock = getStock(product);
   const isOutOfStock = stock <= 0;
   const ratingInfo = getAverageRating(product.id, product.rating);
   const favorited = isFavorite(product.id);
 
-  const handleAddToCart = (e) => {
+  const handleAddToCart = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     if (isOutOfStock) return;
     addToCart(product);
     setAdded(true);
-    setTimeout(() => setAdded(false), 1500);
-  };
+  }, [addToCart, product, isOutOfStock]);
 
   const handleToggleFavorite = (e) => {
     e.preventDefault();
@@ -44,6 +50,7 @@ export default memo(function ProductCard({ product }) {
     <div className="product-card">
       {/* دکمه علاقه‌مندی */}
       <button
+        type="button"
         onClick={handleToggleFavorite}
         className={`product-card__favorite-btn ${favorited ? "is-active" : ""}`}
         title="افزودن به علاقه‌مندی‌ها"
@@ -109,6 +116,7 @@ export default memo(function ProductCard({ product }) {
           </Link>
 
           <button
+            type="button"
             onClick={handleAddToCart}
             disabled={isOutOfStock}
             className={`product-card__add-btn ${added ? "is-added" : ""}`}
@@ -124,7 +132,7 @@ export default memo(function ProductCard({ product }) {
           </button>
         </div>
 
-        {!isOutOfStock && stock <= 5 && (
+        {!isOutOfStock && stock <= LOW_STOCK_THRESHOLD && (
           <span className="product-card__low-stock">
             تنها {stock} عدد باقی مانده
           </span>
@@ -132,4 +140,4 @@ export default memo(function ProductCard({ product }) {
       </div>
     </div>
   );
-});
+}

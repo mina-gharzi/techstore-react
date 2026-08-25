@@ -54,6 +54,7 @@ export default function ProductFilter({
         </h3>
 
         <button
+          type="button"
           onClick={() => onCategoryChange("all")}
           style={filterBtn(activeCategory === "all")}
         >
@@ -62,6 +63,7 @@ export default function ProductFilter({
 
         {categories.map((cat) => (
           <button
+            type="button"
             key={cat.id}
             onClick={() => onCategoryChange(cat.id)}
             style={filterBtn(activeCategory === cat.id)}
@@ -85,6 +87,7 @@ export default function ProductFilter({
         </h3>
 
         <button
+          type="button"
           onClick={() => onFilterChange("all")}
           style={filterBtn(activeFilter === "all")}
         >
@@ -92,6 +95,7 @@ export default function ProductFilter({
         </button>
 
         <button
+          type="button"
           onClick={() => onFilterChange("new")}
           style={filterBtn(activeFilter === "new")}
         >
@@ -99,6 +103,7 @@ export default function ProductFilter({
         </button>
 
         <button
+          type="button"
           onClick={() => onFilterChange("discount")}
           style={filterBtn(activeFilter === "discount")}
         >
@@ -109,6 +114,7 @@ export default function ProductFilter({
       {/* پاک کردن فیلترها */}
       {hasActiveFilters && (
         <button
+          type="button"
           onClick={onClear}
           style={{
             width: "100%",

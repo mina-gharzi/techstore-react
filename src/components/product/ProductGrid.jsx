@@ -43,6 +43,7 @@ export default function ProductGrid({ products, onClearFilters }) {
         </p>
         {onClearFilters && (
           <button
+            type="button"
             onClick={onClearFilters}
             style={{
               padding: "var(--space-3) var(--space-6)",

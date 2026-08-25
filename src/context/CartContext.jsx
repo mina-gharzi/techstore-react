@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, useMemo, useCallback } 
 import { useAuth } from "./AuthContext";
 import { useProducts, getStock } from "./ProductsContext";
 import { readJSON, writeJSON, removeItem } from "../utils/storage";
+import { DEFAULT_STOCK } from "../utils/constants";
 
 const CartContext = createContext(null);
 
@@ -44,37 +45,28 @@ export function CartProvider({ children }) {
   const userId = user?.id ?? null;
 
   // ---------- state خام سبد (فقط id + color + quantity) ----------
-  const [rawCart, setRawCart] = useState(() => readRawCart(null));
-
-  // ---------- لود سبد کاربر جدید موقع سویچ ----------
-  useEffect(() => {
-    const userCart = readRawCart(userId);
+  // initState: merge مهمان ↔ کاربر در همون ابتدا انجام می‌شه، نه در useEffect
+  const [rawCart, setRawCart] = useState(() => {
+    const currentUserCart = readRawCart(userId);
     const guestCart = readRawCart(null);
-
     if (userId && guestCart.length > 0) {
-      // Merge: آیتم‌های مهمان رو به سبد کاربر اضافه کن
-      setRawCart((prev) => {
-        const merged = [...userCart];
-        guestCart.forEach((gItem) => {
-          const existing = merged.find(
-            (m) => m.productId === gItem.productId && m.selectedColor === gItem.selectedColor,
-          );
-          if (existing) {
-            existing.quantity += gItem.quantity;
-          } else {
-            merged.push({ ...gItem });
-          }
-        });
-        return merged;
+      const merged = [...currentUserCart];
+      guestCart.forEach((gItem) => {
+        const existing = merged.find(
+          (m) => m.productId === gItem.productId && m.selectedColor === gItem.selectedColor,
+        );
+        if (existing) {
+          existing.quantity += gItem.quantity;
+        } else {
+          merged.push({ ...gItem });
+        }
       });
-      // پاک کردن سبد مهمان بعد از merge
       writeRawCart(null, []);
       removeItem("techstore-cart-guest");
-    } else {
-      setRawCart(userCart);
+      return merged;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+    return currentUserCart;
+  });
 
   // ---------- ذخیره خودکار ----------
   useEffect(() => {
@@ -106,7 +98,7 @@ export function CartProvider({ children }) {
     const selectedColor = product.selectedColor || null;
     const productId = product.id;
     const liveProduct = products.find((p) => p.id === productId);
-    const maxStock = liveProduct ? getStock(liveProduct) : 10;
+    const maxStock = liveProduct ? getStock(liveProduct) : DEFAULT_STOCK;
 
     setRawCart((prev) => {
       const existing = prev.find(
@@ -134,28 +126,30 @@ export function CartProvider({ children }) {
   }, []);
 
   // ---------- تغییر تعداد ----------
+  // نکته: آیتم از داخل updater خونده می‌شه نه از closure خارجی
+  // تا همیشه به‌روز باشه (closure ممکنه stale باشه).
   const updateQuantity = useCallback((cartItemId, quantity) => {
     if (quantity < 1) {
       removeFromCart(cartItemId);
       return;
     }
 
-    const item = rawCart.find(
-      (i) => getCartItemId(i.productId, i.selectedColor) === cartItemId,
-    );
-    if (!item) return;
+    setRawCart((prev) => {
+      const item = prev.find(
+        (i) => getCartItemId(i.productId, i.selectedColor) === cartItemId,
+      );
+      if (!item) return prev;
 
-    const liveProduct = products.find((p) => p.id === item.productId);
-    const maxStock = liveProduct ? getStock(liveProduct) : 10;
+      const liveProduct = products.find((p) => p.id === item.productId);
+      const maxStock = liveProduct ? getStock(liveProduct) : DEFAULT_STOCK;
 
-    setRawCart((prev) =>
-      prev.map((i) =>
+      return prev.map((i) =>
         getCartItemId(i.productId, i.selectedColor) === cartItemId
           ? { ...i, quantity: Math.min(quantity, maxStock) }
           : i,
-      ),
-    );
-  }, [products]);
+      );
+    });
+  }, [products, removeFromCart]);
 
   // ---------- خالی کردن ----------
   const clearCart = useCallback(() => setRawCart([]), []);

@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
-import { ArrowRight, Shield, Truck, RotateCcw } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useProducts, getStock } from "../context/ProductsContext";
 import { useCategories } from "../context/CategoriesContext";
 import { usePageTitle } from "../hooks/usePageTitle";
@@ -9,6 +9,7 @@ import { useFavorites } from "../context/FavoritesContext";
 import { useAuth } from "../context/AuthContext";
 import { useOrders } from "../context/OrdersContext";
 import { useReviews } from "../context/ReviewsContext";
+import { TIMEOUT_REVIEW_SAVED } from "../utils/constants";
 
 import ProductImage from "../components/product/ProductImage";
 import ProductInfo from "../components/product/ProductInfo";
@@ -19,11 +20,12 @@ import ProductRelated from "../components/product/ProductRelated";
 // ======================================================
 // ProductDetails
 // صفحه جزئیات محصول
+//
+// state با key={id} ریست می‌شه (وقتی route عوض بشه).
+// نیازی به useEffect برای sync state نیست.
 // ======================================================
 
-export default function ProductDetails() {
-  const { id } = useParams();
-  const location = useLocation();
+function ProductDetailsInner({ id, location }) {
   const { products } = useProducts();
   const { categories } = useCategories();
   const { addToCart } = useCart();
@@ -38,47 +40,43 @@ export default function ProductDetails() {
     deleteReview,
   } = useReviews();
 
+  const product = products.find((item) => item.id === Number(id));
+  usePageTitle(product ? product.name : "محصول پیدا نشد");
+
+  // ---------- state (initializers from product — no useEffect needed) ----------
+  const [selectedColor, setSelectedColor] = useState(
+    product?.colors?.length ? product.colors[0] : null,
+  );
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => { mountedRef.current = false; };
+  }, []);
 
   // ---------- فرم نظر ----------
-  const [reviewRating, setReviewRating] = useState(0);
+  const existingReview = product && isAuthenticated && user
+    ? getUserReview(product.id, user.id)
+    : null;
+
+  const [reviewRating, setReviewRating] = useState(existingReview?.rating ?? 0);
   const [hoveredStar, setHoveredStar] = useState(0);
-  const [reviewComment, setReviewComment] = useState("");
+  const [reviewComment, setReviewComment] = useState(existingReview?.comment ?? "");
   const [reviewSaved, setReviewSaved] = useState(false);
   const [reviewError, setReviewError] = useState("");
 
-  const product = products.find((item) => item.id === Number(id));
-
-  usePageTitle(product ? product.name : "محصول پیدا نشد");
-  const [selectedColor, setSelectedColor] = useState(null);
-
+  // وقتی کاربر لاگین/لاگاوت می‌کنه، فرم نظر رو ریست کن
+  const prevUserId = user?.id ?? null;
   useEffect(() => {
-    if (product?.colors?.length) {
-      setSelectedColor(product.colors[0]);
-    } else {
-      setSelectedColor(null);
-    }
-    setQuantity(1);
-    setAdded(false);
-  }, [product]);
-
-  useEffect(() => {
-    if (!product || !isAuthenticated) {
-      setReviewRating(0);
-      setReviewComment("");
-      return;
-    }
-    const existing = getUserReview(product.id, user.id);
-    if (existing) {
-      setReviewRating(existing.rating);
-      setReviewComment(existing.comment);
-    } else {
-      setReviewRating(0);
-      setReviewComment("");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [product?.id, isAuthenticated, user?.id]);
+    /* eslint-disable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
+    const review = product && isAuthenticated && user
+      ? getUserReview(product.id, user.id)
+      : null;
+    setReviewRating(review?.rating ?? 0);
+    setReviewComment(review?.comment ?? "");
+    /* eslint-enable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
+  }, [prevUserId]);
 
   const relatedProducts = useMemo(() => {
     if (!product) return [];
@@ -149,7 +147,9 @@ export default function ProductDetails() {
     });
 
     setReviewSaved(true);
-    setTimeout(() => setReviewSaved(false), 2000);
+    setTimeout(() => {
+      if (mountedRef.current) setReviewSaved(false);
+    }, TIMEOUT_REVIEW_SAVED);
   };
 
   const handleDeleteReview = () => {
@@ -173,7 +173,9 @@ export default function ProductDetails() {
     addToCart(itemToAdd, quantity);
 
     setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
+    setTimeout(() => {
+      if (mountedRef.current) setAdded(false);
+    }, 2000);
   };
 
   return (
@@ -241,6 +243,7 @@ export default function ProductDetails() {
             hasPurchased={hasPurchased}
             reviewRating={reviewRating}
             setReviewRating={setReviewRating}
+            setReviewError={setReviewError}
             hoveredStar={hoveredStar}
             setHoveredStar={setHoveredStar}
             reviewComment={reviewComment}
@@ -260,4 +263,13 @@ export default function ProductDetails() {
       </section>
     </div>
   );
+}
+
+// ======================================================
+// ProductDetails — wrapper: key={id} state رو ریست می‌کنه
+// ======================================================
+export default function ProductDetails() {
+  const { id } = useParams();
+  const location = useLocation();
+  return <ProductDetailsInner key={id} id={id} location={location} />;
 }

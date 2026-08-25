@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useMemo } from "react";
+import { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
 import { readJSON, writeJSON, removeItem } from "../utils/storage";
 
 const AuthContext = createContext(null);
@@ -86,8 +86,7 @@ export function AuthProvider({ children }) {
   }, [user]);
 
   // ---------- ثبت‌نام ----------
-  // برمی‌گرداند: { success: boolean, message?: string }
-  const register = ({ fullName, email, phone, password }) => {
+  const register = useCallback(({ fullName, email, phone, password }) => {
     const currentUsers = readUsers();
     const normalizedEmail = email.trim().toLowerCase();
 
@@ -111,14 +110,14 @@ export function AuthProvider({ children }) {
     persistUsers([...currentUsers, newUser]);
 
     // بعد از ثبت‌نام موفق، خودکار لاگین کن
-    const { password: _pw, ...safeUser } = newUser;
+    const { password: _password, ...safeUser } = newUser;
     setUser(safeUser);
 
     return { success: true };
-  };
+  }, []);
 
   // ---------- ورود ----------
-  const login = ({ email, password }) => {
+  const login = useCallback(({ email, password }) => {
     const currentUsers = readUsers();
     const normalizedEmail = email.trim().toLowerCase();
 
@@ -134,16 +133,13 @@ export function AuthProvider({ children }) {
     setUser(safeUser);
 
     return { success: true };
-  };
+  }, []);
 
   // ---------- خروج ----------
-  const logout = () => setUser(null);
+  const logout = useCallback(() => setUser(null), []);
 
-  // ---------- ویرایش پروفایل (نام/موبایل) ----------
-  // ایمیل عمداً قابل ویرایش نیست، چون همون شناسه‌ی یکتای ورود
-  // (username) هست؛ تغییرش نیاز به منطق پیچیده‌تری (تایید ایمیل
-  // جدید و...) داره که خارج از اسکوپ این نسخه‌ی fake auth‌ست.
-  const updateProfile = ({ fullName, phone }) => {
+  // ---------- ویرایش پروفایل ----------
+  const updateProfile = useCallback(({ fullName, phone }) => {
     if (!user) {
       return { success: false, message: "کاربر لاگین نیست" };
     }
@@ -157,10 +153,10 @@ export function AuthProvider({ children }) {
     setUser((prev) => ({ ...prev, fullName: fullName.trim(), phone: phone.trim() }));
 
     return { success: true };
-  };
+  }, [user]);
 
   // ---------- تغییر رمز عبور ----------
-  const changePassword = ({ currentPassword, newPassword }) => {
+  const changePassword = useCallback(({ currentPassword, newPassword }) => {
     if (!user) {
       return { success: false, message: "کاربر لاگین نیست" };
     }
@@ -178,15 +174,10 @@ export function AuthProvider({ children }) {
     persistUsers(updatedUsers);
 
     return { success: true };
-  };
+  }, [user]);
 
-  // ---------- بازیابی رمز عبور (فراموشی رمز) ----------
-  // چون سرویس ایمیل واقعی نداریم (نمی‌تونیم لینک بازیابی بفرستیم)،
-  // هویت کاربر با تطابق ایمیل + شماره موبایلی که موقع ثبت‌نام داده
-  // بود تایید می‌شه، بعد اجازه‌ی تنظیم رمز جدید داده می‌شه. این یک
-  // جایگزین ساده‌ی fake‌ست؛ در پروژه‌ی واقعی باید یک لینک یک‌بارمصرف
-  // با محدودیت زمانی از طریق ایمیل/پیامک فرستاده بشه.
-  const resetPassword = ({ email, phone, newPassword }) => {
+  // ---------- بازیابی رمز عبور ----------
+  const resetPassword = useCallback(({ email, phone, newPassword }) => {
     const currentUsers = readUsers();
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedPhone = phone.trim();
@@ -208,15 +199,13 @@ export function AuthProvider({ children }) {
     persistUsers(updatedUsers);
 
     return { success: true };
-  };
+  }, []);
 
-  // ---------- مدیریت کاربران (فقط ادمین) ----------
+  // ---------- مدیریت کاربران ----------
 
-  // تعداد ادمین‌های فعلی - برای جلوگیری از حذف/تنزل آخرین ادمین
   const countAdmins = (list) => list.filter((u) => u.role === "admin").length;
 
-  // حذف یک کاربر
-  const deleteUser = (userId) => {
+  const deleteUser = useCallback((userId) => {
     if (user && userId === user.id) {
       return { success: false, message: "نمی‌توانید حساب خودتان را حذف کنید" };
     }
@@ -234,10 +223,10 @@ export function AuthProvider({ children }) {
 
     persistUsers(currentUsers.filter((u) => u.id !== userId));
     return { success: true };
-  };
+  }, [user]);
 
-  // تغییر نقش یک کاربر (ادمین <-> کاربر عادی)
-  const setUserRole = (userId, role) => {
+  // تغییر نقش یک کاربر
+  const setUserRole = useCallback((userId, role) => {
     if (user && userId === user.id) {
       return { success: false, message: "نمی‌توانید نقش خودتان را تغییر دهید" };
     }
@@ -259,10 +248,13 @@ export function AuthProvider({ children }) {
     persistUsers(updatedUsers);
 
     return { success: true };
-  };
+  }, [user]);
 
   // لیست کاربرها بدون پسورد - برای نمایش در پنل ادمین
-  const safeUsers = users.map(({ password: _pw, ...rest }) => rest);
+  const safeUsers = useMemo(
+    () => users.map(({ password: _pw, ...rest }) => rest),
+    [users],
+  );
 
   const value = useMemo(() => ({
     user,

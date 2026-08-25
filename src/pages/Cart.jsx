@@ -52,7 +52,7 @@ export default function Cart() {
             سبد خرید ({totalItems} کالا)
           </h1>
 
-          <button onClick={clearCart} className="btn btn--ghost" style={{ color: "var(--color-error)" }}>
+          <button type="button" onClick={clearCart} className="btn btn--ghost" style={{ color: "var(--color-error)" }}>
             حذف همه
           </button>
         </div>
@@ -148,6 +148,7 @@ export default function Cart() {
                 {/* کنترل تعداد */}
                 <div className="quantity">
                   <button
+                    type="button"
                     className="quantity__btn"
                     onClick={() => updateQuantity(item.cartItemId, item.quantity - 1)}
                     aria-label="کم کردن تعداد"
@@ -158,6 +159,7 @@ export default function Cart() {
                   <span className="quantity__value">{item.quantity}</span>
 
                   <button
+                    type="button"
                     className="quantity__btn"
                     onClick={() => updateQuantity(item.cartItemId, Math.min(item.stock, item.quantity + 1))}
                     disabled={item.quantity >= item.stock}
@@ -181,6 +183,7 @@ export default function Cart() {
 
                 {/* حذف */}
                 <button
+                  type="button"
                   onClick={() => removeFromCart(item.cartItemId)}
                   className="btn btn--icon"
                   style={{ width: "38px", height: "38px", borderRadius: "var(--radius-md)", color: "var(--color-error)" }}

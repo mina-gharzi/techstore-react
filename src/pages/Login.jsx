@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { LogIn, Mail, Lock } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { TIMEOUT_LOGIN } from "../utils/constants";
 import "../styles/auth.css";
 
 // ======================================================
@@ -24,6 +25,11 @@ export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => { mountedRef.current = false; };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,13 +52,15 @@ export default function Login() {
       const result = login(formData);
 
       if (!result.success) {
+        if (!mountedRef.current) return;
         setError(result.message);
         setIsSubmitting(false);
         return;
       }
 
+      if (!mountedRef.current) return;
       navigate(redirectTo, { replace: true });
-    }, 500);
+    }, TIMEOUT_LOGIN);
   };
 
   return (
@@ -72,13 +80,13 @@ export default function Login() {
             <LogIn size={23} />
           </div>
 
-          <h1>ورود به حساب کاربری</h1>
+          <h1 className="auth-header__title">ورود به حساب کاربری</h1>
 
-          <p>برای ادامه‌ی خرید وارد حساب خود شوید</p>
+          <p className="auth-header__subtitle">برای ادامه‌ی خرید وارد حساب خود شوید</p>
         </div>
 
         {/* Error */}
-        {error && <div className="auth-general-error">{error}</div>}
+        {error && <div className="auth-general-error" id="login-error">{error}</div>}
 
         {/* Form */}
         <form className="auth-form" onSubmit={handleSubmit}>
@@ -93,6 +101,7 @@ export default function Login() {
                 type="email"
                 name="email"
                 id="email"
+                aria-describedby={error ? "login-error" : undefined}
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="example@email.com"
@@ -112,6 +121,7 @@ export default function Login() {
                 type="password"
                 name="password"
                 id="password"
+                aria-describedby={error ? "login-error" : undefined}
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"
@@ -138,7 +148,7 @@ export default function Login() {
         {/* Register link */}
         <p className="auth-switch">
           حساب کاربری ندارید؟{" "}
-          <Link to="/register">ثبت‌نام کنید</Link>
+          <Link to="/register" className="auth-switch__link">ثبت‌نام کنید</Link>
         </p>
       </div>
     </section>

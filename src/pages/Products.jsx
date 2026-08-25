@@ -177,6 +177,7 @@ export default function Products() {
 
             {/* دکمه فیلتر موبایل */}
             <button
+              type="button"
               onClick={() => setShowFilters((prev) => !prev)}
               style={{
                 height: "48px",
@@ -213,8 +214,7 @@ export default function Products() {
           >
             {/* سایدبار فیلتر */}
             <div
-              className="products-sidebar"
-              style={{ display: showFilters ? "block" : undefined }}
+              className={`products-sidebar${showFilters ? " is-open" : ""}`}
             >
               <ProductFilter
                 categories={categories}
@@ -245,7 +245,7 @@ export default function Products() {
           .products-sidebar {
             display: none;
           }
-          .products-sidebar[style*="block"] {
+          .products-sidebar.is-open {
             display: block !important;
           }
         }

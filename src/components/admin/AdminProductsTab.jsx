@@ -5,7 +5,6 @@ import {
   Trash2,
   PackageSearch,
   X,
-  Check,
   AlertTriangle,
   Image as ImageIcon,
   ImageOff,
@@ -151,6 +150,7 @@ export default function AdminProductsTab({
         }}
       >
         <button
+          type="button"
           onClick={openAddForm}
           style={{
             display: "flex",
@@ -201,6 +201,7 @@ export default function AdminProductsTab({
               {editingId ? "ویرایش محصول" : "محصول جدید"}
             </h2>
             <button
+              type="button"
               onClick={closeForm}
               style={{
                 width: "34px",
@@ -236,10 +237,12 @@ export default function AdminProductsTab({
                   id="productName"
                   value={formData.name}
                   onChange={handleChange}
-                  className={!!errors.name ? "form-input form-input--error" : "form-input"}
+                  className={errors.name ? "form-input form-input--error" : "form-input"}
+                  aria-invalid={!!errors.name}
+                  aria-describedby={errors.name ? "productName-error" : undefined}
                 />
                 {errors.name && (
-                  <span className="form-error">{errors.name}</span>
+                  <span className="form-error" id="productName-error">{errors.name}</span>
                 )}
               </div>
 
@@ -251,10 +254,12 @@ export default function AdminProductsTab({
                   id="brand"
                   value={formData.brand}
                   onChange={handleChange}
-                  className={!!errors.brand ? "form-input form-input--error" : "form-input"}
+                  className={errors.brand ? "form-input form-input--error" : "form-input"}
+                  aria-invalid={!!errors.brand}
+                  aria-describedby={errors.brand ? "brand-error" : undefined}
                 />
                 {errors.brand && (
-                  <span className="form-error">{errors.brand}</span>
+                  <span className="form-error" id="brand-error">{errors.brand}</span>
                 )}
               </div>
             </div>
@@ -310,10 +315,12 @@ export default function AdminProductsTab({
                   step="1"
                   value={formData.stock}
                   onChange={handleChange}
-                  className={!!errors.stock ? "form-input form-input--error" : "form-input"}
+                  className={errors.stock ? "form-input form-input--error" : "form-input"}
+                  aria-invalid={!!errors.stock}
+                  aria-describedby={errors.stock ? "stock-error" : undefined}
                 />
                 {errors.stock && (
-                  <span className="form-error">{errors.stock}</span>
+                  <span className="form-error" id="stock-error">{errors.stock}</span>
                 )}
               </div>
             </div>
@@ -335,10 +342,12 @@ export default function AdminProductsTab({
                   id="price"
                   value={formData.price}
                   onChange={handleChange}
-                  className={!!errors.price ? "form-input form-input--error" : "form-input"}
+                  className={errors.price ? "form-input form-input--error" : "form-input"}
+                  aria-invalid={!!errors.price}
+                  aria-describedby={errors.price ? "price-error" : undefined}
                 />
                 {errors.price && (
-                  <span className="form-error">{errors.price}</span>
+                  <span className="form-error" id="price-error">{errors.price}</span>
                 )}
               </div>
 
@@ -352,10 +361,12 @@ export default function AdminProductsTab({
                   id="oldPrice"
                   value={formData.oldPrice}
                   onChange={handleChange}
-                  className={!!errors.oldPrice ? "form-input form-input--error" : "form-input"}
+                  className={errors.oldPrice ? "form-input form-input--error" : "form-input"}
+                  aria-invalid={!!errors.oldPrice}
+                  aria-describedby={errors.oldPrice ? "oldPrice-error" : undefined}
                 />
                 {errors.oldPrice && (
-                  <span className="form-error">{errors.oldPrice}</span>
+                  <span className="form-error" id="oldPrice-error">{errors.oldPrice}</span>
                 )}
               </div>
             </div>
@@ -378,6 +389,14 @@ export default function AdminProductsTab({
                   onChange={handleChange}
                   placeholder="/assets/images/product/example.jpg"
                   className="form-input"
+                  aria-invalid={!!errors.image || (!errors.image && formData.image.trim() && imagePreviewError)}
+                  aria-describedby={
+                    errors.image
+                      ? "imageUrl-error"
+                      : formData.image.trim() && imagePreviewError
+                        ? "imageUrl-preview-error"
+                        : undefined
+                  }
                   style={{
                     flex: 1,
                     minWidth: "200px",
@@ -433,12 +452,12 @@ export default function AdminProductsTab({
                 </div>
               </div>
               {errors.image && (
-                <span className="form-error">{errors.image}</span>
+                <span className="form-error" id="imageUrl-error">{errors.image}</span>
               )}
               {!errors.image &&
                 formData.image.trim() &&
                 imagePreviewError && (
-                  <span className="form-error">
+                  <span className="form-error" id="imageUrl-preview-error">
                     این آدرس تصویر بارگذاری نشد - لینک را بررسی کنید
                   </span>
                 )}
@@ -660,6 +679,7 @@ export default function AdminProductsTab({
 
               <div style={{ display: "flex", gap: "8px" }}>
                 <button
+                  type="button"
                   onClick={() => openEditForm(product)}
                   style={{
                     width: "38px",
@@ -679,6 +699,7 @@ export default function AdminProductsTab({
                   <Pencil size={16} />
                 </button>
                 <button
+                  type="button"
                   onClick={() => handleDelete(product)}
                   style={{
                     width: "38px",

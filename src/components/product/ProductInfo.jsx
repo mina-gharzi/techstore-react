@@ -9,12 +9,12 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { formatPrice } from "../../utils/formatPrice";
+import { LOW_STOCK_THRESHOLD } from "../../utils/constants";
 
 export default function ProductInfo({
   product,
   categoryName,
   ratingInfo,
-  discountPercent,
   selectedColor,
   setSelectedColor,
   quantity,
@@ -189,6 +189,7 @@ export default function ProductInfo({
 
               return (
                 <button
+                  type="button"
                   key={color.value}
                   onClick={() => setSelectedColor(color)}
                   title={color.name}
@@ -236,6 +237,7 @@ export default function ProductInfo({
           }}
         >
           <button
+            type="button"
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
             style={{
               width: "34px",
@@ -262,6 +264,7 @@ export default function ProductInfo({
             {quantity}
           </span>
           <button
+            type="button"
             onClick={() => setQuantity((q) => Math.min(stock, q + 1))}
             disabled={quantity >= stock}
             style={{
@@ -281,7 +284,7 @@ export default function ProductInfo({
             <Plus size={14} />
           </button>
         </div>
-        {!isOutOfStock && stock <= 5 && (
+        {!isOutOfStock && stock <= LOW_STOCK_THRESHOLD && (
           <span
             style={{
               color: "var(--color-warning)",
@@ -304,6 +307,7 @@ export default function ProductInfo({
         }}
       >
         <button
+          type="button"
           onClick={handleAddToCart}
           disabled={isOutOfStock}
           style={{
@@ -340,6 +344,7 @@ export default function ProductInfo({
         </button>
 
         <button
+          type="button"
           onClick={() => toggleFavorite(product)}
           style={{
             width: "56px",

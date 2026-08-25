@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
 import { products as seedProducts } from "../data/products";
 import { readJSON, writeJSON } from "../utils/storage";
+import { DEFAULT_STOCK } from "../utils/constants";
 
 const ProductsContext = createContext(null);
 const STORAGE_KEY = "techstore-products";
@@ -38,7 +39,7 @@ export function ProductsProvider({ children }) {
           description: p.description ?? "",
           image: p.image ?? "",
           colors: p.colors ?? [],
-          stock: Number.isFinite(p.stock) ? p.stock : 10,
+          stock: Number.isFinite(p.stock) ? p.stock : DEFAULT_STOCK,
         }))
       : seedProducts;
   });
@@ -115,5 +116,5 @@ export function useProducts() {
 // اینکه با undefined همه‌جا "ناموجود" یا "بی‌نهایت" نشون بدیم،
 // یک مقدار پیش‌فرض معقول (۱۰) در نظر می‌گیریم.
 export function getStock(product) {
-  return Number.isFinite(product?.stock) ? product.stock : 10;
+  return Number.isFinite(product?.stock) ? product.stock : DEFAULT_STOCK;
 }

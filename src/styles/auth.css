@@ -79,7 +79,7 @@
   color: var(--color-primary);
 }
 
-.auth-header h1 {
+.auth-header__title {
   margin: 0 0 9px;
 
   color: var(--color-text);
@@ -88,7 +88,7 @@
   letter-spacing: -0.5px;
 }
 
-.auth-header p {
+.auth-header__subtitle {
   margin: 0;
 
   color: var(--color-text-muted);
@@ -278,13 +278,13 @@
   font-size: 0.84rem;
 }
 
-.auth-switch a {
+.auth-switch__link {
   color: var(--color-primary);
   font-weight: 800;
   text-decoration: none;
 }
 
-.auth-switch a:hover {
+.auth-switch__link:hover {
   text-decoration: underline;
 }
 
@@ -314,7 +314,7 @@
     margin-bottom: 28px;
   }
 
-  .auth-header h1 {
+  .auth-header__title {
     font-size: 1.4rem;
   }
 

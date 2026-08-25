@@ -1,5 +1,3 @@
-import { ImageOff } from "lucide-react";
-
 export default function ProductImage({ product, discountPercent }) {
   return (
     <div

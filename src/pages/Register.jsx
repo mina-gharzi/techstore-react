@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserPlus, User, Mail, Phone, Lock } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { TIMEOUT_REGISTER } from "../utils/constants";
 import "../styles/auth.css";
 
 // ======================================================
@@ -23,6 +24,11 @@ export default function Register() {
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => { mountedRef.current = false; };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -76,21 +82,16 @@ export default function Register() {
       const result = register(formData);
 
       if (!result.success) {
+        if (!mountedRef.current) return;
         setErrors({ email: result.message });
         setIsSubmitting(false);
         return;
       }
 
       // register() در AuthContext بعد از ثبت‌نام موفق خودکار لاگین هم می‌کند
+      if (!mountedRef.current) return;
       navigate("/", { replace: true });
-    }, 500);
-  };
-
-  const iconStyle = {
-    position: "absolute",
-    right: "14px",
-    top: "50%",
-    transform: "translateY(-50%)",
+    }, TIMEOUT_REGISTER);
   };
 
   return (
@@ -110,9 +111,9 @@ export default function Register() {
             <UserPlus size={23} />
           </div>
 
-          <h1>ساخت حساب کاربری</h1>
+          <h1 className="auth-header__title">ساخت حساب کاربری</h1>
 
-          <p>حساب خود را بسازید و خریدتان را شروع کنید</p>
+          <p className="auth-header__subtitle">حساب خود را بسازید و خریدتان را شروع کنید</p>
         </div>
 
         {/* Form */}
@@ -128,6 +129,8 @@ export default function Register() {
                 type="text"
                 name="fullName"
                 id="fullName"
+                aria-describedby={errors.fullName ? "reg-fullName-error" : undefined}
+                aria-invalid={!!errors.fullName}
                 value={formData.fullName}
                 onChange={handleChange}
                 placeholder="مثلاً: مینا قارزی "
@@ -138,7 +141,7 @@ export default function Register() {
             </div>
 
             {errors.fullName && (
-              <span className="form-error">{errors.fullName}</span>
+              <span className="form-error" id="reg-fullName-error">{errors.fullName}</span>
             )}
           </div>
 
@@ -153,6 +156,8 @@ export default function Register() {
                 type="email"
                 name="email"
                 id="email"
+                aria-describedby={errors.email ? "reg-email-error" : undefined}
+                aria-invalid={!!errors.email}
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="example@email.com"
@@ -162,7 +167,7 @@ export default function Register() {
               />
             </div>
 
-            {errors.email &&               <span className="form-error">{errors.email}</span>}
+            {errors.email && <span className="form-error" id="reg-email-error">{errors.email}</span>}
           </div>
 
           {/* Phone */}
@@ -176,6 +181,8 @@ export default function Register() {
                 type="tel"
                 name="phone"
                 id="phone"
+                aria-describedby={errors.phone ? "reg-phone-error" : undefined}
+                aria-invalid={!!errors.phone}
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="09xxxxxxxxx"
@@ -185,7 +192,7 @@ export default function Register() {
               />
             </div>
 
-            {errors.phone &&               <span className="form-error">{errors.phone}</span>}
+            {errors.phone && <span className="form-error" id="reg-phone-error">{errors.phone}</span>}
           </div>
 
           {/* Password */}
@@ -199,6 +206,8 @@ export default function Register() {
                 type="password"
                 name="password"
                 id="password"
+                aria-describedby={errors.password ? "reg-password-error" : undefined}
+                aria-invalid={!!errors.password}
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="حداقل ۶ کاراکتر"
@@ -209,7 +218,7 @@ export default function Register() {
             </div>
 
             {errors.password && (
-              <span className="form-error">{errors.password}</span>
+              <span className="form-error" id="reg-password-error">{errors.password}</span>
             )}
           </div>
 
@@ -224,6 +233,8 @@ export default function Register() {
                 type="password"
                 name="confirmPassword"
                 id="confirmPassword"
+                aria-describedby={errors.confirmPassword ? "reg-confirmPassword-error" : undefined}
+                aria-invalid={!!errors.confirmPassword}
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="••••••••"
@@ -234,7 +245,7 @@ export default function Register() {
             </div>
 
             {errors.confirmPassword && (
-              <span className="form-error">{errors.confirmPassword}</span>
+              <span className="form-error" id="reg-confirmPassword-error">{errors.confirmPassword}</span>
             )}
           </div>
 
@@ -246,7 +257,7 @@ export default function Register() {
 
         {/* Login link */}
         <p className="auth-switch">
-          قبلاً ثبت‌نام کرده‌اید؟ <Link to="/login">وارد شوید</Link>
+          قبلاً ثبت‌نام کرده‌اید؟ <Link to="/login" className="auth-switch__link">وارد شوید</Link>
         </p>
       </div>
     </section>
