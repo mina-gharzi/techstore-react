@@ -1,8 +1,37 @@
 import { ClipboardList } from "lucide-react";
 import { formatPrice } from "../../utils/formatPrice";
-import { ORDER_STATUSES, statusColor, formatOrderDate } from "./adminHelpers";
+import {
+  statusColor,
+  formatOrderDate,
+  getAllowedTransitions,
+  STATUS_CANCELLED,
+} from "./adminHelpers";
 
-export default function AdminOrdersTab({ orders, updateOrderStatus }) {
+// ======================================================
+// AdminOrdersTab
+// لیست سفارش‌ها + تغییر وضعیت (با محدودیت transition)
+// ======================================================
+
+export default function AdminOrdersTab({
+  orders,
+  updateOrderStatus,
+  cancelOrder,
+  restoreStock,
+}) {
+  const handleStatusChange = (order, newStatus) => {
+    if (newStatus === STATUS_CANCELLED) {
+      const confirmed = window.confirm(
+        `آیا از لغو سفارش «${order.orderNumber}» مطمئن هستید؟`,
+      );
+      if (!confirmed) return;
+
+      cancelOrder(order.id, restoreStock);
+      return;
+    }
+
+    updateOrderStatus(order.id, newStatus);
+  };
+
   return orders.length === 0 ? (
     <div
       style={{
@@ -26,6 +55,9 @@ export default function AdminOrdersTab({ orders, updateOrderStatus }) {
     >
       {orders.map((order) => {
         const colors = statusColor(order.status);
+        const allowed = getAllowedTransitions(order.status);
+        const isTerminal = allowed.length === 0;
+
         return (
           <div
             key={order.id}
@@ -68,30 +100,43 @@ export default function AdminOrdersTab({ orders, updateOrderStatus }) {
                 </div>
               </div>
 
-              {/* تغییر وضعیت سفارش */}
-              <select
-                value={order.status}
-                onChange={(e) =>
-                  updateOrderStatus(order.id, e.target.value)
-                }
-                style={{
-                  padding: "8px 14px",
-                  borderRadius: "10px",
-                  border: "1.5px solid var(--color-border)",
-                  background: colors.bg,
-                  color: colors.text,
-                  fontWeight: 700,
-                  fontSize: "0.85rem",
-                  fontFamily: "inherit",
-                  cursor: "pointer",
-                }}
-              >
-                {ORDER_STATUSES.map((status) => (
-                  <option key={status} value={status}>
-                    {status}
-                  </option>
-                ))}
-              </select>
+              {isTerminal ? (
+                <span
+                  style={{
+                    padding: "8px 14px",
+                    borderRadius: "10px",
+                    background: colors.bg,
+                    color: colors.text,
+                    fontWeight: 700,
+                    fontSize: "0.85rem",
+                  }}
+                >
+                  {order.status}
+                </span>
+              ) : (
+                <select
+                  value={order.status}
+                  onChange={(e) => handleStatusChange(order, e.target.value)}
+                  style={{
+                    padding: "8px 14px",
+                    borderRadius: "10px",
+                    border: "1.5px solid var(--color-border)",
+                    background: colors.bg,
+                    color: colors.text,
+                    fontWeight: 700,
+                    fontSize: "0.85rem",
+                    fontFamily: "inherit",
+                    cursor: "pointer",
+                  }}
+                >
+                  <option value={order.status}>{order.status}</option>
+                  {allowed.map((status) => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
 
             {/* آیتم‌های سفارش */}

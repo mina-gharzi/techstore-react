@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useOrders } from "../context/OrdersContext";
 import { useProducts, getStock } from "../context/ProductsContext";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { STATUS_PROCESSING } from "../components/admin/adminHelpers";
 
 import ProfileInfoForm from "../components/profile/ProfileInfoForm";
 import ProfilePasswordForm from "../components/profile/ProfilePasswordForm";
@@ -17,29 +18,29 @@ export default function Profile() {
   usePageTitle("پروفایل من");
 
   const { user, updateProfile, changePassword } = useAuth();
-  const { getOrdersByUser, updateOrderStatus } = useOrders();
+  const { getOrdersByUser, cancelOrder } = useOrders();
   const { products, updateProduct } = useProducts();
 
   const myOrders = getOrdersByUser(user.id);
 
   // ---------- لغو سفارش ----------
-  // مهم: موجودی باید از محصول زنده خونده بشه، نه از snapshot سفارش
-  // وگرنه هر لغوی موجودی رو بیشتر از حد اصلی بالا می‌بره.
+  // cancelOrder خودش وضعیت رو تغییر می‌ده و فقط callback
+  // بازگرداندن موجودی رو صدا می‌زنه.
   const handleCancelOrder = (order) => {
+    if (order.status !== STATUS_PROCESSING) return;
+
     const confirmed = window.confirm(
       `آیا از لغو سفارش «${order.orderNumber}» مطمئن هستید؟`,
     );
     if (!confirmed) return;
 
-    order.items.forEach((item) => {
-      const liveProduct = products.find((p) => p.id === item.id);
+    cancelOrder(order.id, (productId, quantity) => {
+      const liveProduct = products.find((p) => p.id === productId);
       if (liveProduct) {
         const currentStock = getStock(liveProduct);
-        updateProduct(item.id, { stock: currentStock + item.quantity });
+        updateProduct(productId, { stock: currentStock + quantity });
       }
     });
-
-    updateOrderStatus(order.id, "لغو شده");
   };
 
   // ---------- اطلاعات شخصی ----------

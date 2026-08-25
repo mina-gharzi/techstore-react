@@ -553,7 +553,9 @@ export default function AdminProductsTab({
             gap: "12px",
           }}
         >
-          {products.map((product) => (
+          {products.map((product) => {
+            const stock = getStock(product);
+            return (
             <div
               key={product.id}
               style={{
@@ -637,17 +639,17 @@ export default function AdminProductsTab({
                   fontSize: "0.82rem",
                   fontWeight: 700,
                   color:
-                    getStock(product) === 0
+                    stock === 0
                       ? "var(--color-error)"
-                      : getStock(product) <= 5
+                      : stock <= 5
                         ? "var(--color-warning)"
                         : "var(--color-text-muted)",
                 }}
               >
-                {getStock(product) === 0 && <AlertTriangle size={14} />}
-                {getStock(product) === 0
+                {stock === 0 && <AlertTriangle size={14} />}
+                {stock === 0
                   ? "ناموجود"
-                  : `${getStock(product)} عدد`}
+                  : `${stock} عدد`}
               </div>
 
               <div style={{ display: "flex", gap: "8px" }}>
@@ -691,7 +693,8 @@ export default function AdminProductsTab({
                 </button>
               </div>
             </div>
-          ))}
+          );
+          })}
         </div>
       )}
     </>

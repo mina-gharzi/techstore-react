@@ -60,7 +60,7 @@ export default function AdminCategoriesTab({
   };
 
   const countProductsInCategory = (categoryId) =>
-    products.filter((p) => p.categoryId === categoryId).length;
+    products.filter((p) => p.category === categoryId).length;
 
   const handleDeleteCategory = (cat) => {
     const count = countProductsInCategory(cat.id);

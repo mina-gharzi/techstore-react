@@ -5,6 +5,24 @@ export const ORDER_STATUSES = [
   "لغو شده",
 ];
 
+export const STATUS_CANCELLED = "لغو شده";
+export const STATUS_DELIVERED = "تحویل داده شد";
+export const STATUS_SHIPPED = "ارسال شد";
+export const STATUS_PROCESSING = "در حال پردازش";
+
+export const VALID_TRANSITIONS = {
+  [STATUS_PROCESSING]: [STATUS_SHIPPED, STATUS_DELIVERED, STATUS_CANCELLED],
+  [STATUS_SHIPPED]:    [STATUS_DELIVERED, STATUS_CANCELLED],
+  [STATUS_DELIVERED]:  [],
+  [STATUS_CANCELLED]:  [],
+};
+
+export const getAllowedTransitions = (currentStatus) =>
+  VALID_TRANSITIONS[currentStatus] ?? [];
+
+export const canTransition = (from, to) =>
+  getAllowedTransitions(from).includes(to);
+
 export const statusColor = (status) => {
   if (status === "تحویل داده شد") return { bg: "#f0fdf4", text: "#16a34a" };
   if (status === "لغو شده") return { bg: "#fef2f2", text: "#ef4444" };

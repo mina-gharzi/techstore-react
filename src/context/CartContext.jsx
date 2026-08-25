@@ -108,9 +108,13 @@ export function CartProvider({ children }) {
   }, [rawCart, products]);
 
   // ---------- افزودن به سبد ----------
+  // اگه تعداد از موجودی بیشتر باشه، clamp می‌شه (جلوگیری از manipulate
+  // localStorage توسط کاربر)
   const addToCart = (product, quantity = 1) => {
     const selectedColor = product.selectedColor || null;
     const productId = product.id;
+    const liveProduct = products.find((p) => p.id === productId);
+    const maxStock = liveProduct ? getStock(liveProduct) : 10;
 
     setRawCart((prev) => {
       const existing = prev.find(
@@ -118,14 +122,15 @@ export function CartProvider({ children }) {
       );
 
       if (existing) {
+        const newQty = Math.min(existing.quantity + quantity, maxStock);
         return prev.map((item) =>
           item.productId === productId && item.selectedColor === selectedColor
-            ? { ...item, quantity: item.quantity + quantity }
+            ? { ...item, quantity: newQty }
             : item,
         );
       }
 
-      return [...prev, { productId, selectedColor, quantity }];
+      return [...prev, { productId, selectedColor, quantity: Math.min(quantity, maxStock) }];
     });
   };
 
@@ -143,11 +148,19 @@ export function CartProvider({ children }) {
       return;
     }
 
+    const item = rawCart.find(
+      (i) => getCartItemId(i.productId, i.selectedColor) === cartItemId,
+    );
+    if (!item) return;
+
+    const liveProduct = products.find((p) => p.id === item.productId);
+    const maxStock = liveProduct ? getStock(liveProduct) : 10;
+
     setRawCart((prev) =>
-      prev.map((item) =>
-        getCartItemId(item.productId, item.selectedColor) === cartItemId
-          ? { ...item, quantity }
-          : item,
+      prev.map((i) =>
+        getCartItemId(i.productId, i.selectedColor) === cartItemId
+          ? { ...i, quantity: Math.min(quantity, maxStock) }
+          : i,
       ),
     );
   };

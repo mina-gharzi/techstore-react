@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { canTransition, STATUS_CANCELLED } from "../components/admin/adminHelpers";
 
 const OrdersContext = createContext(null);
 const STORAGE_KEY = "techstore-orders";
@@ -6,14 +7,13 @@ const STORAGE_KEY = "techstore-orders";
 // ======================================================
 // OrdersProvider
 //
-// قبلاً وقتی سفارشی توی Checkout ثبت می‌شد، هیچ‌جا ذخیره نمی‌شد -
-// فقط یک پیام موقت (از طریق navigate state) به OrderSuccess
-// فرستاده می‌شد و بعدش برای همیشه گم می‌شد. برای این‌که کاربر
-// بتونه توی پروفایلش تاریخچه‌ی خریدهاش رو ببینه، سفارش‌ها الان
-// توی localStorage ذخیره می‌شن (همون الگوی Cart/Favorites/Products).
+// فقط سه عملیات مجاز روی سفارش‌ها وجود داره:
+// 1. addOrder — ثبت سفارش جدید
+// 2. updateOrderStatus — تغییر وضعیت (با اعتبارسنجی transition)
+// 3. cancelOrder — لغو سفارش + بازگرداندن موجودی
 //
-// هر سفارش با userId کاربری که ثبتش کرده مرتبطه، پس هر کاربر
-// فقط سفارش‌های خودش رو می‌بینه.
+// قاعده کلی: هر عملیات نوشتن روی سفارش باید از یک جا اتفاق بیفته
+// تا از inconsistent state جلوگیری بشه.
 // ======================================================
 
 export function OrdersProvider({ children }) {
@@ -30,14 +30,11 @@ export function OrdersProvider({ children }) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
     } catch {
-      // localStorage در دسترس نیست (مثلاً حالت خصوصی مرورگر)
+      // localStorage در دسترس نیست
     }
   }, [orders]);
 
   // ---------- ثبت سفارش جدید ----------
-  // items باید یک snapshot از سبد خرید در لحظه‌ی ثبت باشه، نه
-  // ارجاع مستقیم به cart context - چون بعد از ثبت سفارش، سبد
-  // خالی می‌شه و اگه snapshot نگیریم اطلاعات از دست می‌ره.
   const addOrder = (orderData) => {
     const newOrder = {
       id: Date.now(),
@@ -49,18 +46,46 @@ export function OrdersProvider({ children }) {
     return newOrder;
   };
 
-  // ---------- سفارش‌های یک کاربر خاص ----------
+  // ---------- سفارش‌های یک کاربر ----------
   const getOrdersByUser = (userId) =>
     orders.filter((order) => order.userId === userId);
 
-  // ---------- تغییر وضعیت سفارش (توسط ادمین) ----------
-  const updateOrderStatus = (orderId, status) => {
+  // ---------- تغییر وضعیت سفارش ----------
+  // اگه transition مجاز نباشه، ساکت reject می‌شه.
+  // عملیات side-effect (مثلاً بازگرداندن موجودی) باید توسط caller
+  // و قبل از این فراخوانی انجام بشه.
+  const updateOrderStatus = useCallback((orderId, newStatus) => {
     setOrders((prev) =>
-      prev.map((order) => (order.id === orderId ? { ...order, status } : order)),
+      prev.map((order) => {
+        if (order.id !== orderId) return order;
+        if (!canTransition(order.status, newStatus)) return order;
+        return { ...order, status: newStatus };
+      }),
     );
-  };
+  }, []);
 
-  const value = { orders, addOrder, getOrdersByUser, updateOrderStatus };
+  // ---------- لغو سفارش ----------
+  // یک تابع کمکی که هم وضعیت رو تغییر می‌ده و هم callback
+  // بازگرداندن موجودی رو فراخوانی می‌کنه.
+  const cancelOrder = useCallback((orderId, restoreStock) => {
+    setOrders((prev) =>
+      prev.map((order) => {
+        if (order.id !== orderId) return order;
+        if (!canTransition(order.status, STATUS_CANCELLED)) return order;
+
+        // بازگرداندن موجودی برای هر آیتم
+        if (typeof restoreStock === "function") {
+          order.items.forEach((item) => {
+            restoreStock(item.id, item.quantity);
+          });
+        }
+
+        return { ...order, status: STATUS_CANCELLED };
+      }),
+    );
+  }, []);
+
+  const value = { orders, addOrder, getOrdersByUser, updateOrderStatus, cancelOrder };
 
   return <OrdersContext.Provider value={value}>{children}</OrdersContext.Provider>;
 }

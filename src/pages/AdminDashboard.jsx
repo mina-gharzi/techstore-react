@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   Package,
   ClipboardList,
@@ -6,7 +6,7 @@ import {
   Tags,
   BarChart3,
 } from "lucide-react";
-import { useProducts } from "../context/ProductsContext";
+import { useProducts, getStock } from "../context/ProductsContext";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { useCategories } from "../context/CategoriesContext";
 import { useOrders } from "../context/OrdersContext";
@@ -35,8 +35,15 @@ export default function AdminDashboard() {
   const { products, addProduct, updateProduct, deleteProduct } = useProducts();
   const { categories, addCategory, updateCategory, deleteCategory } =
     useCategories();
-  const { orders, updateOrderStatus } = useOrders();
+  const { orders, updateOrderStatus, cancelOrder } = useOrders();
   const { users, deleteUser, setUserRole, user: currentUser } = useAuth();
+
+  const restoreStock = useCallback((productId, quantity) => {
+    const liveProduct = products.find((p) => p.id === productId);
+    if (liveProduct) {
+      updateProduct(productId, { stock: getStock(liveProduct) + quantity });
+    }
+  }, [products, updateProduct]);
 
   // ---------- محاسبات آمار (تب "آمار") ----------
   const analytics = useMemo(() => {
@@ -201,6 +208,8 @@ export default function AdminDashboard() {
           <AdminOrdersTab
             orders={orders}
             updateOrderStatus={updateOrderStatus}
+            cancelOrder={cancelOrder}
+            restoreStock={restoreStock}
           />
         )}
 
