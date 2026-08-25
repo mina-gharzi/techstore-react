@@ -1,0 +1,51 @@
+/* ======================================================
+   Quantity Control
+   کنترل تعداد (+ / -) در سبد خرید و صفحه محصول
+   ====================================================== */
+
+.quantity {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2p5);
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  padding: var(--space-1p5) var(--space-2p5);
+}
+
+.quantity__btn {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.quantity__btn:hover:not(:disabled) {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  border-color: var(--color-primary-border);
+}
+
+.quantity__btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.quantity__value {
+  min-width: 28px;
+  text-align: center;
+  font-weight: var(--font-weight-extrabold);
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+}

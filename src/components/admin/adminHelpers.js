@@ -1,33 +1,24 @@
-export const ORDER_STATUSES = [
-  "در حال پردازش",
-  "ارسال شد",
-  "تحویل داده شد",
-  "لغو شده",
-];
+// ======================================================
+// Admin Helpers
+//
+// توابع و ثابت‌های مخصوص پنل ادمین.
+// قواعد وضعیت سفارش در utils/orderStatus.js تعریف شدن
+// و از اونجا re-export می‌شن.
+//
+// استایل‌های فرم (input, label, error) حالا توی
+// styles/components/forms.css تعریف شدن و با CSS classes
+// استفاده می‌شن — دیگه نیازی به توابع inline style نیست.
+// ======================================================
 
-export const STATUS_CANCELLED = "لغو شده";
-export const STATUS_DELIVERED = "تحویل داده شد";
-export const STATUS_SHIPPED = "ارسال شد";
-export const STATUS_PROCESSING = "در حال پردازش";
+export { ORDER_STATUSES, STATUS_PROCESSING, STATUS_CANCELLED } from "../../utils/orderStatus";
 
-export const VALID_TRANSITIONS = {
-  [STATUS_PROCESSING]: [STATUS_SHIPPED, STATUS_DELIVERED, STATUS_CANCELLED],
-  [STATUS_SHIPPED]:    [STATUS_DELIVERED, STATUS_CANCELLED],
-  [STATUS_DELIVERED]:  [],
-  [STATUS_CANCELLED]:  [],
-};
-
-export const getAllowedTransitions = (currentStatus) =>
-  VALID_TRANSITIONS[currentStatus] ?? [];
-
-export const canTransition = (from, to) =>
-  getAllowedTransitions(from).includes(to);
+import { STATUS_DELIVERED, STATUS_CANCELLED, STATUS_SHIPPED } from "../../utils/orderStatus";
 
 export const statusColor = (status) => {
-  if (status === "تحویل داده شد") return { bg: "#f0fdf4", text: "#16a34a" };
-  if (status === "لغو شده") return { bg: "#fef2f2", text: "#ef4444" };
-  if (status === "ارسال شد") return { bg: "#eff6ff", text: "#2563eb" };
-  return { bg: "#fffbeb", text: "#d97706" };
+  if (status === STATUS_DELIVERED) return { bg: "var(--color-success-light)", text: "var(--color-success)" };
+  if (status === STATUS_CANCELLED) return { bg: "var(--color-error-light)", text: "var(--color-error)" };
+  if (status === STATUS_SHIPPED) return { bg: "var(--color-primary-light)", text: "var(--color-primary)" };
+  return { bg: "var(--color-warning-light)", text: "var(--color-warning-dark)" };
 };
 
 export const formatOrderDate = (isoString) => {
@@ -40,35 +31,6 @@ export const formatOrderDate = (isoString) => {
   } catch {
     return "";
   }
-};
-
-export const inputStyle = (hasError) => ({
-  width: "100%",
-  height: "46px",
-  padding: "0 14px",
-  border: `1.5px solid ${hasError ? "#fca5a5" : "#e2e8f0"}`,
-  borderRadius: "10px",
-  fontSize: "0.92rem",
-  outline: "none",
-  background: hasError ? "#fef2f2" : "#f8fafc",
-  fontFamily: "inherit",
-  color: "#0f172a",
-});
-
-export const labelStyle = {
-  display: "block",
-  marginBottom: "6px",
-  fontWeight: 700,
-  color: "#1e293b",
-  fontSize: "0.85rem",
-};
-
-export const errorStyle = {
-  display: "block",
-  marginTop: "5px",
-  color: "#ef4444",
-  fontSize: "0.78rem",
-  fontWeight: 600,
 };
 
 export const emptyForm = {

@@ -1,0 +1,43 @@
+/* ======================================================
+   Alerts / Banners
+   پیام‌های خطا، موفقیت، هشدار
+   ====================================================== */
+
+.alert {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2p5);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--alert-radius);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.5;
+}
+
+/* ---------- Error ---------- */
+.alert--error {
+  background: var(--color-error-light);
+  border: var(--alert-border) var(--color-error-border-strong);
+  color: var(--color-error-deep);
+}
+
+/* ---------- Success ---------- */
+.alert--success {
+  background: var(--color-success-light);
+  border: var(--alert-border) var(--color-success-border);
+  color: var(--color-success);
+}
+
+/* ---------- Warning ---------- */
+.alert--warning {
+  background: var(--color-warning-light);
+  border: var(--alert-border) var(--color-warning-border);
+  color: var(--color-warning-dark);
+}
+
+/* ---------- Info ---------- */
+.alert--info {
+  background: var(--color-primary-light);
+  border: var(--alert-border) var(--color-primary-border);
+  color: var(--color-primary-dark);
+}

@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
 import { categories as seedCategories } from "../data/products";
+import { readJSON, writeJSON } from "../utils/storage";
 
 const CategoriesContext = createContext(null);
 const STORAGE_KEY = "techstore-categories";
@@ -18,25 +19,14 @@ const STORAGE_KEY = "techstore-categories";
 // ======================================================
 
 export function CategoriesProvider({ children }) {
-  const [categories, setCategories] = useState(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : seedCategories;
-    } catch {
-      return seedCategories;
-    }
-  });
+  const [categories, setCategories] = useState(() => readJSON(STORAGE_KEY, seedCategories));
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(categories));
-    } catch {
-      // localStorage در دسترس نیست (مثلاً حالت خصوصی مرورگر)
-    }
+    writeJSON(STORAGE_KEY, categories);
   }, [categories]);
 
   // ---------- افزودن دسته‌بندی جدید ----------
-  const addCategory = (name) => {
+  const addCategory = useCallback((name) => {
     const trimmed = name.trim();
 
     if (!trimmed) {
@@ -50,17 +40,14 @@ export function CategoriesProvider({ children }) {
       return { success: false, message: "این دسته‌بندی از قبل وجود دارد" };
     }
 
-    // id جدا از name نگه داشته می‌شه (نه slug فارسی)، چون این id
-    // هم توی محصولات (product.category) و هم توی URL (?category=id)
-    // استفاده می‌شه و بهتره پایدار و بدون کاراکتر خاص باشه.
     const newCategory = { id: `cat-${Date.now()}`, name: trimmed };
     setCategories((prev) => [...prev, newCategory]);
 
     return { success: true, category: newCategory };
-  };
+  }, [categories]);
 
   // ---------- ویرایش نام یک دسته‌بندی ----------
-  const updateCategory = (id, name) => {
+  const updateCategory = useCallback((id, name) => {
     const trimmed = name.trim();
 
     if (!trimmed) {
@@ -72,18 +59,14 @@ export function CategoriesProvider({ children }) {
     );
 
     return { success: true };
-  };
+  }, []);
 
   // ---------- حذف دسته‌بندی ----------
-  // نکته: بررسی اینکه آیا محصولی از این دسته استفاده می‌کنه یا نه،
-  // اینجا انجام نمی‌شه - چون این context از محصولات خبر نداره.
-  // این چک باید توی کامپوننتی که هم به useProducts هم به
-  // useCategories دسترسی داره (مثلاً AdminDashboard) انجام بشه.
-  const deleteCategory = (id) => {
+  const deleteCategory = useCallback((id) => {
     setCategories((prev) => prev.filter((c) => c.id !== id));
-  };
+  }, []);
 
-  const value = { categories, addCategory, updateCategory, deleteCategory };
+  const value = useMemo(() => ({ categories, addCategory, updateCategory, deleteCategory }), [categories, addCategory, updateCategory, deleteCategory]);
 
   return (
     <CategoriesContext.Provider value={value}>

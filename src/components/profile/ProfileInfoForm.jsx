@@ -7,22 +7,6 @@ const cardStyle = {
   padding: "28px 26px",
 };
 
-const labelStyle = {
-  display: "block",
-  marginBottom: "8px",
-  fontWeight: 700,
-  color: "#1e293b",
-  fontSize: "0.88rem",
-};
-
-const errorStyle = {
-  display: "block",
-  marginTop: "6px",
-  color: "var(--color-error)",
-  fontSize: "0.8rem",
-  fontWeight: 600,
-};
-
 const iconStyle = {
   position: "absolute",
   right: "14px",
@@ -37,7 +21,6 @@ export default function ProfileInfoForm({
   infoSaved,
   handleInfoChange,
   handleInfoSubmit,
-  inputStyle,
 }) {
   return (
     <div style={cardStyle}>
@@ -47,71 +30,67 @@ export default function ProfileInfoForm({
 
       <form onSubmit={handleInfoSubmit}>
         <div style={{ marginBottom: "16px" }}>
-          <label style={labelStyle}>نام و نام خانوادگی</label>
+          <label className="form-label" htmlFor="fullName">نام و نام خانوادگی</label>
           <div style={{ position: "relative" }}>
             <User size={18} color="var(--color-text-faint)" style={iconStyle} />
             <input
               type="text"
               name="fullName"
+              id="fullName"
               value={infoData.fullName}
               onChange={handleInfoChange}
-              style={inputStyle(!!infoErrors.fullName)}
+              className={!!infoErrors.fullName ? "form-input form-input--error" : "form-input"}
             />
           </div>
-          {infoErrors.fullName && <span style={errorStyle}>{infoErrors.fullName}</span>}
+          {infoErrors.fullName && <span className="form-error">{infoErrors.fullName}</span>}
         </div>
 
         <div style={{ marginBottom: "16px" }}>
-          <label style={labelStyle}>شماره موبایل</label>
+          <label className="form-label" htmlFor="phone">شماره موبایل</label>
           <div style={{ position: "relative" }}>
             <Phone size={18} color="var(--color-text-faint)" style={iconStyle} />
             <input
               type="tel"
               name="phone"
+              id="phone"
               value={infoData.phone}
               onChange={handleInfoChange}
-              style={inputStyle(!!infoErrors.phone)}
+              className={!!infoErrors.phone ? "form-input form-input--error" : "form-input"}
             />
           </div>
-          {infoErrors.phone && <span style={errorStyle}>{infoErrors.phone}</span>}
+          {infoErrors.phone && <span className="form-error">{infoErrors.phone}</span>}
         </div>
 
         <div style={{ marginBottom: "22px" }}>
-          <label style={labelStyle}>ایمیل</label>
+          <label className="form-label" htmlFor="email">ایمیل</label>
           <div style={{ position: "relative" }}>
             <Mail size={18} color="var(--color-text-faint)" style={iconStyle} />
             <input
               type="email"
+              id="email"
               value={user.email}
               disabled
+              className="form-input"
               style={{
-                ...inputStyle(false),
                 background: "#f1f5f9",
                 color: "var(--color-text-faint)",
                 cursor: "not-allowed",
               }}
             />
           </div>
-          <span style={{ display: "block", marginTop: "6px", color: "var(--color-text-faint)", fontSize: "0.78rem" }}>
+          <span className="form-error" style={{ color: "var(--color-text-faint)" }}>
             ایمیل قابل تغییر نیست
           </span>
         </div>
 
         <button
           type="submit"
+          className="btn btn--primary"
           style={{
-            padding: "12px 26px",
-            background: infoSaved ? "var(--color-success)" : "var(--color-primary)",
-            color: "var(--color-bg-white)",
-            borderRadius: "12px",
-            fontWeight: 700,
-            border: "none",
-            cursor: "pointer",
-            fontFamily: "inherit",
             display: "flex",
             alignItems: "center",
             gap: "8px",
-            transition: "background 0.2s ease",
+            background: infoSaved ? "var(--color-success)" : undefined,
           }}
         >
           {infoSaved ? <Check size={17} /> : null}

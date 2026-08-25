@@ -1,63 +1,224 @@
 /* ======================================================
    Design Tokens
-   توکن‌های دیزاین سیستم - منبع اصلی رنگ‌ها، spacing و...
+   منبع واحد تمام مقادیر دیزاین — رنگ‌ها، فاصله‌ها، سایه‌ها،
+   گردی، فونت، ترنزیشن‌ها و توکن‌های کامپوننت.
+
+   قاعده: هیچ مقدار هاردکدی نباید خارج از این فایل تعریف بشه.
+   هر رنگ/فاصله/سایه‌ای که بیش از یک‌بار استفاده بشه باید توکن باشه.
    ====================================================== */
 
 :root {
-  /* ---------- رنگ‌ها ---------- */
-  --color-primary: #2563eb;
-  --color-primary-dark: #1d4ed8;
-  --color-primary-light: #eff6ff;
+  /* ====================================================
+     COLOR — PRIMITIVES
+     ==================================================== */
+  --blue-50:  #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-200: #bfdbfe;
+  --blue-300: #93c5fd;
+  --blue-400: #60a5fa;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+  --blue-800: #1e40af;
+  --blue-900: #1e3a8a;
 
-  --color-success: #16a34a;
-  --color-warning: #f59e0b;
+  --red-50:  #fef2f2;
+  --red-100: #fee2e2;
+  --red-200: #fecaca;
+  --red-300: #fca5a5;
+  --red-400: #f87171;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+  --red-700: #b91c1c;
 
-  --color-error: #ef4444;
-  --color-error-light: #fef2f2;
-  --color-error-border: #fecaca;
+  --green-50:  #f0fdf4;
+  --green-100: #dcfce7;
+  --green-200: #bbf7d0;
+  --green-500: #22c55e;
+  --green-600: #16a34a;
 
-  --color-text: #0f172a;
-  --color-text-secondary: #334155;
-  --color-text-muted: #64748b;
-  --color-text-faint: #94a3b8;
+  --yellow-50:  #fffbeb;
+  --yellow-100: #fef3c7;
+  --yellow-200: #fde68a;
+  --yellow-500: #f59e0b;
+  --yellow-600: #d97706;
 
-  --color-border: #e2e8f0;
-  --color-bg: #f8fafc;
-  --color-bg-white: #ffffff;
+  --slate-50:  #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
 
-  /* ---------- فاصله‌ها ---------- */
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
-  --space-7: 28px;
-  --space-10: 40px;
+  /* ====================================================
+     COLOR — SEMANTIC
+     ==================================================== */
+  --color-primary:         var(--blue-600);
+  --color-primary-dark:    var(--blue-700);
+  --color-primary-darkest: var(--blue-800);
+  --color-primary-medium:  var(--blue-500);
+  --color-primary-light:   var(--blue-50);
+  --color-primary-border:  var(--blue-200);
+  --color-primary-disabled: var(--blue-300);
 
-  /* ---------- گردی گوشه‌ها ---------- */
-  --radius-md: 10px;
-  --radius-lg: 12px;
-  --radius-2xl: 16px;
-  --radius-3xl: 18px;
+  --color-success:         var(--green-600);
+  --color-success-light:   var(--green-50);
+  --color-success-border:  var(--green-200);
+
+  --color-warning:         var(--yellow-500);
+  --color-warning-dark:    var(--yellow-600);
+  --color-warning-light:   var(--yellow-50);
+  --color-warning-border:  var(--yellow-200);
+
+  --color-error:           var(--red-500);
+  --color-error-dark:      var(--red-600);
+  --color-error-deep:      var(--red-700);
+  --color-error-light:     var(--red-50);
+  --color-error-border:    var(--red-200);
+  --color-error-border-strong: var(--red-300);
+
+  /* ====================================================
+     COLOR — TEXT
+     ==================================================== */
+  --color-text:              var(--slate-900);
+  --color-text-dark:         var(--slate-800);
+  --color-text-secondary:    var(--slate-700);
+  --color-text-medium:       var(--slate-600);
+  --color-text-muted:        var(--slate-500);
+  --color-text-faint:        var(--slate-400);
+  --color-text-placeholder:  var(--slate-400);
+
+  /* ====================================================
+     COLOR — SURFACES & BORDERS
+     ==================================================== */
+  --color-bg:              var(--slate-50);
+  --color-bg-white:        #ffffff;
+  --color-bg-subtle:       var(--slate-100);
+  --color-border:          var(--slate-200);
+  --color-border-hover:    var(--slate-300);
+  --color-border-dark:     #dbe2ea;
+  --color-overlay:         rgba(15, 23, 42, 0.35);
+  --color-overlay-light:   rgba(15, 23, 42, 0.08);
+
+  /* ====================================================
+     SPACING
+     ==================================================== */
+  --space-0:   0px;
+  --space-0p5: 2px;
+  --space-1:   4px;
+  --space-1p5: 6px;
+  --space-2:   8px;
+  --space-2p5: 10px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-7:   28px;
+  --space-8:   32px;
+  --space-9:   36px;
+  --space-10:  40px;
+  --space-12:  48px;
+  --space-15:  60px;
+  --space-20:  80px;
+  --space-25:  100px;
+
+  /* ====================================================
+     BORDER RADIUS
+     ==================================================== */
+  --radius-xs:   6px;
+  --radius-sm:   8px;
+  --radius-md:   10px;
+  --radius-lg:   12px;
+  --radius-xl:   14px;
+  --radius-2xl:  16px;
+  --radius-3xl:  18px;
+  --radius-4xl:  20px;
+  --radius-5xl:  24px;
   --radius-full: 50px;
 
-  /* ---------- سایه‌ها ---------- */
-  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.06);
+  /* ====================================================
+     SHADOWS
+     ==================================================== */
+  --shadow-xs:    0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-sm:    0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-md:    0 4px 16px rgba(15, 23, 42, 0.06);
+  --shadow-lg:    0 8px 24px rgba(15, 23, 42, 0.08);
+  --shadow-xl:    0 12px 32px rgba(15, 23, 42, 0.12);
+  --shadow-card:  0 20px 50px rgba(15, 23, 42, 0.06);
+  --shadow-hero:  0 28px 60px rgba(37, 99, 235, 0.35);
 
-  /* ---------- ترنزیشن‌ها ---------- */
+  --shadow-button:         0 8px 18px rgba(37, 99, 235, 0.18);
+  --shadow-button-hover:   0 10px 22px rgba(37, 99, 235, 0.23);
+  --shadow-button-hero:    0 14px 32px rgba(37, 99, 235, 0.32);
+  --shadow-button-outline: 0 4px 14px rgba(37, 99, 235, 0.10);
+
+  --shadow-focus-primary: 0 0 0 3px rgba(37, 99, 235, 0.08);
+  --shadow-focus-error:   0 0 0 3px rgba(239, 68, 68, 0.07);
+  --shadow-navbar:        0 4px 20px rgba(15, 23, 42, 0.04);
+
+  /* ====================================================
+     TRANSITIONS
+     ==================================================== */
+  --transition-fast:   0.15s ease;
   --transition-normal: 0.2s ease;
-  --transition-slow: 0.3s ease;
+  --transition-slow:   0.3s ease;
 
-  /* ---------- فونت ---------- */
+  /* ====================================================
+     FONT
+     ==================================================== */
   --font-family: Vazirmatn-Bold, system-ui, sans-serif;
-  --font-size-sm: 0.78rem;
-  --font-size-base: 0.85rem;
-  --font-size-md: 0.92rem;
-  --font-size-lg: 1rem;
-  --font-size-xl: 1.05rem;
 
-  --font-weight-regular: 600;
-  --font-weight-bold: 700;
+  --font-size-xs:   0.7rem;
+  --font-size-sm:   0.78rem;
+  --font-size-base: 0.85rem;
+  --font-size-md:   0.92rem;
+  --font-size-lg:   1rem;
+  --font-size-xl:   1.05rem;
+  --font-size-2xl:  1.2rem;
+  --font-size-3xl:  1.45rem;
+  --font-size-4xl:  1.65rem;
+
+  --font-weight-medium:    500;
+  --font-weight-regular:   600;
+  --font-weight-bold:      700;
   --font-weight-extrabold: 800;
-  --font-weight-black: 900;
+  --font-weight-black:     900;
+
+  /* ====================================================
+     COMPONENT TOKENS
+     ==================================================== */
+  --input-height:     50px;
+  --input-height-sm:  42px;
+  --input-padding:    0 var(--space-4);
+  --input-radius:     var(--radius-lg);
+  --input-border:     1.5px solid var(--color-border);
+  --input-bg:         var(--color-bg);
+  --input-bg-white:   var(--color-bg-white);
+
+  --btn-height:       48px;
+  --btn-height-sm:    40px;
+  --btn-height-lg:    52px;
+  --btn-padding:      0 var(--space-6);
+  --btn-radius:       var(--radius-lg);
+  --btn-radius-pill:  var(--radius-full);
+  --btn-font:         var(--font-size-md);
+
+  --card-padding:     var(--space-6);
+  --card-radius:      var(--radius-3xl);
+  --card-border:      1px solid var(--color-border);
+
+  --alert-padding:    var(--space-3) var(--space-4);
+  --alert-radius:     var(--radius-lg);
+  --alert-border:     1.5px solid;
+
+  --container-max:    1200px;
+  --container-padding: var(--space-5);
+
+  --section-padding:       var(--space-20) var(--container-padding);
+  --section-padding-sm:    var(--space-15) var(--container-padding);
+  --section-padding-page:  var(--space-12) var(--container-padding);
 }

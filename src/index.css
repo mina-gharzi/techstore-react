@@ -1,4 +1,11 @@
 @import "./styles/variables.css";
+@import "./styles/components/buttons.css";
+@import "./styles/components/forms.css";
+@import "./styles/components/cards.css";
+@import "./styles/components/alerts.css";
+@import "./styles/components/layout.css";
+@import "./styles/components/quantity.css";
+@import "./styles/components/badges.css";
 
 /* ======================================================
    استایل‌های پایه + Navbar
@@ -83,7 +90,7 @@ body {
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 4px 20px var(--shadow-navbar);
 }
 
 .navbar__container {
@@ -118,7 +125,7 @@ body {
   font-weight: 600;
   color: var(--color-text-secondary);
   border-radius: 10px;
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
   white-space: nowrap;
 }
 
@@ -148,8 +155,8 @@ body {
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  color: #475569;
-  transition: all 0.2s ease;
+  color: var(--color-text-medium);
+  transition: all var(--transition-normal);
 }
 
 .navbar__icon-btn:hover {
@@ -222,8 +229,8 @@ body {
   color: var(--color-text-secondary);
   border-radius: 12px;
   transition:
-    background 0.15s ease,
-    color 0.15s ease;
+    background var(--transition-fast),
+    color var(--transition-fast);
 }
 
 .navbar__mobile-link:hover,
@@ -241,7 +248,7 @@ body {
 /* جداکننده‌ی بصری قبل از بخش کاربر (پروفایل/خروج) توی منوی موبایل */
 .navbar__mobile-divider {
   height: 1px;
-  background: #f1f5f9;
+  background: var(--color-bg-subtle);
   margin: 8px 4px;
 }
 

@@ -86,35 +86,6 @@ export default function Register() {
     }, 500);
   };
 
-  const inputStyle = (hasError) => ({
-    width: "100%",
-    height: "50px",
-    padding: "0 44px 0 16px",
-    border: `1.5px solid ${hasError ? "#fca5a5" : "var(--color-border)"}`,
-    borderRadius: "12px",
-    fontSize: "0.95rem",
-    outline: "none",
-    background: hasError ? "var(--color-error-light)" : "var(--color-bg)",
-    fontFamily: "inherit",
-    color: "var(--color-text)",
-  });
-
-  const labelStyle = {
-    display: "block",
-    marginBottom: "8px",
-    fontWeight: 700,
-    color: "#1e293b",
-    fontSize: "0.9rem",
-  };
-
-  const errorStyle = {
-    display: "block",
-    marginTop: "6px",
-    color: "var(--color-error)",
-    fontSize: "0.82rem",
-    fontWeight: 600,
-  };
-
   const iconStyle = {
     position: "absolute",
     right: "14px",
@@ -148,7 +119,7 @@ export default function Register() {
         <form className="auth-form" onSubmit={handleSubmit}>
           {/* Full Name */}
           <div className="auth-field">
-            <label className="auth-label">نام و نام خانوادگی</label>
+            <label className="form-label" htmlFor="fullName">نام و نام خانوادگی</label>
 
             <div className="auth-input-wrapper">
               <User size={18} className="auth-input-icon" />
@@ -156,23 +127,24 @@ export default function Register() {
               <input
                 type="text"
                 name="fullName"
+                id="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
                 placeholder="مثلاً: مینا قارزی "
-                className={`auth-input ${
-                  errors.fullName ? "auth-input-error" : ""
-                }`}
+                className={
+                  errors.fullName ? "form-input form-input--error" : "form-input"
+                }
               />
             </div>
 
             {errors.fullName && (
-              <span className="auth-error">{errors.fullName}</span>
+              <span className="form-error">{errors.fullName}</span>
             )}
           </div>
 
           {/* Email */}
           <div className="auth-field">
-            <label className="auth-label">ایمیل</label>
+            <label className="form-label" htmlFor="email">ایمیل</label>
 
             <div className="auth-input-wrapper">
               <Mail size={18} className="auth-input-icon" />
@@ -180,21 +152,22 @@ export default function Register() {
               <input
                 type="email"
                 name="email"
+                id="email"
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="example@email.com"
-                className={`auth-input ${
-                  errors.email ? "auth-input-error" : ""
-                }`}
+                className={
+                  errors.email ? "form-input form-input--error" : "form-input"
+                }
               />
             </div>
 
-            {errors.email && <span className="auth-error">{errors.email}</span>}
+            {errors.email &&               <span className="form-error">{errors.email}</span>}
           </div>
 
           {/* Phone */}
           <div className="auth-field">
-            <label className="auth-label">شماره موبایل</label>
+            <label className="form-label" htmlFor="phone">شماره موبایل</label>
 
             <div className="auth-input-wrapper">
               <Phone size={18} className="auth-input-icon" />
@@ -202,21 +175,22 @@ export default function Register() {
               <input
                 type="tel"
                 name="phone"
+                id="phone"
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="09xxxxxxxxx"
-                className={`auth-input ${
-                  errors.phone ? "auth-input-error" : ""
-                }`}
+                className={
+                  errors.phone ? "form-input form-input--error" : "form-input"
+                }
               />
             </div>
 
-            {errors.phone && <span className="auth-error">{errors.phone}</span>}
+            {errors.phone &&               <span className="form-error">{errors.phone}</span>}
           </div>
 
           {/* Password */}
           <div className="auth-field">
-            <label className="auth-label">رمز عبور</label>
+            <label className="form-label" htmlFor="password">رمز عبور</label>
 
             <div className="auth-input-wrapper">
               <Lock size={18} className="auth-input-icon" />
@@ -224,23 +198,24 @@ export default function Register() {
               <input
                 type="password"
                 name="password"
+                id="password"
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="حداقل ۶ کاراکتر"
-                className={`auth-input ${
-                  errors.password ? "auth-input-error" : ""
-                }`}
+                className={
+                  errors.password ? "form-input form-input--error" : "form-input"
+                }
               />
             </div>
 
             {errors.password && (
-              <span className="auth-error">{errors.password}</span>
+              <span className="form-error">{errors.password}</span>
             )}
           </div>
 
           {/* Confirm Password */}
           <div className="auth-field">
-            <label className="auth-label">تکرار رمز عبور</label>
+            <label className="form-label" htmlFor="confirmPassword">تکرار رمز عبور</label>
 
             <div className="auth-input-wrapper">
               <Lock size={18} className="auth-input-icon" />
@@ -248,22 +223,23 @@ export default function Register() {
               <input
                 type="password"
                 name="confirmPassword"
+                id="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="••••••••"
-                className={`auth-input ${
-                  errors.confirmPassword ? "auth-input-error" : ""
-                }`}
+                className={
+                  errors.confirmPassword ? "form-input form-input--error" : "form-input"
+                }
               />
             </div>
 
             {errors.confirmPassword && (
-              <span className="auth-error">{errors.confirmPassword}</span>
+              <span className="form-error">{errors.confirmPassword}</span>
             )}
           </div>
 
           {/* Submit */}
-          <button type="submit" disabled={isSubmitting} className="auth-submit">
+          <button type="submit" disabled={isSubmitting} className="btn btn--primary">
             {isSubmitting ? "در حال ساخت حساب..." : "ساخت حساب کاربری"}
           </button>
         </form>

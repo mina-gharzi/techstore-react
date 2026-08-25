@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
 import { products as seedProducts } from "../data/products";
+import { readJSON, writeJSON } from "../utils/storage";
 
 const ProductsContext = createContext(null);
 const STORAGE_KEY = "techstore-products";
@@ -20,43 +21,34 @@ const STORAGE_KEY = "techstore-products";
 
 export function ProductsProvider({ children }) {
   const [products, setProducts] = useState(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      const parsed = saved ? JSON.parse(saved) : seedProducts;
-      // نرمال‌سازی: اطمینان از اینکه همه فیلدها مقدار پیش‌فرض دارن
-      // (برای مقابله با localStorage نسخه‌های قدیمی‌تر اپ)
-      return Array.isArray(parsed)
-        ? parsed.map((p) => ({
-            id: p.id,
-            name: p.name ?? "",
-            brand: p.brand ?? "",
-            category: p.category ?? "",
-            price: p.price ?? 0,
-            oldPrice: p.oldPrice ?? null,
-            rating: p.rating ?? 0,
-            isNew: p.isNew ?? false,
-            isFeatured: p.isFeatured ?? false,
-            description: p.description ?? "",
-            image: p.image ?? "",
-            colors: p.colors ?? [],
-            stock: Number.isFinite(p.stock) ? p.stock : 10,
-          }))
-        : seedProducts;
-    } catch {
-      return seedProducts;
-    }
+    const parsed = readJSON(STORAGE_KEY, seedProducts);
+    // نرمال‌سازی: اطمینان از اینکه همه فیلدها مقدار پیش‌فرض دارن
+    // (برای مقابله با localStorage نسخه‌های قدیمی‌تر اپ)
+    return Array.isArray(parsed)
+      ? parsed.map((p) => ({
+          id: p.id,
+          name: p.name ?? "",
+          brand: p.brand ?? "",
+          category: p.category ?? "",
+          price: p.price ?? 0,
+          oldPrice: p.oldPrice ?? null,
+          rating: p.rating ?? 0,
+          isNew: p.isNew ?? false,
+          isFeatured: p.isFeatured ?? false,
+          description: p.description ?? "",
+          image: p.image ?? "",
+          colors: p.colors ?? [],
+          stock: Number.isFinite(p.stock) ? p.stock : 10,
+        }))
+      : seedProducts;
   });
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-    } catch {
-      // localStorage در دسترس نیست (مثلاً حالت خصوصی مرورگر)
-    }
+    writeJSON(STORAGE_KEY, products);
   }, [products]);
 
   // ---------- افزودن محصول جدید ----------
-  const addProduct = (productData) => {
+  const addProduct = useCallback((productData) => {
     const newProduct = {
       id: Date.now(),
       name: "",
@@ -75,30 +67,30 @@ export function ProductsProvider({ children }) {
     };
     setProducts((prev) => [newProduct, ...prev]);
     return newProduct;
-  };
+  }, []);
 
   // ---------- ویرایش محصول موجود ----------
-  const updateProduct = (id, updates) => {
+  const updateProduct = useCallback((id, updates) => {
     setProducts((prev) =>
       prev.map((p) => (p.id === id ? { ...p, ...updates } : p)),
     );
-  };
+  }, []);
 
   // ---------- حذف محصول ----------
-  const deleteProduct = (id) => {
+  const deleteProduct = useCallback((id) => {
     setProducts((prev) => prev.filter((p) => p.id !== id));
-  };
+  }, []);
 
   // ---------- بازگشت به لیست پیش‌فرض (برای دمو/تست) ----------
-  const resetToDefaults = () => setProducts(seedProducts);
+  const resetToDefaults = useCallback(() => setProducts(seedProducts), []);
 
-  const value = {
+  const value = useMemo(() => ({
     products,
     addProduct,
     updateProduct,
     deleteProduct,
     resetToDefaults,
-  };
+  }), [products, addProduct, updateProduct, deleteProduct, resetToDefaults]);
 
   return (
     <ProductsContext.Provider value={value}>

@@ -12,7 +12,6 @@ import { formatPrice } from "../utils/formatPrice";
 export default function Cart() {
   usePageTitle("سبد خرید");
 
-  // ---------- Context ----------
   const {
     cart,
     removeFromCart,
@@ -22,85 +21,38 @@ export default function Cart() {
     totalPrice,
   } = useCart();
 
-  // ---------- اگر سبد خالی بود ----------
   if (cart.length === 0) {
     return (
-      <section
-        style={{
-          padding: "100px 20px",
-          textAlign: "center",
-        }}
-      >
-        <ShoppingBag
-          size={64}
-          color="var(--color-text-faint)"
-          style={{ margin: "0 auto 24px" }}
-        />
-        <h1
-          style={{
-            fontSize: "1.8rem",
-            fontWeight: 800,
-            color: "var(--color-text)",
-            marginBottom: "12px",
-          }}
-        >
-          سبد خرید خالی است
-        </h1>
-        <p style={{ color: "var(--color-text-muted)", marginBottom: "28px" }}>
-          هنوز محصولی به سبد اضافه نکرده‌اید.
-        </p>
-        <Link
-          to="/products"
-          style={{
-            display: "inline-block",
-            padding: "12px 28px",
-            background: "var(--color-primary)",
-            color: "var(--color-bg-white)",
-            borderRadius: "12px",
-            fontWeight: 700,
-            textDecoration: "none",
-          }}
-        >
+      <section className="empty-state">
+        <ShoppingBag size={64} color="var(--color-text-faint)" className="empty-state__icon" />
+        <h1 className="empty-state__title">سبد خرید خالی است</h1>
+        <p className="empty-state__text">هنوز محصولی به سبد اضافه نکرده‌اید.</p>
+        <Link to="/products" className="btn btn--primary btn--pill">
           مشاهده محصولات
         </Link>
       </section>
     );
   }
 
-  // ---------- Render ----------
   return (
-    <section style={{ padding: "50px 20px" }}>
-      <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+    <section className="section--page">
+      <div className="container" style={{ maxWidth: "1000px" }}>
         {/* ---------- عنوان ---------- */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: "36px",
+            marginBottom: "var(--space-9)",
             flexWrap: "wrap",
-            gap: "16px",
+            gap: "var(--space-4)",
           }}
         >
-          <h1
-            style={{
-              fontSize: "1.8rem",
-              fontWeight: 800,
-              color: "var(--color-text)",
-            }}
-          >
+          <h1 className="page-header__title" style={{ marginBottom: 0 }}>
             سبد خرید ({totalItems} کالا)
           </h1>
 
-          <button
-            onClick={clearCart}
-            style={{
-              color: "var(--color-error)",
-              fontWeight: 600,
-              fontSize: "0.95rem",
-              cursor: "pointer",
-            }}
-          >
+          <button onClick={clearCart} className="btn btn--ghost" style={{ color: "var(--color-error)" }}>
             حذف همه
           </button>
         </div>
@@ -115,19 +67,16 @@ export default function Cart() {
           className="cart-layout"
         >
           {/* ---------- لیست محصولات ---------- */}
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "16px" }}
-          >
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
             {cart.map((item) => {
               const exceedsStock = item.quantity > item.stock;
 
               return (
               <div
                 key={item.cartItemId}
+                className="card"
                 style={{
-                  background: "var(--color-bg-white)",
-                  border: exceedsStock ? "1.5px solid #fca5a5" : "1px solid var(--color-border)",
-                  borderRadius: "16px",
+                  border: exceedsStock ? "1.5px solid var(--color-error-border-strong)" : undefined,
                   padding: "18px",
                   display: "flex",
                   gap: "18px",
@@ -145,8 +94,8 @@ export default function Cart() {
                       height: "90px",
                       objectFit: "contain",
                       background: "var(--color-bg)",
-                      borderRadius: "12px",
-                      padding: "8px",
+                      borderRadius: "var(--radius-lg)",
+                      padding: "var(--space-2)",
                     }}
                     onError={(e) => {
                       e.target.src = "/assets/images/product/no-image.png";
@@ -159,55 +108,37 @@ export default function Cart() {
                   <Link
                     to={`/products/${item.id}`}
                     style={{
-                      fontSize: "1.05rem",
-                      fontWeight: 700,
+                      fontSize: "var(--font-size-xl)",
+                      fontWeight: "var(--font-weight-bold)",
                       color: "var(--color-text)",
                       textDecoration: "none",
                       display: "block",
-                      marginBottom: "6px",
+                      marginBottom: "var(--space-1p5)",
                     }}
                   >
                     {item.name}
                   </Link>
 
-                  {/* رنگ انتخابی - اگر محصول واریانت رنگ داشته باشد */}
                   {item.selectedColor && (
                     <span
                       style={{
                         display: "inline-block",
-                        fontSize: "0.82rem",
+                        fontSize: "var(--font-size-sm)",
                         color: "var(--color-text-muted)",
-                        fontWeight: 600,
-                        marginBottom: "6px",
+                        fontWeight: "var(--font-weight-regular)",
+                        marginBottom: "var(--space-1p5)",
                       }}
                     >
                       رنگ: {item.selectedColor}
                     </span>
                   )}
 
-                  <span
-                    style={{
-                      display: "block",
-                      color: "var(--color-primary)",
-                      fontWeight: 700,
-                    }}
-                  >
+                  <span style={{ display: "block", color: "var(--color-primary)", fontWeight: "var(--font-weight-bold)" }}>
                     {formatPrice(item.price)}
                   </span>
 
-                  {/* هشدار: اگه موجودی از وقتی این آیتم به سبد اضافه شده کم شده باشه */}
                   {exceedsStock && (
-                    <span
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "5px",
-                        marginTop: "6px",
-                        color: "var(--color-error)",
-                        fontSize: "0.8rem",
-                        fontWeight: 700,
-                      }}
-                    >
+                    <span className="alert alert--error" style={{ marginTop: "var(--space-1p5)", fontSize: "var(--font-size-xs)", padding: "var(--space-1) var(--space-2)" }}>
                       <AlertTriangle size={13} />
                       فقط {item.stock} عدد در انبار موجود است
                     </span>
@@ -215,73 +146,31 @@ export default function Cart() {
                 </div>
 
                 {/* کنترل تعداد */}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    background: "var(--color-bg)",
-                    borderRadius: "10px",
-                    padding: "6px 10px",
-                  }}
-                >
+                <div className="quantity">
                   <button
-                    onClick={() =>
-                      updateQuantity(item.cartItemId, item.quantity - 1)
-                    }
-                    style={{
-                      width: "30px",
-                      height: "30px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: "8px",
-                      background: "var(--color-bg-white)",
-                      border: "1px solid var(--color-border)",
-                      cursor: "pointer",
-                    }}
+                    className="quantity__btn"
+                    onClick={() => updateQuantity(item.cartItemId, item.quantity - 1)}
                     aria-label="کم کردن تعداد"
                   >
                     <Minus size={14} />
                   </button>
 
-                  <span
-                    style={{
-                      fontWeight: 700,
-                      minWidth: "24px",
-                      textAlign: "center",
-                    }}
-                  >
-                    {item.quantity}
-                  </span>
+                  <span className="quantity__value">{item.quantity}</span>
 
                   <button
-                    onClick={() =>
-                      updateQuantity(item.cartItemId, Math.min(item.stock, item.quantity + 1))
-                    }
+                    className="quantity__btn"
+                    onClick={() => updateQuantity(item.cartItemId, Math.min(item.stock, item.quantity + 1))}
                     disabled={item.quantity >= item.stock}
-                    style={{
-                      width: "30px",
-                      height: "30px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: "8px",
-                      background: "var(--color-bg-white)",
-                      border: "1px solid var(--color-border)",
-                      cursor: item.quantity >= item.stock ? "not-allowed" : "pointer",
-                      opacity: item.quantity >= item.stock ? 0.5 : 1,
-                    }}
                     aria-label="زیاد کردن تعداد"
                   >
                     <Plus size={14} />
                   </button>
                 </div>
 
-                {/* قیمت کل این آیتم */}
+                {/* قیمت کل */}
                 <div
                   style={{
-                    fontWeight: 800,
+                    fontWeight: "var(--font-weight-extrabold)",
                     color: "var(--color-text)",
                     minWidth: "120px",
                     textAlign: "left",
@@ -290,19 +179,11 @@ export default function Cart() {
                   {formatPrice(item.price * item.quantity)}
                 </div>
 
-                {/* دکمه حذف */}
+                {/* حذف */}
                 <button
                   onClick={() => removeFromCart(item.cartItemId)}
-                  style={{
-                    width: "38px",
-                    height: "38px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: "10px",
-                    color: "var(--color-error)",
-                    cursor: "pointer",
-                  }}
+                  className="btn btn--icon"
+                  style={{ width: "38px", height: "38px", borderRadius: "var(--radius-md)", color: "var(--color-error)" }}
                   title="حذف"
                   aria-label="حذف از سبد"
                 >
@@ -314,35 +195,12 @@ export default function Cart() {
           </div>
 
           {/* ---------- خلاصه سفارش ---------- */}
-          <div
-            style={{
-              background: "var(--color-bg-white)",
-              border: "1px solid var(--color-border)",
-              borderRadius: "16px",
-              padding: "24px",
-              position: "sticky",
-              top: "90px",
-            }}
-          >
-            <h2
-              style={{
-                fontSize: "1.2rem",
-                fontWeight: 800,
-                marginBottom: "20px",
-                color: "var(--color-text)",
-              }}
-            >
+          <div className="card" style={{ position: "sticky", top: "90px" }}>
+            <h2 style={{ fontSize: "var(--font-size-2xl)", fontWeight: "var(--font-weight-extrabold)", marginBottom: "var(--space-5)", color: "var(--color-text)" }}>
               خلاصه سفارش
             </h2>
 
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "12px",
-                color: "var(--color-text-muted)",
-              }}
-            >
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "var(--space-3)", color: "var(--color-text-muted)" }}>
               <span>تعداد کالا</span>
               <span>{totalItems}</span>
             </div>
@@ -351,43 +209,19 @@ export default function Cart() {
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                marginBottom: "20px",
-                paddingBottom: "20px",
+                marginBottom: "var(--space-5)",
+                paddingBottom: "var(--space-5)",
                 borderBottom: "1px solid var(--color-border)",
-                fontWeight: 800,
-                fontSize: "1.15rem",
+                fontWeight: "var(--font-weight-extrabold)",
+                fontSize: "var(--font-size-xl)",
                 color: "var(--color-text)",
               }}
             >
               <span>مبلغ کل</span>
-              <span style={{ color: "var(--color-primary)" }}>
-                {formatPrice(totalPrice)}
-              </span>
+              <span style={{ color: "var(--color-primary)" }}>{formatPrice(totalPrice)}</span>
             </div>
 
-            {/*
-              نکته: این دکمه به /checkout لینک شده، اما این مسیر هنوز
-              در routes.jsx تعریف نشده. وقتی صفحه‌ی Checkout رو ساختی،
-              کافیه یک <Route path="/checkout" element={<Checkout />} />
-              به routes.jsx اضافه کنی؛ لینک از همین الان درست کار می‌کنه.
-            */}
-            <Link
-              to="/checkout"
-              style={{
-                display: "block",
-                width: "100%",
-                padding: "14px",
-                background: "linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))",
-                color: "var(--color-bg-white)",
-                borderRadius: "12px",
-                fontWeight: 700,
-                fontSize: "1rem",
-                textAlign: "center",
-                cursor: "pointer",
-                boxShadow: "0 10px 25px rgba(37, 99, 235, 0.25)",
-                textDecoration: "none",
-              }}
-            >
+            <Link to="/checkout" className="btn btn--primary btn--pill" style={{ width: "100%", display: "block", textAlign: "center" }}>
               ادامه فرآیند خرید
             </Link>
 
@@ -396,11 +230,11 @@ export default function Cart() {
               style={{
                 display: "block",
                 textAlign: "center",
-                marginTop: "14px",
+                marginTop: "var(--space-4)",
                 color: "var(--color-text-muted)",
-                fontWeight: 600,
+                fontWeight: "var(--font-weight-regular)",
                 textDecoration: "none",
-                fontSize: "0.95rem",
+                fontSize: "var(--font-size-md)",
               }}
             >
               ادامه خرید
@@ -409,7 +243,6 @@ export default function Cart() {
         </div>
       </div>
 
-      {/* ریسپانسیو: زیر ۸۰۰px، خلاصه سفارش زیر لیست محصولات می‌آید */}
       <style>{`
         @media (max-width: 800px) {
           .cart-layout {

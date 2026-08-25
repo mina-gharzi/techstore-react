@@ -1,21 +1,6 @@
 import { MapPin } from "lucide-react";
 
-const labelStyle = {
-  display: "block",
-  fontSize: "0.88rem",
-  fontWeight: 600,
-  color: "#374151",
-  marginBottom: "6px",
-};
-
-const errorStyle = {
-  color: "#dc2626",
-  fontSize: "0.8rem",
-  marginTop: "4px",
-  display: "block",
-};
-
-export default function CheckoutAddressForm({ formData, errors, handleChange, inputStyle }) {
+export default function CheckoutAddressForm({ formData, errors, handleChange }) {
   return (
     <div
       style={{
@@ -48,29 +33,31 @@ export default function CheckoutAddressForm({ formData, errors, handleChange, in
         }}
       >
         <div>
-          <label style={labelStyle}>نام و نام خانوادگی</label>
+          <label className="form-label" htmlFor="fullName">نام و نام خانوادگی</label>
           <input
             type="text"
             name="fullName"
+            id="fullName"
             value={formData.fullName}
             onChange={handleChange}
             placeholder="مثلاً: مینا قرضی"
-            style={inputStyle(!!errors.fullName)}
+            className={errors.fullName ? "form-input form-input--error" : "form-input"}
           />
-          {errors.fullName && <span style={errorStyle}>{errors.fullName}</span>}
+          {errors.fullName && <span className="form-error">{errors.fullName}</span>}
         </div>
 
         <div>
-          <label style={labelStyle}>شماره موبایل</label>
+          <label className="form-label" htmlFor="phone">شماره موبایل</label>
           <input
             type="tel"
             name="phone"
+            id="phone"
             value={formData.phone}
             onChange={handleChange}
             placeholder="09xxxxxxxxx"
-            style={inputStyle(!!errors.phone)}
+            className={errors.phone ? "form-input form-input--error" : "form-input"}
           />
-          {errors.phone && <span style={errorStyle}>{errors.phone}</span>}
+          {errors.phone && <span className="form-error">{errors.phone}</span>}
         </div>
       </div>
 
@@ -83,51 +70,54 @@ export default function CheckoutAddressForm({ formData, errors, handleChange, in
         }}
       >
         <div>
-          <label style={labelStyle}>شهر</label>
+          <label className="form-label" htmlFor="city">شهر</label>
           <input
             type="text"
             name="city"
+            id="city"
             value={formData.city}
             onChange={handleChange}
             placeholder="مثلاً: تهران"
-            style={inputStyle(!!errors.city)}
+            className={errors.city ? "form-input form-input--error" : "form-input"}
           />
-          {errors.city && <span style={errorStyle}>{errors.city}</span>}
+          {errors.city && <span className="form-error">{errors.city}</span>}
         </div>
 
         <div>
-          <label style={labelStyle}>کد پستی</label>
+          <label className="form-label" htmlFor="postalCode">کد پستی</label>
           <input
             type="text"
             name="postalCode"
+            id="postalCode"
             value={formData.postalCode}
             onChange={handleChange}
             placeholder="۱۰ رقم"
-            style={inputStyle(!!errors.postalCode)}
+            className={errors.postalCode ? "form-input form-input--error" : "form-input"}
           />
           {errors.postalCode && (
-            <span style={errorStyle}>{errors.postalCode}</span>
+            <span className="form-error">{errors.postalCode}</span>
           )}
         </div>
       </div>
 
       <div>
-        <label style={labelStyle}>آدرس کامل</label>
+        <label className="form-label" htmlFor="address">آدرس کامل</label>
         <textarea
           name="address"
+          id="address"
           value={formData.address}
           onChange={handleChange}
           rows={3}
           placeholder="خیابان، کوچه، پلاک، واحد..."
+          className={errors.address ? "form-input form-input--error" : "form-input"}
           style={{
-            ...inputStyle(!!errors.address),
             height: "auto",
             padding: "14px 16px",
             resize: "vertical",
             lineHeight: 1.7,
           }}
         />
-        {errors.address && <span style={errorStyle}>{errors.address}</span>}
+        {errors.address && <span className="form-error">{errors.address}</span>}
       </div>
     </div>
   );

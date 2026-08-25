@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
+import { readJSON, writeJSON } from "../utils/storage";
 
 const ReviewsContext = createContext(null);
 const STORAGE_KEY = "techstore-reviews";
@@ -18,34 +19,21 @@ const STORAGE_KEY = "techstore-reviews";
 // ======================================================
 
 export function ReviewsProvider({ children }) {
-  const [reviews, setReviews] = useState(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [reviews, setReviews] = useState(() => readJSON(STORAGE_KEY, []));
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(reviews));
-    } catch {
-      // localStorage در دسترس نیست (مثلاً حالت خصوصی مرورگر)
-    }
+    writeJSON(STORAGE_KEY, reviews);
   }, [reviews]);
 
   // ---------- نظرهای یک محصول خاص (جدیدترین اول) ----------
-  const getReviewsByProduct = (productId) =>
+  const getReviewsByProduct = useCallback((productId) =>
     reviews
       .filter((r) => r.productId === productId)
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
+  [reviews]);
 
   // ---------- میانگین امتیاز یک محصول ----------
-  // fallbackRating: امتیاز ثابتی که توی data/products.js تعریف شده،
-  // برای وقتی که هنوز هیچ نظر واقعی‌ای ثبت نشده (تا صفحه محصول
-  // خالی/بی‌امتیاز به نظر نرسه)
-  const getAverageRating = (productId, fallbackRating = 0) => {
+  const getAverageRating = useCallback((productId, fallbackRating = 0) => {
     const productReviews = getReviewsByProduct(productId);
 
     if (productReviews.length === 0) {
@@ -54,14 +42,15 @@ export function ReviewsProvider({ children }) {
 
     const sum = productReviews.reduce((acc, r) => acc + r.rating, 0);
     return { average: sum / productReviews.length, count: productReviews.length };
-  };
+  }, [reviews]);
 
-  // ---------- نظر یک کاربر خاص برای یک محصول خاص (اگه وجود داشته باشه) ----------
-  const getUserReview = (productId, userId) =>
-    reviews.find((r) => r.productId === productId && r.userId === userId);
+  // ---------- نظر یک کاربر خاص برای یک محصول خاص ----------
+  const getUserReview = useCallback((productId, userId) =>
+    reviews.find((r) => r.productId === productId && r.userId === userId),
+  [reviews]);
 
   // ---------- ثبت یا ویرایش نظر ----------
-  const submitReview = (productId, userId, userName, { rating, comment }) => {
+  const submitReview = useCallback((productId, userId, userName, { rating, comment }) => {
     const existing = getUserReview(productId, userId);
 
     if (existing) {
@@ -86,21 +75,21 @@ export function ReviewsProvider({ children }) {
     };
     setReviews((prev) => [newReview, ...prev]);
     return newReview.id;
-  };
+  }, []);
 
   // ---------- حذف نظر ----------
-  const deleteReview = (reviewId) => {
+  const deleteReview = useCallback((reviewId) => {
     setReviews((prev) => prev.filter((r) => r.id !== reviewId));
-  };
+  }, []);
 
-  const value = {
+  const value = useMemo(() => ({
     reviews,
     getReviewsByProduct,
     getAverageRating,
     getUserReview,
     submitReview,
     deleteReview,
-  };
+  }), [reviews, getReviewsByProduct, getAverageRating, getUserReview, submitReview, deleteReview]);
 
   return (
     <ReviewsContext.Provider value={value}>{children}</ReviewsContext.Provider>

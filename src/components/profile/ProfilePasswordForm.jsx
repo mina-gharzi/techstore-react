@@ -7,14 +7,6 @@ const cardStyle = {
   padding: "28px 26px",
 };
 
-const labelStyle = {
-  display: "block",
-  marginBottom: "8px",
-  fontWeight: 700,
-  color: "#1e293b",
-  fontSize: "0.88rem",
-};
-
 const iconStyle = {
   position: "absolute",
   right: "14px",
@@ -30,7 +22,6 @@ export default function ProfilePasswordForm({
   passwordSaved,
   handlePasswordChange,
   handlePasswordSubmit,
-  inputStyle,
 }) {
   return (
     <div style={cardStyle}>
@@ -62,17 +53,7 @@ export default function ProfilePasswordForm({
       </button>
 
       {passwordSaved && !isPasswordFormOpen && (
-        <div
-          style={{
-            marginTop: "16px",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            color: "var(--color-success)",
-            fontWeight: 700,
-            fontSize: "0.9rem",
-          }}
-        >
+        <div className="alert alert--success" style={{ marginTop: "16px" }}>
           <Check size={16} />
           رمز عبور با موفقیت تغییر کرد
         </div>
@@ -81,62 +62,54 @@ export default function ProfilePasswordForm({
       {isPasswordFormOpen && (
         <div style={{ marginTop: "22px" }}>
           {passwordError && (
-            <div
-              style={{
-                background: "var(--color-error-light)",
-                border: "1px solid var(--color-error-border)",
-                color: "var(--color-error)",
-                borderRadius: "12px",
-                padding: "12px 14px",
-                fontSize: "0.85rem",
-                fontWeight: 600,
-                marginBottom: "18px",
-              }}
-            >
+            <div className="alert alert--error" style={{ marginBottom: "18px" }}>
               {passwordError}
             </div>
           )}
 
           <form onSubmit={handlePasswordSubmit}>
             <div style={{ marginBottom: "16px" }}>
-              <label style={labelStyle}>رمز عبور فعلی</label>
+              <label className="form-label" htmlFor="currentPassword">رمز عبور فعلی</label>
               <div style={{ position: "relative" }}>
                 <Lock size={18} color="var(--color-text-faint)" style={iconStyle} />
                 <input
                   type="password"
                   name="currentPassword"
+                  id="currentPassword"
                   value={passwordData.currentPassword}
                   onChange={handlePasswordChange}
-                  style={inputStyle(false)}
+                  className="form-input"
                 />
               </div>
             </div>
 
             <div style={{ marginBottom: "16px" }}>
-              <label style={labelStyle}>رمز عبور جدید</label>
+              <label className="form-label" htmlFor="newPassword">رمز عبور جدید</label>
               <div style={{ position: "relative" }}>
                 <Lock size={18} color="var(--color-text-faint)" style={iconStyle} />
                 <input
                   type="password"
                   name="newPassword"
+                  id="newPassword"
                   value={passwordData.newPassword}
                   onChange={handlePasswordChange}
                   placeholder="حداقل ۶ کاراکتر"
-                  style={inputStyle(false)}
+                  className="form-input"
                 />
               </div>
             </div>
 
             <div style={{ marginBottom: "22px" }}>
-              <label style={labelStyle}>تکرار رمز عبور جدید</label>
+              <label className="form-label" htmlFor="confirmNewPassword">تکرار رمز عبور جدید</label>
               <div style={{ position: "relative" }}>
                 <Lock size={18} color="var(--color-text-faint)" style={iconStyle} />
                 <input
                   type="password"
                   name="confirmNewPassword"
+                  id="confirmNewPassword"
                   value={passwordData.confirmNewPassword}
                   onChange={handlePasswordChange}
-                  style={inputStyle(false)}
+                  className="form-input"
                 />
               </div>
             </div>
@@ -144,31 +117,18 @@ export default function ProfilePasswordForm({
             <div style={{ display: "flex", gap: "10px" }}>
               <button
                 type="submit"
-                style={{
-                  padding: "12px 26px",
-                  background: "var(--color-primary)",
-                  color: "var(--color-bg-white)",
-                  borderRadius: "12px",
-                  fontWeight: 700,
-                  border: "none",
-                  cursor: "pointer",
-                  fontFamily: "inherit",
-                }}
+                className="btn btn--primary"
               >
                 تغییر رمز عبور
               </button>
               <button
                 type="button"
                 onClick={togglePasswordForm}
+                className="btn"
                 style={{
-                  padding: "12px 22px",
                   background: "var(--color-bg-white)",
                   color: "var(--color-text-secondary)",
                   border: "1.5px solid var(--color-border)",
-                  borderRadius: "12px",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  fontFamily: "inherit",
                 }}
               >
                 انصراف

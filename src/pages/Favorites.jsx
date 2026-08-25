@@ -15,41 +15,22 @@ export default function Favorites() {
   // ---------- اگر لیست خالی بود ----------
   if (favorites.length === 0) {
     return (
-      <section
-        style={{
-          padding: "100px 20px",
-          textAlign: "center",
-        }}
-      >
-        <Heart
-          size={64}
-          color="var(--color-text-faint)"
-          style={{ margin: "0 auto 24px" }}
-        />
-        <h1
-          style={{
-            fontSize: "1.8rem",
-            fontWeight: 800,
-            color: "var(--color-text)",
-            marginBottom: "12px",
-          }}
-        >
+      <section className="empty-state">
+        <div className="empty-state__icon">
+          <Heart
+            size={64}
+            color="var(--color-text-faint)"
+          />
+        </div>
+        <h1 className="empty-state__title">
           لیست علاقه‌مندی‌ها خالی است
         </h1>
-        <p style={{ color: "var(--color-text-muted)", marginBottom: "28px" }}>
+        <p className="empty-state__text">
           هنوز محصولی به علاقه‌مندی‌ها اضافه نکرده‌اید.
         </p>
         <Link
           to="/products"
-          style={{
-            display: "inline-block",
-            padding: "12px 28px",
-            background: "var(--color-primary)",
-            color: "var(--color-bg-white)",
-            borderRadius: "12px",
-            fontWeight: 700,
-            textDecoration: "none",
-          }}
+          className="btn btn--primary btn--pill"
         >
           مشاهده محصولات
         </Link>
@@ -59,9 +40,8 @@ export default function Favorites() {
 
   // ---------- Render ----------
   return (
-    <section style={{ padding: "50px 20px" }}>
+    <section className="page-favorites" style={{ padding: "50px 20px" }}>
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-        {/* ---------- عنوان ---------- */}
         <div style={{ marginBottom: "40px", textAlign: "center" }}>
           <h1
             style={{
@@ -78,14 +58,7 @@ export default function Favorites() {
           </p>
         </div>
 
-        {/* ---------- گرید محصولات ---------- */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-            gap: "24px",
-          }}
-        >
+        <div className="product-grid">
           {favorites.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

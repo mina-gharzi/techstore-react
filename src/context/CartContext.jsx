@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, useEffect, useMemo } from "react";
+import { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
 import { useAuth } from "./AuthContext";
 import { useProducts, getStock } from "./ProductsContext";
+import { readJSON, writeJSON, removeItem } from "../utils/storage";
 
 const CartContext = createContext(null);
 
@@ -25,20 +26,11 @@ function getStorageKey(userId) {
 }
 
 function readRawCart(userId) {
-  try {
-    const saved = localStorage.getItem(getStorageKey(userId));
-    return saved ? JSON.parse(saved) : [];
-  } catch {
-    return [];
-  }
+  return readJSON(getStorageKey(userId), []);
 }
 
 function writeRawCart(userId, items) {
-  try {
-    localStorage.setItem(getStorageKey(userId), JSON.stringify(items));
-  } catch {
-    // localStorage ممکن است در دسترس نباشد
-  }
+  writeJSON(getStorageKey(userId), items);
 }
 
 function getCartItemId(productId, selectedColor) {
@@ -77,7 +69,7 @@ export function CartProvider({ children }) {
       });
       // پاک کردن سبد مهمان بعد از merge
       writeRawCart(null, []);
-      localStorage.removeItem("techstore-cart-guest");
+      removeItem("techstore-cart-guest");
     } else {
       setRawCart(userCart);
     }
@@ -110,7 +102,7 @@ export function CartProvider({ children }) {
   // ---------- افزودن به سبد ----------
   // اگه تعداد از موجودی بیشتر باشه، clamp می‌شه (جلوگیری از manipulate
   // localStorage توسط کاربر)
-  const addToCart = (product, quantity = 1) => {
+  const addToCart = useCallback((product, quantity = 1) => {
     const selectedColor = product.selectedColor || null;
     const productId = product.id;
     const liveProduct = products.find((p) => p.id === productId);
@@ -132,17 +124,17 @@ export function CartProvider({ children }) {
 
       return [...prev, { productId, selectedColor, quantity: Math.min(quantity, maxStock) }];
     });
-  };
+  }, [products]);
 
   // ---------- حذف ----------
-  const removeFromCart = (cartItemId) => {
+  const removeFromCart = useCallback((cartItemId) => {
     setRawCart((prev) =>
       prev.filter((item) => getCartItemId(item.productId, item.selectedColor) !== cartItemId),
     );
-  };
+  }, []);
 
   // ---------- تغییر تعداد ----------
-  const updateQuantity = (cartItemId, quantity) => {
+  const updateQuantity = useCallback((cartItemId, quantity) => {
     if (quantity < 1) {
       removeFromCart(cartItemId);
       return;
@@ -163,16 +155,16 @@ export function CartProvider({ children }) {
           : i,
       ),
     );
-  };
+  }, [products]);
 
   // ---------- خالی کردن ----------
-  const clearCart = () => setRawCart([]);
+  const clearCart = useCallback(() => setRawCart([]), []);
 
   // ---------- محاسبات (از قیمت زنده) ----------
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const value = {
+  const value = useMemo(() => ({
     cart,
     addToCart,
     removeFromCart,
@@ -180,7 +172,7 @@ export function CartProvider({ children }) {
     clearCart,
     totalItems,
     totalPrice,
-  };
+  }), [cart, addToCart, removeFromCart, updateQuantity, clearCart, totalItems, totalPrice]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

@@ -1,0 +1,78 @@
+/* ======================================================
+   Layout
+   Container, section, page header, grid helpers
+   ====================================================== */
+
+/* ---------- Container ---------- */
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+}
+
+/* ---------- Sections ---------- */
+.section {
+  padding: var(--section-padding);
+}
+
+.section--sm {
+  padding: var(--section-padding-sm);
+}
+
+.section--page {
+  padding: var(--section-padding-page);
+}
+
+.section--alt {
+  background: var(--color-bg-white);
+}
+
+/* ---------- Page Header ---------- */
+.page-header {
+  margin-bottom: var(--space-8);
+}
+
+.page-header__title {
+  font-size: clamp(var(--font-size-3xl), 3vw, var(--font-size-4xl));
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+}
+
+.page-header__subtitle {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-md);
+}
+
+/* ---------- Section Title ---------- */
+.section-title {
+  font-size: clamp(var(--font-size-2xl), 3vw, var(--font-size-3xl));
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-text);
+  margin-bottom: var(--space-3);
+}
+
+.section-subtitle {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-md);
+  margin-bottom: var(--space-8);
+}
+
+/* ---------- Divider ---------- */
+.divider {
+  height: 1px;
+  background: var(--color-bg-subtle);
+  margin: var(--space-4);
+}
+
+.divider--section {
+  margin: var(--space-4) 0;
+}
+
+/* ---------- RTL grid gap helper ---------- */
+@media (max-width: 768px) {
+  .checkout-layout {
+    grid-template-columns: 1fr !important;
+  }
+}

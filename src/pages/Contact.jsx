@@ -52,19 +52,6 @@ export default function Contact() {
     },
   ];
 
-  const inputStyle = {
-    width: "100%",
-    height: "52px",
-    padding: "0 16px",
-    border: "1.5px solid var(--color-border)",
-    borderRadius: "12px",
-    fontSize: "0.95rem",
-    outline: "none",
-    background: "var(--color-bg)",
-    fontFamily: "inherit",
-    color: "var(--color-text)",
-  };
-
   return (
     <div>
       {/* ===================== Hero Banner ===================== */}
@@ -279,6 +266,7 @@ export default function Contact() {
                 {/* نام */}
                 <div style={{ marginBottom: "16px" }}>
                   <label
+                    htmlFor="contactName"
                     style={{
                       display: "block",
                       marginBottom: "8px",
@@ -292,17 +280,19 @@ export default function Contact() {
                   <input
                     type="text"
                     name="name"
+                    id="contactName"
                     value={formData.name}
                     onChange={handleChange}
                     required
                     placeholder="مثلاً: مینا"
-                    style={inputStyle}
+                    className="form-input"
                   />
                 </div>
 
                 {/* ایمیل */}
                 <div style={{ marginBottom: "16px" }}>
                   <label
+                    htmlFor="contactEmail"
                     style={{
                       display: "block",
                       marginBottom: "8px",
@@ -316,17 +306,19 @@ export default function Contact() {
                   <input
                     type="email"
                     name="email"
+                    id="contactEmail"
                     value={formData.email}
                     onChange={handleChange}
                     required
                     placeholder="example@email.com"
-                    style={inputStyle}
+                    className="form-input"
                   />
                 </div>
 
                 {/* موضوع */}
                 <div style={{ marginBottom: "16px" }}>
                   <label
+                    htmlFor="contactSubject"
                     style={{
                       display: "block",
                       marginBottom: "8px",
@@ -340,17 +332,19 @@ export default function Contact() {
                   <input
                     type="text"
                     name="subject"
+                    id="contactSubject"
                     value={formData.subject}
                     onChange={handleChange}
                     required
                     placeholder="موضوع پیام شما"
-                    style={inputStyle}
+                    className="form-input"
                   />
                 </div>
 
                 {/* پیام */}
                 <div style={{ marginBottom: "22px" }}>
                   <label
+                    htmlFor="contactMessage"
                     style={{
                       display: "block",
                       marginBottom: "8px",
@@ -363,13 +357,14 @@ export default function Contact() {
                   </label>
                   <textarea
                     name="message"
+                    id="contactMessage"
                     value={formData.message}
                     onChange={handleChange}
                     required
                     rows={5}
                     placeholder="متن پیام..."
+                    className="form-input form-textarea"
                     style={{
-                      ...inputStyle,
                       height: "auto",
                       padding: "14px 16px",
                       resize: "vertical",
@@ -381,23 +376,7 @@ export default function Contact() {
                 {/* دکمه */}
                 <button
                   type="submit"
-                  style={{
-                    width: "100%",
-                    height: "54px",
-                    background: "linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))",
-                    color: "var(--color-bg-white)",
-                    borderRadius: "14px",
-                    fontWeight: 800,
-                    fontSize: "1rem",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "8px",
-                    boxShadow: "0 12px 28px rgba(37, 99, 235, 0.28)",
-                    border: "none",
-                    fontFamily: "inherit",
-                  }}
+                  className="btn btn--primary"
                 >
                   <Send size={18} />
                   ارسال پیام

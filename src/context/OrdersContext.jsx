@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { canTransition, STATUS_CANCELLED } from "../components/admin/adminHelpers";
+import { canTransition, STATUS_CANCELLED } from "../utils/orderStatus";
+import { readJSON, writeJSON } from "../utils/storage";
 
 const OrdersContext = createContext(null);
 const STORAGE_KEY = "techstore-orders";
@@ -14,24 +15,17 @@ const STORAGE_KEY = "techstore-orders";
 //
 // قاعده کلی: هر عملیات نوشتن روی سفارش باید از یک جا اتفاق بیفته
 // تا از inconsistent state جلوگیری بشه.
+//
+// نکته مهم درباره cancelOrder:
+// بازگرداندن موجودی (restoreStock) باید بیرون از setOrders اتفاق بیفته
+// چون setOrders یک closure هست و نباید side-effect داخلش باشه.
 // ======================================================
 
 export function OrdersProvider({ children }) {
-  const [orders, setOrders] = useState(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [orders, setOrders] = useState(() => readJSON(STORAGE_KEY, []));
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
-    } catch {
-      // localStorage در دسترس نیست
-    }
+    writeJSON(STORAGE_KEY, orders);
   }, [orders]);
 
   // ---------- ثبت سفارش جدید ----------
@@ -51,9 +45,6 @@ export function OrdersProvider({ children }) {
     orders.filter((order) => order.userId === userId);
 
   // ---------- تغییر وضعیت سفارش ----------
-  // اگه transition مجاز نباشه، ساکت reject می‌شه.
-  // عملیات side-effect (مثلاً بازگرداندن موجودی) باید توسط caller
-  // و قبل از این فراخوانی انجام بشه.
   const updateOrderStatus = useCallback((orderId, newStatus) => {
     setOrders((prev) =>
       prev.map((order) => {
@@ -65,27 +56,30 @@ export function OrdersProvider({ children }) {
   }, []);
 
   // ---------- لغو سفارش ----------
-  // یک تابع کمکی که هم وضعیت رو تغییر می‌ده و هم callback
-  // بازگرداندن موجودی رو فراخوانی می‌کنه.
+  // اول بررسی می‌کنیم آیا transition مجاز هست، بعد موجودی رو
+  // برمی‌گردونیم (خارج از setOrders)، و بعد وضعیت رو آپدیت می‌کنیم.
   const cancelOrder = useCallback((orderId, restoreStock) => {
+    // ۱. خوندن وضعیت فعلی سفارش (بدون هیچ state write)
+    const order = orders.find((o) => o.id === orderId);
+    if (!order) return;
+    if (!canTransition(order.status, STATUS_CANCELLED)) return;
+
+    // ۲. بازگرداندن موجودی — کاملاً بیرون از setOrders
+    if (typeof restoreStock === "function") {
+      order.items.forEach((item) => {
+        restoreStock(item.id, item.quantity);
+      });
+    }
+
+    // ۳. آپدیت وضعیت سفارش
     setOrders((prev) =>
-      prev.map((order) => {
-        if (order.id !== orderId) return order;
-        if (!canTransition(order.status, STATUS_CANCELLED)) return order;
-
-        // بازگرداندن موجودی برای هر آیتم
-        if (typeof restoreStock === "function") {
-          order.items.forEach((item) => {
-            restoreStock(item.id, item.quantity);
-          });
-        }
-
-        return { ...order, status: STATUS_CANCELLED };
-      }),
+      prev.map((o) =>
+        o.id === orderId ? { ...o, status: STATUS_CANCELLED } : o,
+      ),
     );
-  }, []);
+  }, [orders]);
 
-  const value = { orders, addOrder, getOrdersByUser, updateOrderStatus, cancelOrder };
+  const value = useMemo(() => ({ orders, addOrder, getOrdersByUser, updateOrderStatus, cancelOrder }), [orders, addOrder, getOrdersByUser, updateOrderStatus, cancelOrder]);
 
   return <OrdersContext.Provider value={value}>{children}</OrdersContext.Provider>;
 }

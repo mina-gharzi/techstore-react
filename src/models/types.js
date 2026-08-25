@@ -29,30 +29,32 @@
 /**
  * @typedef {Object} OrderItem
  * @property {number} id - شناسه محصول
+ * @property {string} cartItemId - شناسه یکتای ردیف سبد (productId-selectedColor)
  * @property {string} name - نام محصول (Snapshot لحظه ثبت سفارش)
- * @property {string} brand - برند
- * @property {number} price - قیمت (Snapshot لحظه ثبت سفارش)
- * @property {number|null} oldPrice - قیمت قبل تخفیف
- * @property {string} image - آدرس تصویر
- * @property {string|null} selectedColor - رنگ انتخاب شده
+ * @property {string} brand - برند (Snapshot)
+ * @property {number} price - قیمت واحد (Snapshot)
+ * @property {number|null} oldPrice - قیمت قبل تخفیف (Snapshot)
+ * @property {string} image - آدرس تصویر (Snapshot)
+ * @property {string|null} selectedColor - رنگ انتخاب شده (Snapshot)
  * @property {number} quantity - تعداد خریداری شده
+ * @property {number} stock - موجودی لحظه ثبت (Snapshot — برای بازگرداندن عند لغو)
  */
 
 /**
  * @typedef {Object} Order
- * @property {string} id - شناسه سفارش
+ * @property {number} id - شناسه (Date.now())
  * @property {string} orderNumber - شماره پیگیری (مثلاً TS-12345678)
  * @property {string} userId - شناسه کاربر
- * @property {OrderItem[]} items - آیتم‌های سفارش
+ * @property {OrderItem[]} items - آیتم‌های سفارش (Snapshot)
  * @property {number} subtotal - مبلغ کل قبل تخفیف
  * @property {string|null} couponCode - کد تخفیف استفاده شده
  * @property {number} discountAmount - مبلغ تخفیف
  * @property {number} totalPrice - مبلغ قابل پرداخت
  * @property {number} totalItems - تعداد کل کالاها
- * @property {string} paymentMethod - روش پرداخت ("online" | "cod")
+ * @property {"online"|"cod"} paymentMethod - روش پرداخت
  * @property {string} customerName - نام خریدار
  * @property {{ city: string, address: string, postalCode: string, phone: string }} shippingAddress - آدرس ارسال
- * @property {string} status - وضعیت سفارش
+ * @property {"در حال پردازش"|"ارسال شد"|"تحویل داده شد"|"لغو شده"} status - وضعیت سفارش
  * @property {string} createdAt - تاریخ ثبت (ISO string)
  */
 

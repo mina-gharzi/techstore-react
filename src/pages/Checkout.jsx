@@ -12,19 +12,6 @@ import CheckoutOrderSummary from "../components/checkout/CheckoutOrderSummary";
 // فرم نهایی‌سازی خرید - فقط UI (منطق کسب‌وکار در useCheckout)
 // ======================================================
 
-const inputStyle = (hasError) => ({
-  width: "100%",
-  height: "50px",
-  padding: "0 16px",
-  border: `1.5px solid ${hasError ? "#fca5a5" : "var(--color-border)"}`,
-  borderRadius: "12px",
-  fontSize: "0.95rem",
-  outline: "none",
-  background: hasError ? "var(--color-error-light)" : "var(--color-bg)",
-  fontFamily: "inherit",
-  color: "var(--color-text)",
-});
-
 export default function Checkout() {
   usePageTitle("تکمیل خرید");
 
@@ -39,30 +26,17 @@ export default function Checkout() {
 
   if (cart.length === 0) {
     return (
-      <section style={{ padding: "100px 20px", textAlign: "center" }}>
+      <section className="empty-state">
         <ShoppingBag
           size={64}
           color="var(--color-text-faint)"
           style={{ margin: "0 auto 24px" }}
         />
-        <h1 style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--color-text)", marginBottom: "12px" }}>
-          سبد خرید خالی است
-        </h1>
-        <p style={{ color: "var(--color-text-muted)", marginBottom: "28px" }}>
+        <h1 className="empty-state__title">سبد خرید خالی است</h1>
+        <p className="empty-state__text">
           برای ادامه فرآیند خرید ابتدا محصولی به سبد اضافه کنید.
         </p>
-        <Link
-          to="/products"
-          style={{
-            display: "inline-block",
-            padding: "12px 28px",
-            background: "var(--color-primary)",
-            color: "var(--color-bg-white)",
-            borderRadius: "12px",
-            fontWeight: 700,
-            textDecoration: "none",
-          }}
-        >
+        <Link to="/products" className="btn btn--primary btn--pill">
           مشاهده محصولات
         </Link>
       </section>
@@ -82,21 +56,7 @@ export default function Checkout() {
         </div>
 
         {stockError && (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-              padding: "14px 18px",
-              background: "var(--color-error-light)",
-              border: "1.5px solid #fca5a5",
-              borderRadius: "12px",
-              color: "#b91c1c",
-              fontWeight: 600,
-              fontSize: "0.92rem",
-              marginBottom: "24px",
-            }}
-          >
+          <div className="alert alert--error">
             {stockError}
           </div>
         )}
@@ -107,7 +67,7 @@ export default function Checkout() {
             className="checkout-layout"
           >
             <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-              <CheckoutAddressForm formData={formData} errors={errors} handleChange={handleChange} inputStyle={inputStyle} />
+              <CheckoutAddressForm formData={formData} errors={errors} handleChange={handleChange} />
               <CheckoutPaymentMethod paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} />
             </div>
 

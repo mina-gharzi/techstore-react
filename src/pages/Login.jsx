@@ -84,7 +84,7 @@ export default function Login() {
         <form className="auth-form" onSubmit={handleSubmit}>
           {/* Email */}
           <div className="auth-field">
-            <label className="auth-label">ایمیل</label>
+            <label className="auth-label" htmlFor="email">ایمیل</label>
 
             <div className="auth-input-wrapper">
               <Mail size={18} className="auth-input-icon" />
@@ -92,6 +92,7 @@ export default function Login() {
               <input
                 type="email"
                 name="email"
+                id="email"
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="example@email.com"
@@ -102,7 +103,7 @@ export default function Login() {
 
           {/* Password */}
           <div className="auth-field">
-            <label className="auth-label">رمز عبور</label>
+            <label className="auth-label" htmlFor="password">رمز عبور</label>
 
             <div className="auth-input-wrapper">
               <Lock size={18} className="auth-input-icon" />
@@ -110,6 +111,7 @@ export default function Login() {
               <input
                 type="password"
                 name="password"
+                id="password"
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"

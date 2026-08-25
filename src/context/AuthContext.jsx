@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useMemo } from "react";
+import { readJSON, writeJSON, removeItem } from "../utils/storage";
 
 const AuthContext = createContext(null);
 
@@ -19,20 +20,11 @@ const USERS_KEY = "techstore-users";
 const CURRENT_USER_KEY = "techstore-user";
 
 function readUsers() {
-  try {
-    const saved = localStorage.getItem(USERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  } catch {
-    return [];
-  }
+  return readJSON(USERS_KEY, []);
 }
 
 function writeUsers(users) {
-  try {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  } catch {
-    // localStorage در دسترس نیست (مثلاً حالت خصوصی مرورگر)
-  }
+  writeJSON(USERS_KEY, users);
 }
 
 // ---------- ساخت یک حساب ادمین پیش‌فرض ----------
@@ -69,14 +61,7 @@ ensureDefaultAdmin();
 export function AuthProvider({ children }) {
 
   // خواندن اولیه‌ی کاربر لاگین‌شده از localStorage
-  const [user, setUser] = useState(() => {
-    try {
-      const saved = localStorage.getItem(CURRENT_USER_KEY);
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      return null;
-    }
-  });
+  const [user, setUser] = useState(() => readJSON(CURRENT_USER_KEY, null));
 
   // ---------- لیست کل کاربرها (برای پنل مدیریت ادمین) ----------
   // قبلاً readUsers/writeUsers فقط توابع کمکی خام بودن که مستقیم
@@ -93,14 +78,10 @@ export function AuthProvider({ children }) {
 
   // هر بار user تغییر کرد، ذخیره‌ش کن
   useEffect(() => {
-    try {
-      if (user) {
-        localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
-      } else {
-        localStorage.removeItem(CURRENT_USER_KEY);
-      }
-    } catch {
-      // نادیده گرفتن خطای localStorage
+    if (user) {
+      writeJSON(CURRENT_USER_KEY, user);
+    } else {
+      removeItem(CURRENT_USER_KEY);
     }
   }, [user]);
 
@@ -283,7 +264,7 @@ export function AuthProvider({ children }) {
   // لیست کاربرها بدون پسورد - برای نمایش در پنل ادمین
   const safeUsers = users.map(({ password: _pw, ...rest }) => rest);
 
-  const value = {
+  const value = useMemo(() => ({
     user,
     isAuthenticated: !!user,
     isAdmin: user?.role === "admin",
@@ -296,7 +277,7 @@ export function AuthProvider({ children }) {
     users: safeUsers,
     deleteUser,
     setUserRole,
-  };
+  }), [user, safeUsers, register, login, logout, updateProfile, changePassword, resetPassword, deleteUser, setUserRole]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -8,7 +8,6 @@ import {
   Check,
   AlertTriangle,
 } from "lucide-react";
-import { inputStyle } from "./adminHelpers";
 
 export default function AdminCategoriesTab({
   products,
@@ -177,13 +176,15 @@ export default function AdminCategoriesTab({
             <div
               style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}
             >
+              <label htmlFor="categoryName" className="sr-only">نام دسته‌بندی</label>
               <input
                 type="text"
+                id="categoryName"
                 value={categoryNameInput}
                 onChange={(e) => setCategoryNameInput(e.target.value)}
                 placeholder="مثلاً: تبلت"
+                className="form-input"
                 style={{
-                  ...inputStyle(false),
                   flex: 1,
                   minWidth: "200px",
                 }}

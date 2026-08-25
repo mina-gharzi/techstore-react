@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, useEffect, useMemo } from "react";
+import { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
 import { useAuth } from "./AuthContext";
 import { useProducts } from "./ProductsContext";
+import { readJSON, writeJSON, removeItem } from "../utils/storage";
 
 const FavoritesContext = createContext(null);
 
@@ -19,20 +20,11 @@ function getStorageKey(userId) {
 }
 
 function readRawFavorites(userId) {
-  try {
-    const saved = localStorage.getItem(getStorageKey(userId));
-    return saved ? JSON.parse(saved) : [];
-  } catch {
-    return [];
-  }
+  return readJSON(getStorageKey(userId), []);
 }
 
 function writeRawFavorites(userId, items) {
-  try {
-    localStorage.setItem(getStorageKey(userId), JSON.stringify(items));
-  } catch {
-    // localStorage ممکن است در دسترس نباشد
-  }
+  writeJSON(getStorageKey(userId), items);
 }
 
 export function FavoritesProvider({ children }) {
@@ -61,7 +53,7 @@ export function FavoritesProvider({ children }) {
         return merged;
       });
       writeRawFavorites(null, []);
-      localStorage.removeItem("techstore-favorites-guest");
+      removeItem("techstore-favorites-guest");
     } else {
       setRawFavorites(userFavs);
     }
@@ -84,7 +76,7 @@ export function FavoritesProvider({ children }) {
   }, [rawFavorites, products]);
 
   // ---------- اضافه/حذف ----------
-  const toggleFavorite = (product) => {
+  const toggleFavorite = useCallback((product) => {
     setRawFavorites((prev) => {
       const exists = prev.some((item) => item.id === product.id);
       if (exists) {
@@ -92,18 +84,18 @@ export function FavoritesProvider({ children }) {
       }
       return [...prev, { id: product.id }];
     });
-  };
+  }, []);
 
   // ---------- چک وضعیت ----------
-  const isFavorite = (id) => {
+  const isFavorite = useCallback((id) => {
     return rawFavorites.some((item) => item.id === id);
-  };
+  }, [rawFavorites]);
 
-  const value = {
+  const value = useMemo(() => ({
     favorites,
     toggleFavorite,
     isFavorite,
-  };
+  }), [favorites, toggleFavorite, isFavorite]);
 
   return (
     <FavoritesContext.Provider value={value}>

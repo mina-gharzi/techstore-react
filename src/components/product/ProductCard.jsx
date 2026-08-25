@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Link } from "react-router-dom";
 import { Heart, ShoppingCart, Check, Ban, Star } from "lucide-react";
 import { useCart } from "../../context/CartContext";
@@ -13,7 +13,7 @@ import "../../styles/product-card.css";
 // کارت نمایش یک محصول
 // ======================================================
 
-export default function ProductCard({ product }) {
+export default memo(function ProductCard({ product }) {
   const { addToCart } = useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { getAverageRating } = useReviews();
@@ -132,4 +132,4 @@ export default function ProductCard({ product }) {
       </div>
     </div>
   );
-}
+});

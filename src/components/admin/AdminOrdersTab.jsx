@@ -1,11 +1,7 @@
 import { ClipboardList } from "lucide-react";
 import { formatPrice } from "../../utils/formatPrice";
-import {
-  statusColor,
-  formatOrderDate,
-  getAllowedTransitions,
-  STATUS_CANCELLED,
-} from "./adminHelpers";
+import { statusColor, formatOrderDate } from "./adminHelpers";
+import { getAllowedTransitions, STATUS_CANCELLED, isTerminal } from "../../utils/orderStatus";
 
 // ======================================================
 // AdminOrdersTab
@@ -56,7 +52,7 @@ export default function AdminOrdersTab({
       {orders.map((order) => {
         const colors = statusColor(order.status);
         const allowed = getAllowedTransitions(order.status);
-        const isTerminal = allowed.length === 0;
+        const terminal = isTerminal(order.status);
 
         return (
           <div
@@ -100,7 +96,7 @@ export default function AdminOrdersTab({
                 </div>
               </div>
 
-              {isTerminal ? (
+              {terminal ? (
                 <span
                   style={{
                     padding: "8px 14px",

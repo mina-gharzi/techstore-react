@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useOrders } from "../context/OrdersContext";
 import { useProducts, getStock } from "../context/ProductsContext";
 import { usePageTitle } from "../hooks/usePageTitle";
-import { STATUS_PROCESSING } from "../components/admin/adminHelpers";
+import { STATUS_PROCESSING } from "../utils/orderStatus";
 
 import ProfileInfoForm from "../components/profile/ProfileInfoForm";
 import ProfilePasswordForm from "../components/profile/ProfilePasswordForm";
@@ -132,20 +132,6 @@ export default function Profile() {
     }
   };
 
-  // ---------- استایل مشترک ----------
-  const inputStyle = (hasError) => ({
-    width: "100%",
-    height: "48px",
-    padding: "0 16px",
-    border: `1.5px solid ${hasError ? "#fca5a5" : "var(--color-border)"}`,
-    borderRadius: "10px",
-    fontSize: "0.92rem",
-    outline: "none",
-    background: hasError ? "var(--color-error-light)" : "var(--color-bg)",
-    fontFamily: "inherit",
-    color: "var(--color-text)",
-  });
-
   return (
     <section style={{ padding: "50px 20px 80px" }}>
       <div style={{ maxWidth: "640px", margin: "0 auto" }}>
@@ -201,7 +187,6 @@ export default function Profile() {
             infoSaved={infoSaved}
             handleInfoChange={handleInfoChange}
             handleInfoSubmit={handleInfoSubmit}
-            inputStyle={inputStyle}
           />
 
           <ProfilePasswordForm
@@ -212,7 +197,6 @@ export default function Profile() {
             passwordSaved={passwordSaved}
             handlePasswordChange={handlePasswordChange}
             handlePasswordSubmit={handlePasswordSubmit}
-            inputStyle={inputStyle}
           />
 
           <ProfileOrderHistory

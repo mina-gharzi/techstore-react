@@ -150,12 +150,13 @@ export default function ForgotPassword() {
         {step === 1 ? (
           <form className="auth-form" onSubmit={handleIdentitySubmit}>
             <div className="auth-field">
-              <label className="auth-label">ایمیل</label>
+              <label className="auth-label" htmlFor="forgotEmail">ایمیل</label>
               <div className="auth-input-wrapper">
                 <Mail size={18} className="auth-input-icon" />
                 <input
                   type="email"
                   name="email"
+                  id="forgotEmail"
                   value={identity.email}
                   onChange={handleIdentityChange}
                   placeholder="example@email.com"
@@ -165,12 +166,13 @@ export default function ForgotPassword() {
             </div>
 
             <div className="auth-field">
-              <label className="auth-label">شماره موبایل</label>
+              <label className="auth-label" htmlFor="forgotPhone">شماره موبایل</label>
               <div className="auth-input-wrapper">
                 <Phone size={18} className="auth-input-icon" />
                 <input
                   type="tel"
                   name="phone"
+                  id="forgotPhone"
                   value={identity.phone}
                   onChange={handleIdentityChange}
                   placeholder="09xxxxxxxxx"
@@ -186,12 +188,13 @@ export default function ForgotPassword() {
         ) : (
           <form className="auth-form" onSubmit={handlePasswordSubmit}>
             <div className="auth-field">
-              <label className="auth-label">رمز عبور جدید</label>
+              <label className="auth-label" htmlFor="forgotNewPassword">رمز عبور جدید</label>
               <div className="auth-input-wrapper">
                 <Lock size={18} className="auth-input-icon" />
                 <input
                   type="password"
                   name="password"
+                  id="forgotNewPassword"
                   value={newPassword.password}
                   onChange={handlePasswordChange}
                   placeholder="حداقل ۶ کاراکتر"
@@ -201,12 +204,13 @@ export default function ForgotPassword() {
             </div>
 
             <div className="auth-field">
-              <label className="auth-label">تکرار رمز عبور جدید</label>
+              <label className="auth-label" htmlFor="forgotConfirmPassword">تکرار رمز عبور جدید</label>
               <div className="auth-input-wrapper">
                 <Lock size={18} className="auth-input-icon" />
                 <input
                   type="password"
                   name="confirmPassword"
+                  id="forgotConfirmPassword"
                   value={newPassword.confirmPassword}
                   onChange={handlePasswordChange}
                   className="auth-input"

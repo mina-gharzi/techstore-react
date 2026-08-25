@@ -12,12 +12,7 @@ import {
 } from "lucide-react";
 import { getStock } from "../../context/ProductsContext";
 import { formatPrice } from "../../utils/formatPrice";
-import {
-  inputStyle,
-  labelStyle,
-  errorStyle,
-  emptyForm,
-} from "./adminHelpers";
+import { emptyForm } from "./adminHelpers";
 
 export default function AdminProductsTab({
   products,
@@ -234,30 +229,32 @@ export default function AdminProductsTab({
               }}
             >
               <div>
-                <label style={labelStyle}>نام محصول</label>
+                <label className="form-label" htmlFor="productName">نام محصول</label>
                 <input
                   type="text"
                   name="name"
+                  id="productName"
                   value={formData.name}
                   onChange={handleChange}
-                  style={inputStyle(!!errors.name)}
+                  className={!!errors.name ? "form-input form-input--error" : "form-input"}
                 />
                 {errors.name && (
-                  <span style={errorStyle}>{errors.name}</span>
+                  <span className="form-error">{errors.name}</span>
                 )}
               </div>
 
               <div>
-                <label style={labelStyle}>برند</label>
+                <label className="form-label" htmlFor="brand">برند</label>
                 <input
                   type="text"
                   name="brand"
+                  id="brand"
                   value={formData.brand}
                   onChange={handleChange}
-                  style={inputStyle(!!errors.brand)}
+                  className={!!errors.brand ? "form-input form-input--error" : "form-input"}
                 />
                 {errors.brand && (
-                  <span style={errorStyle}>{errors.brand}</span>
+                  <span className="form-error">{errors.brand}</span>
                 )}
               </div>
             </div>
@@ -272,12 +269,13 @@ export default function AdminProductsTab({
               }}
             >
               <div>
-                <label style={labelStyle}>دسته‌بندی</label>
+                <label className="form-label" htmlFor="category">دسته‌بندی</label>
                 <select
                   name="category"
+                  id="category"
                   value={formData.category}
                   onChange={handleChange}
-                  style={inputStyle(false)}
+                  className="form-input"
                 >
                   {categories.map((cat) => (
                     <option key={cat.id} value={cat.id}>
@@ -288,32 +286,34 @@ export default function AdminProductsTab({
               </div>
 
               <div>
-                <label style={labelStyle}>امتیاز (۰ تا ۵)</label>
+                <label className="form-label" htmlFor="rating">امتیاز (۰ تا ۵)</label>
                 <input
                   type="number"
                   name="rating"
+                  id="rating"
                   min="0"
                   max="5"
                   step="0.1"
                   value={formData.rating}
                   onChange={handleChange}
-                  style={inputStyle(false)}
+                  className="form-input"
                 />
               </div>
 
               <div>
-                <label style={labelStyle}>موجودی انبار</label>
+                <label className="form-label" htmlFor="stock">موجودی انبار</label>
                 <input
                   type="number"
                   name="stock"
+                  id="stock"
                   min="0"
                   step="1"
                   value={formData.stock}
                   onChange={handleChange}
-                  style={inputStyle(!!errors.stock)}
+                  className={!!errors.stock ? "form-input form-input--error" : "form-input"}
                 />
                 {errors.stock && (
-                  <span style={errorStyle}>{errors.stock}</span>
+                  <span className="form-error">{errors.stock}</span>
                 )}
               </div>
             </div>
@@ -328,38 +328,40 @@ export default function AdminProductsTab({
               }}
             >
               <div>
-                <label style={labelStyle}>قیمت (تومان)</label>
+                <label className="form-label" htmlFor="price">قیمت (تومان)</label>
                 <input
                   type="number"
                   name="price"
+                  id="price"
                   value={formData.price}
                   onChange={handleChange}
-                  style={inputStyle(!!errors.price)}
+                  className={!!errors.price ? "form-input form-input--error" : "form-input"}
                 />
                 {errors.price && (
-                  <span style={errorStyle}>{errors.price}</span>
+                  <span className="form-error">{errors.price}</span>
                 )}
               </div>
 
               <div>
-                <label style={labelStyle}>
+                <label className="form-label" htmlFor="oldPrice">
                   قیمت قبل از تخفیف (اختیاری)
                 </label>
                 <input
                   type="number"
                   name="oldPrice"
+                  id="oldPrice"
                   value={formData.oldPrice}
                   onChange={handleChange}
-                  style={inputStyle(!!errors.oldPrice)}
+                  className={!!errors.oldPrice ? "form-input form-input--error" : "form-input"}
                 />
                 {errors.oldPrice && (
-                  <span style={errorStyle}>{errors.oldPrice}</span>
+                  <span className="form-error">{errors.oldPrice}</span>
                 )}
               </div>
             </div>
 
             <div style={{ marginBottom: "16px" }}>
-              <label style={labelStyle}>آدرس تصویر</label>
+              <label className="form-label" htmlFor="imageUrl">آدرس تصویر</label>
               <div
                 style={{
                   display: "flex",
@@ -371,11 +373,12 @@ export default function AdminProductsTab({
                 <input
                   type="text"
                   name="image"
+                  id="imageUrl"
                   value={formData.image}
                   onChange={handleChange}
                   placeholder="/assets/images/product/example.jpg"
+                  className="form-input"
                   style={{
-                    ...inputStyle(!!errors.image),
                     flex: 1,
                     minWidth: "200px",
                   }}
@@ -430,26 +433,27 @@ export default function AdminProductsTab({
                 </div>
               </div>
               {errors.image && (
-                <span style={errorStyle}>{errors.image}</span>
+                <span className="form-error">{errors.image}</span>
               )}
               {!errors.image &&
                 formData.image.trim() &&
                 imagePreviewError && (
-                  <span style={errorStyle}>
+                  <span className="form-error">
                     این آدرس تصویر بارگذاری نشد - لینک را بررسی کنید
                   </span>
                 )}
             </div>
 
             <div style={{ marginBottom: "16px" }}>
-              <label style={labelStyle}>توضیحات</label>
+              <label className="form-label" htmlFor="description">توضیحات</label>
               <textarea
                 name="description"
+                id="description"
                 value={formData.description}
                 onChange={handleChange}
                 rows={3}
+                className="form-input form-textarea"
                 style={{
-                  ...inputStyle(false),
                   height: "auto",
                   padding: "12px 14px",
                   resize: "vertical",
@@ -459,6 +463,7 @@ export default function AdminProductsTab({
             </div>
 
             <label
+              htmlFor="isNew"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -471,6 +476,7 @@ export default function AdminProductsTab({
               <input
                 type="checkbox"
                 name="isNew"
+                id="isNew"
                 checked={formData.isNew}
                 onChange={handleChange}
                 style={{
