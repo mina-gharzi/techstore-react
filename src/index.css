@@ -75,9 +75,10 @@ button {
 
 body {
   font-family: var(--font-family);
+  font-size: var(--font-size-base);
   background-color: var(--color-bg);
   color: var(--color-text);
-  line-height: 1.6;
+  line-height: var(--line-height-normal);
   direction: rtl;
 }
 /* ======================================================

@@ -155,7 +155,7 @@ export default function ForgotPassword() {
           </p>
         </div>
 
-        {error && <div className="auth-general-error" id="forgot-error">{error}</div>}
+        {error && <div className="auth-general-error" id="forgot-error" role="alert">{error}</div>}
 
         {step === 1 ? (
           <form className="auth-form" onSubmit={handleIdentitySubmit}>

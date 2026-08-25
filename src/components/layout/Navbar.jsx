@@ -90,6 +90,7 @@ export default function Navbar() {
                 onClick={toggleUserMenu}
                 title={user.fullName}
                 aria-label="حساب کاربری"
+                aria-expanded={isUserMenuOpen}
               >
                 <User size={22} />
               </button>
@@ -212,6 +213,7 @@ export default function Navbar() {
             className="navbar__menu-toggle"
             onClick={toggleMenu}
             aria-label={isMenuOpen ? "بستن منو" : "باز کردن منو"}
+            aria-expanded={isMenuOpen}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>

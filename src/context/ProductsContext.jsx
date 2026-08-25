@@ -71,9 +71,14 @@ export function ProductsProvider({ children }) {
   }, []);
 
   // ---------- ویرایش محصول موجود ----------
+  // updates می‌تونه آبجکت یا تابعی باشه که prev رو می‌گیره و آبجکت برمی‌گردونه
   const updateProduct = useCallback((id, updates) => {
     setProducts((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, ...updates } : p)),
+      prev.map((p) => {
+        if (p.id !== id) return p;
+        const patch = typeof updates === "function" ? updates(p) : updates;
+        return { ...p, ...patch };
+      }),
     );
   }, []);
 

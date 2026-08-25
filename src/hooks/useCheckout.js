@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useOrders } from "../context/OrdersContext";
 import { useAuth } from "../context/AuthContext";
+import { DEFAULT_STOCK } from "../utils/constants";
 import { useProducts } from "../context/ProductsContext";
 import { applyCoupon, calculateDiscount } from "../services/couponService";
 import { TIMEOUT_CHECKOUT } from "../utils/constants";
@@ -146,8 +147,17 @@ export function useCheckout() {
         },
       });
 
+      // کاهش موجودی: اگه چند آیتم سبد مربوط به یک محصول باشن (رنگ‌های مختلف)
+      // باید مقدارشون جمع بشه تا موجودی فقط یک‌بار کم بشه (نه overwrite).
+      const stockDeductions = {};
       cart.forEach((item) => {
-        updateProduct(item.id, { stock: Math.max(0, item.stock - item.quantity) });
+        stockDeductions[item.id] = (stockDeductions[item.id] || 0) + item.quantity;
+      });
+      Object.entries(stockDeductions).forEach(([productId, totalQty]) => {
+        updateProduct(Number(productId), (prev) => ({
+          ...prev,
+          stock: Math.max(0, (prev.stock ?? DEFAULT_STOCK) - totalQty),
+        }));
       });
 
       clearCart();

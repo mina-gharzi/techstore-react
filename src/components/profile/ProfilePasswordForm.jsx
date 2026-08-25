@@ -28,6 +28,7 @@ export default function ProfilePasswordForm({
       <button
         type="button"
         onClick={togglePasswordForm}
+        aria-expanded={isPasswordFormOpen}
         style={{
           width: "100%",
           display: "flex",

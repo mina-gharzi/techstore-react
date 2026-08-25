@@ -97,6 +97,10 @@ function ProductDetailsInner({ id, location }) {
     );
   }, [product]);
 
+  // stock به selectedColor وابسته‌ست تا اگه موجودی رنگی اضافه شد، ریکامپوت بشه
+  const stock = useMemo(() => getStock(product), [product, selectedColor]);
+  const isOutOfStock = stock <= 0;
+
   if (!product) {
     return (
       <section style={{ padding: "80px 16px", textAlign: "center" }}>
@@ -114,9 +118,6 @@ function ProductDetailsInner({ id, location }) {
       </section>
     );
   }
-
-  const stock = getStock(product);
-  const isOutOfStock = stock <= 0;
 
   // ---------- نظرها و امتیاز ----------
   const productReviews = getReviewsByProduct(product.id);

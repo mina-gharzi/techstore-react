@@ -86,7 +86,7 @@ export default function Login() {
         </div>
 
         {/* Error */}
-        {error && <div className="auth-general-error" id="login-error">{error}</div>}
+        {error && <div className="auth-general-error" id="login-error" role="alert">{error}</div>}
 
         {/* Form */}
         <form className="auth-form" onSubmit={handleSubmit}>
@@ -101,6 +101,8 @@ export default function Login() {
                 type="email"
                 name="email"
                 id="email"
+                aria-required="true"
+                aria-invalid={!!error}
                 aria-describedby={error ? "login-error" : undefined}
                 value={formData.email}
                 onChange={handleChange}
@@ -121,6 +123,8 @@ export default function Login() {
                 type="password"
                 name="password"
                 id="password"
+                aria-required="true"
+                aria-invalid={!!error}
                 aria-describedby={error ? "login-error" : undefined}
                 value={formData.password}
                 onChange={handleChange}

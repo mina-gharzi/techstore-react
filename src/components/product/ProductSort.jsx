@@ -8,6 +8,7 @@ export default function ProductSort({ sort, onSortChange }) {
     <select
       value={sort}
       onChange={(e) => onSortChange(e.target.value)}
+      aria-label="مرتب‌سازی محصولات"
       style={{
         height: "48px",
         padding: "0 var(--space-4)",
