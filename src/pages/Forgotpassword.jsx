@@ -22,14 +22,19 @@ export default function ForgotPassword() {
 
   const [step, setStep] = useState(1); // 1: تایید هویت | 2: رمز جدید
   const [identity, setIdentity] = useState({ email: "", phone: "" });
-  const [newPassword, setNewPassword] = useState({ password: "", confirmPassword: "" });
+  const [newPassword, setNewPassword] = useState({
+    password: "",
+    confirmPassword: "",
+  });
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDone, setIsDone] = useState(false);
   const mountedRef = useRef(true);
 
   useEffect(() => {
-    return () => { mountedRef.current = false; };
+    return () => {
+      mountedRef.current = false;
+    };
   }, []);
 
   // ---------- مرحله ۱: تایید هویت ----------
@@ -121,7 +126,14 @@ export default function ForgotPassword() {
           >
             <Check size={26} color="var(--color-success)" />
           </div>
-          <h1 style={{ fontSize: "1.4rem", fontWeight: 800, color: "var(--color-text)", marginBottom: "10px" }}>
+          <h1
+            style={{
+              fontSize: "1.4rem",
+              fontWeight: 800,
+              color: "var(--color-text)",
+              marginBottom: "10px",
+            }}
+          >
             رمز عبور تغییر کرد
           </h1>
           <p style={{ color: "var(--color-text-muted)", fontSize: "0.9rem" }}>
@@ -136,17 +148,6 @@ export default function ForgotPassword() {
     <section className="auth-page">
       <div className="auth-container">
         <div className="auth-header">
-          <div className="auth-brand">
-            <div className="auth-brand-mark">
-              <KeyRound size={17} />
-            </div>
-            <span>TechStore</span>
-          </div>
-
-          <div className="auth-header-icon">
-            <KeyRound size={23} />
-          </div>
-
           <h1 className="auth-header__title">فراموشی رمز عبور</h1>
           <p className="auth-header__subtitle">
             {step === 1
@@ -155,12 +156,18 @@ export default function ForgotPassword() {
           </p>
         </div>
 
-        {error && <div className="auth-general-error" id="forgot-error" role="alert">{error}</div>}
+        {error && (
+          <div className="auth-general-error" id="forgot-error" role="alert">
+            {error}
+          </div>
+        )}
 
         {step === 1 ? (
           <form className="auth-form" onSubmit={handleIdentitySubmit}>
             <div className="auth-field">
-              <label className="auth-label" htmlFor="forgotEmail">ایمیل</label>
+              <label className="auth-label" htmlFor="forgotEmail">
+                ایمیل
+              </label>
               <div className="auth-input-wrapper">
                 <Mail size={18} className="auth-input-icon" />
                 <input
@@ -177,7 +184,9 @@ export default function ForgotPassword() {
             </div>
 
             <div className="auth-field">
-              <label className="auth-label" htmlFor="forgotPhone">شماره موبایل</label>
+              <label className="auth-label" htmlFor="forgotPhone">
+                شماره موبایل
+              </label>
               <div className="auth-input-wrapper">
                 <Phone size={18} className="auth-input-icon" />
                 <input
@@ -200,7 +209,9 @@ export default function ForgotPassword() {
         ) : (
           <form className="auth-form" onSubmit={handlePasswordSubmit}>
             <div className="auth-field">
-              <label className="auth-label" htmlFor="forgotNewPassword">رمز عبور جدید</label>
+              <label className="auth-label" htmlFor="forgotNewPassword">
+                رمز عبور جدید
+              </label>
               <div className="auth-input-wrapper">
                 <Lock size={18} className="auth-input-icon" />
                 <input
@@ -217,7 +228,9 @@ export default function ForgotPassword() {
             </div>
 
             <div className="auth-field">
-              <label className="auth-label" htmlFor="forgotConfirmPassword">تکرار رمز عبور جدید</label>
+              <label className="auth-label" htmlFor="forgotConfirmPassword">
+                تکرار رمز عبور جدید
+              </label>
               <div className="auth-input-wrapper">
                 <Lock size={18} className="auth-input-icon" />
                 <input
@@ -232,14 +245,21 @@ export default function ForgotPassword() {
               </div>
             </div>
 
-            <button type="submit" disabled={isSubmitting} className="auth-submit">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="auth-submit"
+            >
               {isSubmitting ? "در حال ثبت..." : "تغییر رمز عبور"}
             </button>
           </form>
         )}
 
         <p className="auth-switch">
-          رمز خود را به یاد آوردید؟ <Link to="/login" className="auth-switch__link">ورود به حساب</Link>
+          رمز خود را به یاد آوردید؟{" "}
+          <Link to="/login" className="auth-switch__link">
+            ورود به حساب
+          </Link>
         </p>
       </div>
     </section>
