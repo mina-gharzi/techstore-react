@@ -90,13 +90,13 @@ export default function Register() {
     width: "100%",
     height: "50px",
     padding: "0 44px 0 16px",
-    border: `1.5px solid ${hasError ? "#fca5a5" : "#e2e8f0"}`,
+    border: `1.5px solid ${hasError ? "#fca5a5" : "var(--color-border)"}`,
     borderRadius: "12px",
     fontSize: "0.95rem",
     outline: "none",
-    background: hasError ? "#fef2f2" : "#f8fafc",
+    background: hasError ? "var(--color-error-light)" : "var(--color-bg)",
     fontFamily: "inherit",
-    color: "#0f172a",
+    color: "var(--color-text)",
   });
 
   const labelStyle = {
@@ -110,7 +110,7 @@ export default function Register() {
   const errorStyle = {
     display: "block",
     marginTop: "6px",
-    color: "#ef4444",
+    color: "var(--color-error)",
     fontSize: "0.82rem",
     fontWeight: 600,
   };

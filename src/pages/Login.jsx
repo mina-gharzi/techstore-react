@@ -120,7 +120,7 @@ export default function Login() {
             <div style={{ textAlign: "left", marginTop: "8px" }}>
               <Link
                 to="/forgot-password"
-                style={{ color: "#2563eb", fontSize: "0.82rem", fontWeight: 700 }}
+                style={{ color: "var(--color-primary)", fontSize: "0.82rem", fontWeight: 700 }}
               >
                 رمز عبور را فراموش کرده‌اید؟
               </Link>

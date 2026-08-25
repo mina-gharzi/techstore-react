@@ -26,18 +26,18 @@ export default function RequireAdmin({ children }) {
   if (!isAdmin) {
     return (
       <section style={{ padding: "100px 20px", textAlign: "center" }}>
-        <ShieldAlert size={64} color="#f59e0b" style={{ margin: "0 auto 24px" }} />
+        <ShieldAlert size={64} color="var(--color-warning)" style={{ margin: "0 auto 24px" }} />
         <h1
           style={{
             fontSize: "1.6rem",
             fontWeight: 800,
-            color: "#0f172a",
+            color: "var(--color-text)",
             marginBottom: "12px",
           }}
         >
           دسترسی محدود
         </h1>
-        <p style={{ color: "#64748b", marginBottom: "28px" }}>
+        <p style={{ color: "var(--color-text-muted)", marginBottom: "28px" }}>
           این بخش فقط برای مدیر فروشگاه در دسترس است.
         </p>
         <Link
@@ -45,8 +45,8 @@ export default function RequireAdmin({ children }) {
           style={{
             display: "inline-block",
             padding: "12px 28px",
-            background: "#2563eb",
-            color: "#fff",
+            background: "var(--color-primary)",
+            color: "var(--color-bg-white)",
             borderRadius: "12px",
             fontWeight: 700,
             textDecoration: "none",

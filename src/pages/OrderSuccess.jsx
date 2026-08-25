@@ -43,21 +43,21 @@ export default function OrderSuccess() {
             margin: "0 auto 26px",
           }}
         >
-          <CheckCircle2 size={48} color="#16a34a" />
+          <CheckCircle2 size={48} color="var(--color-success)" />
         </div>
 
         <h1
           style={{
             fontSize: "1.9rem",
             fontWeight: 900,
-            color: "#0f172a",
+            color: "var(--color-text)",
             marginBottom: "10px",
           }}
         >
           سفارش شما ثبت شد
         </h1>
 
-        <p style={{ color: "#64748b", marginBottom: "36px", lineHeight: 1.9 }}>
+        <p style={{ color: "var(--color-text-muted)", marginBottom: "36px", lineHeight: 1.9 }}>
           {customerName ? `${customerName} عزیز، ` : ""}
           از خرید شما متشکریم. جزئیات سفارش برایتان پیامک می‌شود.
         </p>
@@ -65,8 +65,8 @@ export default function OrderSuccess() {
         {/* کارت جزئیات سفارش */}
         <div
           style={{
-            background: "#fff",
-            border: "1px solid #e2e8f0",
+            background: "var(--color-bg-white)",
+            border: "1px solid var(--color-border)",
             borderRadius: "18px",
             padding: "26px",
             textAlign: "right",
@@ -80,11 +80,11 @@ export default function OrderSuccess() {
               gap: "10px",
               marginBottom: "20px",
               paddingBottom: "16px",
-              borderBottom: "1px dashed #e2e8f0",
+              borderBottom: "1px dashed var(--color-border)",
             }}
           >
-            <Package size={20} color="#2563eb" />
-            <span style={{ fontWeight: 800, color: "#0f172a" }}>
+            <Package size={20} color="var(--color-primary)" />
+            <span style={{ fontWeight: 800, color: "var(--color-text)" }}>
               کد پیگیری: {orderNumber}
             </span>
           </div>
@@ -94,12 +94,12 @@ export default function OrderSuccess() {
               display: "flex",
               justifyContent: "space-between",
               marginBottom: "12px",
-              color: "#64748b",
+              color: "var(--color-text-muted)",
               fontSize: "0.95rem",
             }}
           >
             <span>تعداد کالا</span>
-            <span style={{ color: "#0f172a", fontWeight: 700 }}>{totalItems}</span>
+            <span style={{ color: "var(--color-text)", fontWeight: 700 }}>{totalItems}</span>
           </div>
 
           <div
@@ -107,7 +107,7 @@ export default function OrderSuccess() {
               display: "flex",
               justifyContent: "space-between",
               marginBottom: "12px",
-              color: "#64748b",
+              color: "var(--color-text-muted)",
               fontSize: "0.95rem",
             }}
           >
@@ -117,7 +117,7 @@ export default function OrderSuccess() {
                 display: "flex",
                 alignItems: "center",
                 gap: "6px",
-                color: "#0f172a",
+                color: "var(--color-text)",
                 fontWeight: 700,
               }}
             >
@@ -141,7 +141,7 @@ export default function OrderSuccess() {
                 display: "flex",
                 justifyContent: "space-between",
                 marginBottom: "12px",
-                color: "#16a34a",
+                color: "var(--color-success)",
                 fontSize: "0.95rem",
                 fontWeight: 700,
               }}
@@ -156,14 +156,14 @@ export default function OrderSuccess() {
               display: "flex",
               justifyContent: "space-between",
               paddingTop: "14px",
-              borderTop: "1px solid #e2e8f0",
+              borderTop: "1px solid var(--color-border)",
               fontWeight: 800,
               fontSize: "1.1rem",
-              color: "#0f172a",
+              color: "var(--color-text)",
             }}
           >
             <span>مبلغ پرداخت‌شده</span>
-            <span style={{ color: "#2563eb" }}>{formatPrice(totalPrice)}</span>
+            <span style={{ color: "var(--color-primary)" }}>{formatPrice(totalPrice)}</span>
           </div>
         </div>
 
@@ -172,8 +172,8 @@ export default function OrderSuccess() {
             to="/products"
             style={{
               padding: "13px 28px",
-              background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
-              color: "#fff",
+              background: "linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))",
+              color: "var(--color-bg-white)",
               borderRadius: "12px",
               fontWeight: 700,
               textDecoration: "none",
@@ -185,9 +185,9 @@ export default function OrderSuccess() {
             to="/"
             style={{
               padding: "13px 28px",
-              background: "#fff",
-              color: "#334155",
-              border: "1.5px solid #e2e8f0",
+              background: "var(--color-bg-white)",
+              color: "var(--color-text-secondary)",
+              border: "1.5px solid var(--color-border)",
               borderRadius: "12px",
               fontWeight: 700,
               textDecoration: "none",

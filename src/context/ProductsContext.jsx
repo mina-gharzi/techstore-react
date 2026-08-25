@@ -22,7 +22,26 @@ export function ProductsProvider({ children }) {
   const [products, setProducts] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : seedProducts;
+      const parsed = saved ? JSON.parse(saved) : seedProducts;
+      // نرمال‌سازی: اطمینان از اینکه همه فیلدها مقدار پیش‌فرض دارن
+      // (برای مقابله با localStorage نسخه‌های قدیمی‌تر اپ)
+      return Array.isArray(parsed)
+        ? parsed.map((p) => ({
+            id: p.id,
+            name: p.name ?? "",
+            brand: p.brand ?? "",
+            category: p.category ?? "",
+            price: p.price ?? 0,
+            oldPrice: p.oldPrice ?? null,
+            rating: p.rating ?? 0,
+            isNew: p.isNew ?? false,
+            isFeatured: p.isFeatured ?? false,
+            description: p.description ?? "",
+            image: p.image ?? "",
+            colors: p.colors ?? [],
+            stock: Number.isFinite(p.stock) ? p.stock : 10,
+          }))
+        : seedProducts;
     } catch {
       return seedProducts;
     }
@@ -39,9 +58,17 @@ export function ProductsProvider({ children }) {
   // ---------- افزودن محصول جدید ----------
   const addProduct = (productData) => {
     const newProduct = {
-      // Date.now() برای دمو کافیه و یکتا بودنش تضمینه؛ در یک بک‌اند
-      // واقعی این شناسه رو دیتابیس تولید می‌کنه، نه فرانت‌اند.
       id: Date.now(),
+      name: "",
+      brand: "",
+      category: "",
+      price: 0,
+      oldPrice: null,
+      rating: 0,
+      isNew: false,
+      isFeatured: false,
+      description: "",
+      image: "",
       colors: [],
       stock: 0,
       ...productData,

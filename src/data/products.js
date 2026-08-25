@@ -14,6 +14,7 @@ export const products = [
     oldPrice: 85000000,
     rating: 4.9,
     isNew: true,
+    isFeatured: true,
     description: "پرچمدار اپل با تراشه A17 Pro و بدنه تیتانیومی.",
     image: "/assets/images/product/iphone15.png",
     colors: [
@@ -32,6 +33,7 @@ export const products = [
     oldPrice: 78000000,
     rating: 4.8,
     isNew: true,
+    isFeatured: true,
     description: "پرچمدار سامسونگ با قلم S Pen و دوربین قدرتمند.",
     image: "/assets/images/product/s20.webp",
     colors: [
@@ -48,6 +50,7 @@ export const products = [
     oldPrice: 58000000,
     rating: 4.7,
     isNew: false,
+    isFeatured: false,
     description: "دوربین حرفه‌ای و شارژ فوق‌سریع شیائومی.",
     image: "/assets/images/product/xiaomi.jpg",
     colors: [
@@ -64,6 +67,7 @@ export const products = [
     oldPrice: 98000000,
     rating: 4.9,
     isNew: true,
+    isFeatured: true,
     description: "پرچمدار اپل با طراحی تیتانیومی، دوربین حرفه‌ای و عملکرد قدرتمند.",
     image: "/assets/images/product/iPhone16Max.jpg",
     colors: [
@@ -81,6 +85,7 @@ export const products = [
     oldPrice: 78000000,
     rating: 4.8,
     isNew: true,
+    isFeatured: false,
     description: "آیفون 16 با طراحی مدرن، دوربین قدرتمند و تراشه سریع.",
     image: "/assets/images/product/iPhone16.jpg",
     colors: [
@@ -98,6 +103,7 @@ export const products = [
     oldPrice: 95000000,
     rating: 4.9,
     isNew: true,
+    isFeatured: true,
     description: "پرچمدار سامسونگ با نمایشگر باکیفیت، قلم S Pen و دوربین حرفه‌ای.",
     image: "/assets/images/product/SamsungS25.jpg",
     colors: [
@@ -115,6 +121,7 @@ export const products = [
     oldPrice: 68000000,
     rating: 4.7,
     isNew: true,
+    isFeatured: false,
     description: "گوشی پرچمدار سامسونگ با طراحی سبک و عملکرد سریع.",
     image: "/assets/images/product/SamsungGalaxyS25.jpg",
     colors: [
@@ -132,6 +139,7 @@ export const products = [
     oldPrice: 74000000,
     rating: 4.8,
     isNew: true,
+    isFeatured: false,
     description: "گوشی قدرتمند شیائومی با دوربین حرفه‌ای و شارژ سریع.",
     image: "/assets/images/product/Xiaomi15Ultra.jpg",
     colors: [
@@ -148,6 +156,7 @@ export const products = [
     oldPrice: 71000000,
     rating: 4.7,
     isNew: false,
+    isFeatured: false,
     description: "گوشی گوگل با دوربین حرفه‌ای و تجربه خالص اندروید.",
     image: "/assets/images/product/GooglePixel.jpg",
     colors: [
@@ -165,6 +174,7 @@ export const products = [
     oldPrice: 63000000,
     rating: 4.6,
     isNew: true,
+    isFeatured: true,
     description: "گوشی قدرتمند وان‌پلاس با نمایشگر سریع و شارژ فوق‌سریع.",
     image: "/assets/images/product/OnePlus13.jpg",
     colors: [
@@ -181,6 +191,7 @@ export const products = [
     oldPrice: 35000000,
     rating: 4.5,
     isNew: false,
+    isFeatured: false,
     description: "گوشی میان‌رده قدرتمند سامسونگ با طراحی جذاب و دوربین مناسب.",
     image: "/assets/images/product/SamsungA55.jpg",
     colors: [
@@ -200,6 +211,7 @@ export const products = [
     oldPrice: 135000000,
     rating: 4.9,
     isNew: false,
+    isFeatured: false,
     description: "لپ‌تاپ حرفه‌ای اپل با چیپ M3 Pro.",
     image: "/assets/images/product/macbook.webp",
     colors: [
@@ -217,6 +229,7 @@ export const products = [
     oldPrice: 105000000,
     rating: 4.6,
     isNew: true,
+    isFeatured: true,
     description: "لپ‌تاپ گیمینگ قدرتمند ایسوس.",
     image: "/assets/images/product/asus.jpg",
     colors: [
@@ -234,6 +247,7 @@ export const products = [
     oldPrice: 82000000,
     rating: 4.5,
     isNew: false,
+    isFeatured: false,
     description: "لپ‌تاپ گیمینگ با عملکرد قوی و خنک‌کنندگی عالی.",
     image: "/assets/images/product/lenovo5.jpg",
     colors: [
@@ -251,6 +265,7 @@ export const products = [
     oldPrice: 95000000,
     rating: 4.8,
     isNew: true,
+    isFeatured: false,
     description: "لپ‌تاپ سبک و قدرتمند اپل با تراشه M3 و طراحی باریک.",
     image: "/assets/images/product/MacBookM3.jpg",
     colors: [
@@ -268,6 +283,7 @@ export const products = [
     oldPrice: 178000000,
     rating: 4.9,
     isNew: true,
+    isFeatured: false,
     description: "لپ‌تاپ حرفه‌ای اپل با تراشه M3 Max مناسب کارهای سنگین.",
     image: "/assets/images/product/MacBookPro.jpg",
     colors: [
@@ -284,6 +300,7 @@ export const products = [
     oldPrice: 120000000,
     rating: 4.7,
     isNew: true,
+    isFeatured: true,
     description: "لپ‌تاپ گیمینگ قدرتمند ایسوس با سیستم خنک‌کننده حرفه‌ای.",
     image: "/assets/images/product/ASUSROG.jpg",
     colors: [
@@ -300,6 +317,7 @@ export const products = [
     oldPrice: 74000000,
     rating: 4.5,
     isNew: false,
+    isFeatured: false,
     description: "لپ‌تاپ گیمینگ اقتصادی با عملکرد مناسب برای بازی و کارهای روزمره.",
     image: "/assets/images/product/LenovoLOQ15.jpg",
     colors: [
@@ -316,6 +334,7 @@ export const products = [
     oldPrice: 116000000,
     rating: 4.7,
     isNew: true,
+    isFeatured: false,
     description: "لپ‌تاپ حرفه‌ای دل با طراحی مدرن و نمایشگر باکیفیت.",
     image: "/assets/images/product/Dell.jpg",
     colors: [
@@ -334,6 +353,7 @@ export const products = [
     oldPrice: 52000000,
     rating: 4.7,
     isNew: true,
+    isFeatured: true,
     description: "ساعت هوشمند مقاوم مناسب ورزش حرفه‌ای.",
     image: "/assets/images/product/applewatch.png",
     colors: [
@@ -351,6 +371,7 @@ export const products = [
     oldPrice: 21000000,
     rating: 4.5,
     isNew: false,
+    isFeatured: false,
     description: "ساعت هوشمند سامسونگ با امکانات سلامتی کامل.",
     image: "/assets/images/product/samsungw.jpg",
     colors: [
@@ -368,6 +389,7 @@ export const products = [
     oldPrice: 40000000,
     rating: 4.8,
     isNew: true,
+    isFeatured: false,
     description: "ساعت هوشمند اپل با طراحی باریک و امکانات پیشرفته.",
     image: "/assets/images/product/Applewatch10.jpg",
     colors: [
@@ -385,6 +407,7 @@ export const products = [
     oldPrice: 28000000,
     rating: 4.6,
     isNew: true,
+    isFeatured: false,
     description: "ساعت هوشمند سامسونگ با قابلیت‌های ورزشی و سلامتی متنوع.",
     image: "/assets/images/product/Samsungwatch7.jpg",
     colors: [
@@ -401,6 +424,7 @@ export const products = [
     oldPrice: 43000000,
     rating: 4.7,
     isNew: true,
+    isFeatured: false,
     description: "ساعت هوشمند حرفه‌ای سامسونگ مناسب ورزش و استفاده روزمره.",
     image: "/assets/images/product/SamsungUltra.jpg",
     colors: [
@@ -419,6 +443,7 @@ export const products = [
     oldPrice: 21000000,
     rating: 4.8,
     isNew: false,
+    isFeatured: false,
     description: "هدفون نویزکنسلینگ حرفه‌ای سونی.",
     image: "/assets/images/product/sony.jpg",
     colors: [
@@ -437,6 +462,7 @@ export const products = [
     oldPrice: 16000000,
     rating: 4.7,
     isNew: true,
+    isFeatured: false,
     description: "هدفون بی‌سیم اپل با نویزکنسلینگ فعال.",
     image: "/assets/images/product/airpods.jpg",
     colors: [
@@ -453,6 +479,7 @@ export const products = [
     oldPrice: 46000000,
     rating: 4.7,
     isNew: true,
+    isFeatured: false,
     description: "هدفون روگوشی حرفه‌ای اپل با صدای باکیفیت و نویزکنسلینگ فعال.",
     image: "/assets/images/product/AirPodsMax.jpg",
     colors: [
@@ -470,6 +497,7 @@ export const products = [
     oldPrice: 27000000,
     rating: 4.9,
     isNew: true,
+    isFeatured: false,
     description: "هدفون پرچمدار سونی با نویزکنسلینگ پیشرفته و کیفیت صدای عالی.",
     image: "/assets/images/product/SonyWH.jpg",
     colors: [
@@ -486,6 +514,7 @@ export const products = [
     oldPrice: 15000000,
     rating: 4.6,
     isNew: true,
+    isFeatured: false,
     description: "ایربادز حرفه‌ای سامسونگ با صدای باکیفیت و حذف نویز فعال.",
     image: "/assets/images/product/SamsungBuds3Pro.jpg",
     colors: [
@@ -502,6 +531,7 @@ export const products = [
     oldPrice: 25000000,
     rating: 4.8,
     isNew: false,
+    isFeatured: false,
     description: "هدفون حرفه‌ای Bose با نویزکنسلینگ قدرتمند و صدای فراگیر.",
     image: "/assets/images/product/BoseUltra.jpg",
     colors: [

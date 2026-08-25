@@ -109,12 +109,12 @@ export default function ForgotPassword() {
               margin: "0 auto 18px",
             }}
           >
-            <Check size={26} color="#16a34a" />
+            <Check size={26} color="var(--color-success)" />
           </div>
-          <h1 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#0f172a", marginBottom: "10px" }}>
+          <h1 style={{ fontSize: "1.4rem", fontWeight: 800, color: "var(--color-text)", marginBottom: "10px" }}>
             رمز عبور تغییر کرد
           </h1>
-          <p style={{ color: "#64748b", fontSize: "0.9rem" }}>
+          <p style={{ color: "var(--color-text-muted)", fontSize: "0.9rem" }}>
             در حال انتقال به صفحه‌ی ورود...
           </p>
         </div>

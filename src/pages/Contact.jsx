@@ -31,22 +31,22 @@ export default function Contact() {
 
   const contactInfo = [
     {
-      icon: <MapPin size={22} color="#2563eb" />,
+      icon: <MapPin size={22} color="var(--color-primary)" />,
       title: "آدرس",
       desc: "تهران، ایران",
     },
     {
-      icon: <Phone size={22} color="#2563eb" />,
+      icon: <Phone size={22} color="var(--color-primary)" />,
       title: "تلفن",
       desc: "۰۲۱-۱۲۳۴۵۶۷۸",
     },
     {
-      icon: <Mail size={22} color="#2563eb" />,
+      icon: <Mail size={22} color="var(--color-primary)" />,
       title: "ایمیل",
       desc: "info@techstore.com",
     },
     {
-      icon: <Clock size={22} color="#2563eb" />,
+      icon: <Clock size={22} color="var(--color-primary)" />,
       title: "ساعات کاری",
       desc: "۹ صبح تا ۹ شب",
     },
@@ -56,13 +56,13 @@ export default function Contact() {
     width: "100%",
     height: "52px",
     padding: "0 16px",
-    border: "1.5px solid #e2e8f0",
+    border: "1.5px solid var(--color-border)",
     borderRadius: "12px",
     fontSize: "0.95rem",
     outline: "none",
-    background: "#f8fafc",
+    background: "var(--color-bg)",
     fontFamily: "inherit",
-    color: "#0f172a",
+    color: "var(--color-text)",
   };
 
   return (
@@ -72,7 +72,7 @@ export default function Contact() {
         style={{
           padding: "50px 16px 40px",
           background:
-            "radial-gradient(circle at top right, rgba(37,99,235,0.1) 0%, transparent 45%), #f8fafc",
+            "radial-gradient(circle at top right, rgba(37,99,235,0.1) 0%, transparent 45%), var(--color-bg)",
         }}
       >
         <div
@@ -91,7 +91,7 @@ export default function Contact() {
               style={{
                 display: "inline-block",
                 background: "rgba(37, 99, 235, 0.1)",
-                color: "#2563eb",
+                color: "var(--color-primary)",
                 padding: "7px 16px",
                 borderRadius: "50px",
                 fontSize: "0.88rem",
@@ -106,7 +106,7 @@ export default function Contact() {
               style={{
                 fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
                 fontWeight: 900,
-                color: "#0f172a",
+                color: "var(--color-text)",
                 marginBottom: "16px",
                 lineHeight: 1.35,
               }}
@@ -117,7 +117,7 @@ export default function Contact() {
             <p
               style={{
                 fontSize: "clamp(0.95rem, 2.5vw, 1.08rem)",
-                color: "#64748b",
+                color: "var(--color-text-muted)",
                 lineHeight: 1.9,
                 maxWidth: "520px",
               }}
@@ -157,8 +157,8 @@ export default function Contact() {
             {/* ---------- اطلاعات تماس ---------- */}
             <div
               style={{
-                background: "#fff",
-                border: "1px solid #e2e8f0",
+                background: "var(--color-bg-white)",
+                border: "1px solid var(--color-border)",
                 borderRadius: "22px",
                 padding: "32px 26px",
                 boxShadow: "0 10px 30px rgba(15, 23, 42, 0.04)",
@@ -168,7 +168,7 @@ export default function Contact() {
                 style={{
                   fontSize: "1.35rem",
                   fontWeight: 800,
-                  color: "#0f172a",
+                  color: "var(--color-text)",
                   marginBottom: "8px",
                 }}
               >
@@ -176,7 +176,7 @@ export default function Contact() {
               </h2>
               <p
                 style={{
-                  color: "#64748b",
+                  color: "var(--color-text-muted)",
                   marginBottom: "28px",
                   fontSize: "0.95rem",
                   lineHeight: 1.8,
@@ -200,7 +200,7 @@ export default function Contact() {
                       alignItems: "center",
                       gap: "14px",
                       padding: "14px",
-                      background: "#f8fafc",
+                      background: "var(--color-bg)",
                       borderRadius: "14px",
                       border: "1px solid #f1f5f9",
                     }}
@@ -210,7 +210,7 @@ export default function Contact() {
                         width: "46px",
                         height: "46px",
                         borderRadius: "12px",
-                        background: "#eff6ff",
+                        background: "var(--color-primary-light)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -223,7 +223,7 @@ export default function Contact() {
                       <div
                         style={{
                           fontSize: "0.85rem",
-                          color: "#94a3b8",
+                          color: "var(--color-text-faint)",
                           fontWeight: 600,
                           marginBottom: "2px",
                         }}
@@ -233,7 +233,7 @@ export default function Contact() {
                       <div
                         style={{
                           fontSize: "0.98rem",
-                          color: "#0f172a",
+                          color: "var(--color-text)",
                           fontWeight: 700,
                         }}
                       >
@@ -248,8 +248,8 @@ export default function Contact() {
             {/* ---------- فرم ---------- */}
             <div
               style={{
-                background: "#fff",
-                border: "1px solid #e2e8f0",
+                background: "var(--color-bg-white)",
+                border: "1px solid var(--color-border)",
                 borderRadius: "22px",
                 padding: "32px 26px",
                 boxShadow: "0 10px 30px rgba(15, 23, 42, 0.04)",
@@ -259,7 +259,7 @@ export default function Contact() {
                 style={{
                   fontSize: "1.35rem",
                   fontWeight: 800,
-                  color: "#0f172a",
+                  color: "var(--color-text)",
                   marginBottom: "8px",
                 }}
               >
@@ -267,7 +267,7 @@ export default function Contact() {
               </h2>
               <p
                 style={{
-                  color: "#64748b",
+                  color: "var(--color-text-muted)",
                   marginBottom: "26px",
                   fontSize: "0.95rem",
                 }}
@@ -384,8 +384,8 @@ export default function Contact() {
                   style={{
                     width: "100%",
                     height: "54px",
-                    background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
-                    color: "#fff",
+                    background: "linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))",
+                    color: "var(--color-bg-white)",
                     borderRadius: "14px",
                     fontWeight: 800,
                     fontSize: "1rem",
@@ -408,7 +408,7 @@ export default function Contact() {
                     style={{
                       marginTop: "16px",
                       textAlign: "center",
-                      color: "#16a34a",
+                      color: "var(--color-success)",
                       fontWeight: 700,
                       background: "#f0fdf4",
                       padding: "12px",

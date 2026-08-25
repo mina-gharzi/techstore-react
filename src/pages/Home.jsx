@@ -20,7 +20,7 @@ export default function Home() {
   const { products } = useProducts();
   const { categories } = useCategories();
 
-  const featuredProducts = products.slice(0, 4);
+  const featuredProducts = products.filter((p) => p.isFeatured).slice(0, 4);
   const newProducts = products.filter((p) => p.isNew).slice(0, 4);
   const discountProducts = products
     .filter((p) => p.oldPrice && p.oldPrice > p.price)
@@ -34,7 +34,7 @@ export default function Home() {
           position: "relative",
           padding: "100px 20px 90px",
           background:
-            "radial-gradient(circle at top right, rgba(37,99,235,0.12) 0%, transparent 40%), radial-gradient(circle at bottom left, rgba(59,130,246,0.08) 0%, transparent 40%), linear-gradient(180deg, #f8fbff 0%, #ffffff 100%)",
+            "radial-gradient(circle at top right, rgba(37,99,235,0.12) 0%, transparent 40%), radial-gradient(circle at bottom left, rgba(59,130,246,0.08) 0%, transparent 40%), linear-gradient(180deg, #f8fbff 0%, var(--color-bg-white) 100%)",
         }}
       >
         <div
@@ -52,7 +52,7 @@ export default function Home() {
               alignItems: "center",
               gap: "8px",
               background: "rgba(37, 99, 235, 0.1)",
-              color: "#2563eb",
+              color: "var(--color-primary)",
               padding: "9px 20px",
               borderRadius: "50px",
               fontSize: "0.92rem",
@@ -68,7 +68,7 @@ export default function Home() {
             style={{
               fontSize: "clamp(2.2rem, 5vw, 3.6rem)",
               fontWeight: 900,
-              color: "#0f172a",
+              color: "var(--color-text)",
               lineHeight: 1.25,
               marginBottom: "22px",
               letterSpacing: "-0.5px",
@@ -78,7 +78,7 @@ export default function Home() {
             <br />
             <span
               style={{
-                background: "linear-gradient(135deg, #2563eb, #3b82f6)",
+                background: "linear-gradient(135deg, var(--color-primary), #3b82f6)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
@@ -90,7 +90,7 @@ export default function Home() {
           <p
             style={{
               fontSize: "1.12rem",
-              color: "#64748b",
+              color: "var(--color-text-muted)",
               maxWidth: "560px",
               margin: "0 auto 36px",
               lineHeight: 2,
@@ -113,8 +113,8 @@ export default function Home() {
               to="/products"
               style={{
                 padding: "15px 38px",
-                background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
-                color: "#fff",
+                background: "linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))",
+                color: "var(--color-bg-white)",
                 borderRadius: "50px",
                 fontWeight: 700,
                 fontSize: "1rem",
@@ -129,8 +129,8 @@ export default function Home() {
               to="/about"
               style={{
                 padding: "15px 38px",
-                background: "#ffffff",
-                color: "#2563eb",
+                background: "var(--color-bg-white)",
+                color: "var(--color-primary)",
                 borderRadius: "50px",
                 fontWeight: 700,
                 fontSize: "1rem",
@@ -164,12 +164,12 @@ export default function Home() {
                   alignItems: "center",
                   gap: "8px",
                   background: "rgba(255,255,255,0.9)",
-                  border: "1px solid #e2e8f0",
+                  border: "1px solid var(--color-border)",
                   borderRadius: "50px",
                   padding: "11px 22px",
                   fontWeight: 600,
                   fontSize: "0.92rem",
-                  color: "#334155",
+                  color: "var(--color-text-secondary)",
                   boxShadow: "0 6px 18px rgba(15, 23, 42, 0.05)",
                 }}
               >
@@ -182,20 +182,20 @@ export default function Home() {
       </section>
 
       {/* ===================== Categories ===================== */}
-      <section style={{ padding: "80px 20px", background: "#ffffff" }}>
+      <section style={{ padding: "80px 20px", background: "var(--color-bg-white)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "50px" }}>
             <h2
               style={{
                 fontSize: "clamp(1.6rem, 3vw, 2rem)",
                 fontWeight: 800,
-                color: "#0f172a",
+                color: "var(--color-text)",
                 marginBottom: "12px",
               }}
             >
               دسته‌بندی محصولات
             </h2>
-            <p style={{ color: "#64748b", fontSize: "1.05rem" }}>
+            <p style={{ color: "var(--color-text-muted)", fontSize: "1.05rem" }}>
               محصول موردنظرتان را سریع‌تر پیدا کنید
             </p>
           </div>
@@ -213,13 +213,13 @@ export default function Home() {
                 to={`/products?category=${cat.id}`}
                 style={{
                   background:
-                    "linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)",
-                  border: "1.5px solid #e2e8f0",
+                    "linear-gradient(180deg, var(--color-bg-white) 0%, var(--color-bg) 100%)",
+                  border: "1.5px solid var(--color-border)",
                   borderRadius: "20px",
                   padding: "36px 20px",
                   textAlign: "center",
                   textDecoration: "none",
-                  color: "#0f172a",
+                  color: "var(--color-text)",
                   fontWeight: 700,
                   fontSize: "1.12rem",
                   boxShadow: "0 4px 20px rgba(15, 23, 42, 0.04)",
@@ -233,20 +233,20 @@ export default function Home() {
       </section>
 
       {/* ===================== Featured Products ===================== */}
-      <section style={{ padding: "80px 20px", background: "#f8fafc" }}>
+      <section style={{ padding: "80px 20px", background: "var(--color-bg)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "50px" }}>
             <h2
               style={{
                 fontSize: "clamp(1.6rem, 3vw, 2rem)",
                 fontWeight: 800,
-                color: "#0f172a",
+                color: "var(--color-text)",
                 marginBottom: "12px",
               }}
             >
               محصولات ویژه
             </h2>
-            <p style={{ color: "#64748b", fontSize: "1.05rem" }}>
+            <p style={{ color: "var(--color-text-muted)", fontSize: "1.05rem" }}>
               جدیدترین و محبوب‌ترین محصولات فروشگاه
             </p>
           </div>
@@ -270,9 +270,9 @@ export default function Home() {
               style={{
                 display: "inline-block",
                 padding: "13px 32px",
-                background: "#ffffff",
-                color: "#2563eb",
-                border: "1.5px solid #2563eb",
+                background: "var(--color-bg-white)",
+                color: "var(--color-primary)",
+                border: "1.5px solid var(--color-primary)",
                 borderRadius: "14px",
                 fontWeight: 700,
                 textDecoration: "none",
@@ -286,20 +286,20 @@ export default function Home() {
       </section>
 
       {/* ===================== New Products ===================== */}
-      <section style={{ padding: "80px 20px", background: "#ffffff" }}>
+      <section style={{ padding: "80px 20px", background: "var(--color-bg-white)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "50px" }}>
             <h2
               style={{
                 fontSize: "clamp(1.6rem, 3vw, 2rem)",
                 fontWeight: 800,
-                color: "#0f172a",
+                color: "var(--color-text)",
                 marginBottom: "12px",
               }}
             >
               محصولات جدید
             </h2>
-            <p style={{ color: "#64748b", fontSize: "1.05rem" }}>
+            <p style={{ color: "var(--color-text-muted)", fontSize: "1.05rem" }}>
               تازه‌ترین محصولات اضافه‌شده به فروشگاه
             </p>
           </div>
@@ -323,9 +323,9 @@ export default function Home() {
               style={{
                 display: "inline-block",
                 padding: "13px 32px",
-                background: "#ffffff",
-                color: "#2563eb",
-                border: "1.5px solid #2563eb",
+                background: "var(--color-bg-white)",
+                color: "var(--color-primary)",
+                border: "1.5px solid var(--color-primary)",
                 borderRadius: "14px",
                 fontWeight: 700,
                 textDecoration: "none",
@@ -339,20 +339,20 @@ export default function Home() {
       </section>
 
       {/* ===================== Discounted Products ===================== */}
-      <section style={{ padding: "80px 20px", background: "#f8fafc" }}>
+      <section style={{ padding: "80px 20px", background: "var(--color-bg)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "50px" }}>
             <h2
               style={{
                 fontSize: "clamp(1.6rem, 3vw, 2rem)",
                 fontWeight: 800,
-                color: "#0f172a",
+                color: "var(--color-text)",
                 marginBottom: "12px",
               }}
             >
               محصولات تخفیفی
             </h2>
-            <p style={{ color: "#64748b", fontSize: "1.05rem" }}>
+            <p style={{ color: "var(--color-text-muted)", fontSize: "1.05rem" }}>
               محصولات با بیشترین تخفیف
             </p>
           </div>
@@ -376,9 +376,9 @@ export default function Home() {
               style={{
                 display: "inline-block",
                 padding: "13px 32px",
-                background: "#ffffff",
-                color: "#2563eb",
-                border: "1.5px solid #2563eb",
+                background: "var(--color-bg-white)",
+                color: "var(--color-primary)",
+                border: "1.5px solid var(--color-primary)",
                 borderRadius: "14px",
                 fontWeight: 700,
                 textDecoration: "none",
@@ -399,11 +399,11 @@ export default function Home() {
               position: "relative",
               overflow: "hidden",
               background:
-                "linear-gradient(135deg, #2563eb 0%, #1d4ed8 55%, #1e40af 100%)",
+                "linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 55%, #1e40af 100%)",
               borderRadius: "28px",
               padding: "70px 40px",
               textAlign: "center",
-              color: "#fff",
+              color: "var(--color-bg-white)",
               boxShadow: "0 28px 60px rgba(37, 99, 235, 0.35)",
             }}
           >
@@ -450,8 +450,8 @@ export default function Home() {
               style={{
                 display: "inline-block",
                 padding: "14px 36px",
-                background: "#ffffff",
-                color: "#1d4ed8",
+                background: "var(--color-bg-white)",
+                color: "var(--color-primary-dark)",
                 borderRadius: "50px",
                 fontWeight: 800,
                 textDecoration: "none",

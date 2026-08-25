@@ -54,28 +54,28 @@ export default class ErrorBoundary extends Component {
               width: "80px",
               height: "80px",
               borderRadius: "50%",
-              background: "#fef2f2",
+              background: "var(--color-error-light)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               marginBottom: "24px",
             }}
           >
-            <AlertOctagon size={38} color="#ef4444" />
+            <AlertOctagon size={38} color="var(--color-error)" />
           </div>
 
           <h1
             style={{
               fontSize: "1.6rem",
               fontWeight: 800,
-              color: "#0f172a",
+              color: "var(--color-text)",
               marginBottom: "12px",
             }}
           >
             یک مشکل پیش آمد
           </h1>
 
-          <p style={{ color: "#64748b", marginBottom: "32px", maxWidth: "440px", lineHeight: 1.9 }}>
+          <p style={{ color: "var(--color-text-muted)", marginBottom: "32px", maxWidth: "440px", lineHeight: 1.9 }}>
             متأسفانه در نمایش این صفحه خطایی رخ داد. می‌توانید صفحه را دوباره
             بارگذاری کنید یا به صفحه‌ی اصلی بازگردید.
           </p>
@@ -88,8 +88,8 @@ export default class ErrorBoundary extends Component {
                 alignItems: "center",
                 gap: "8px",
                 padding: "13px 28px",
-                background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
-                color: "#fff",
+                background: "linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))",
+                color: "var(--color-bg-white)",
                 borderRadius: "12px",
                 fontWeight: 700,
                 border: "none",
@@ -114,9 +114,9 @@ export default class ErrorBoundary extends Component {
                 alignItems: "center",
                 gap: "8px",
                 padding: "13px 28px",
-                background: "#fff",
-                color: "#334155",
-                border: "1.5px solid #e2e8f0",
+                background: "var(--color-bg-white)",
+                color: "var(--color-text-secondary)",
+                border: "1.5px solid var(--color-border)",
                 borderRadius: "12px",
                 fontWeight: 700,
                 textDecoration: "none",

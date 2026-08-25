@@ -17,7 +17,7 @@ export default function NotFound() {
         style={{
           fontSize: "6rem",
           fontWeight: 900,
-          color: "#2563eb",
+          color: "var(--color-primary)",
           marginBottom: "10px",
           lineHeight: 1,
         }}
@@ -29,7 +29,7 @@ export default function NotFound() {
         style={{
           fontSize: "1.6rem",
           fontWeight: 800,
-          color: "#0f172a",
+          color: "var(--color-text)",
           marginBottom: "14px",
         }}
       >
@@ -38,7 +38,7 @@ export default function NotFound() {
 
       <p
         style={{
-          color: "#64748b",
+          color: "var(--color-text-muted)",
           fontSize: "1.05rem",
           marginBottom: "32px",
         }}
@@ -51,8 +51,8 @@ export default function NotFound() {
         style={{
           display: "inline-block",
           padding: "13px 32px",
-          background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
-          color: "#fff",
+          background: "linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))",
+          color: "var(--color-bg-white)",
           borderRadius: "12px",
           fontWeight: 700,
           textDecoration: "none",

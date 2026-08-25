@@ -1,3 +1,5 @@
+@import "./styles/variables.css";
+
 /* ======================================================
    استایل‌های پایه + Navbar
    ====================================================== */
@@ -64,9 +66,9 @@ button {
 }
 
 body {
-  font-family:Vazirmatn-Bold, system-ui, sans-serif;
-  background-color: #f8fafc;
-  color: #0f172a;
+  font-family: var(--font-family);
+  background-color: var(--color-bg);
+  color: var(--color-text);
   line-height: 1.6;
   direction: rtl;
 }
@@ -80,7 +82,7 @@ body {
   z-index: 100;
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--color-border);
   box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
 }
 
@@ -98,7 +100,7 @@ body {
 .navbar__logo {
   font-size: 1.45rem;
   font-weight: 800;
-  color: #2563eb;
+  color: var(--color-primary);
   letter-spacing: -0.5px;
   flex-shrink: 0;
 }
@@ -114,20 +116,20 @@ body {
   padding: 8px 16px;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #334155;
+  color: var(--color-text-secondary);
   border-radius: 10px;
   transition: all 0.2s ease;
   white-space: nowrap;
 }
 
 .navbar__link:hover {
-  color: #2563eb;
-  background: #eff6ff;
+  color: var(--color-primary);
+  background: var(--color-primary-light);
 }
 
 .navbar__link.active {
-  color: #2563eb;
-  background: #eff6ff;
+  color: var(--color-primary);
+  background: var(--color-primary-light);
 }
 
 /* اکشن‌ها */
@@ -151,8 +153,8 @@ body {
 }
 
 .navbar__icon-btn:hover {
-  background: #eff6ff;
-  color: #2563eb;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
 /* بج */
@@ -166,12 +168,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ef4444;
-  color: #fff;
+  background: var(--color-error);
+  color: var(--color-bg-white);
   font-size: 0.7rem;
   font-weight: 700;
   border-radius: 50px;
-  border: 2px solid #fff;
+  border: 2px solid var(--color-bg-white);
 }
 
 /* دکمه همبرگری */
@@ -182,12 +184,12 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  color: #334155;
+  color: var(--color-text-secondary);
 }
 
 .navbar__menu-toggle:hover {
-  background: #eff6ff;
-  color: #2563eb;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
 /* منوی موبایل
@@ -201,8 +203,8 @@ body {
   display: none;
   flex-direction: column;
   gap: 4px;
-  background: #fff;
-  border-top: 1px solid #e2e8f0;
+  background: var(--color-bg-white);
+  border-top: 1px solid var(--color-border);
   padding: 16px;
   position: relative;
   z-index: 95;
@@ -217,7 +219,7 @@ body {
   padding: 15px 16px;
   font-size: 1.02rem;
   font-weight: 600;
-  color: #334155;
+  color: var(--color-text-secondary);
   border-radius: 12px;
   transition:
     background 0.15s ease,
@@ -226,13 +228,13 @@ body {
 
 .navbar__mobile-link:hover,
 .navbar__mobile-link:active {
-  background: #eff6ff;
-  color: #2563eb;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
 .navbar__mobile-link.active {
-  background: #eff6ff;
-  color: #2563eb;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
   font-weight: 700;
 }
 

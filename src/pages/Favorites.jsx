@@ -23,20 +23,20 @@ export default function Favorites() {
       >
         <Heart
           size={64}
-          color="#94a3b8"
+          color="var(--color-text-faint)"
           style={{ margin: "0 auto 24px" }}
         />
         <h1
           style={{
             fontSize: "1.8rem",
             fontWeight: 800,
-            color: "#0f172a",
+            color: "var(--color-text)",
             marginBottom: "12px",
           }}
         >
           لیست علاقه‌مندی‌ها خالی است
         </h1>
-        <p style={{ color: "#64748b", marginBottom: "28px" }}>
+        <p style={{ color: "var(--color-text-muted)", marginBottom: "28px" }}>
           هنوز محصولی به علاقه‌مندی‌ها اضافه نکرده‌اید.
         </p>
         <Link
@@ -44,8 +44,8 @@ export default function Favorites() {
           style={{
             display: "inline-block",
             padding: "12px 28px",
-            background: "#2563eb",
-            color: "#fff",
+            background: "var(--color-primary)",
+            color: "var(--color-bg-white)",
             borderRadius: "12px",
             fontWeight: 700,
             textDecoration: "none",
@@ -67,13 +67,13 @@ export default function Favorites() {
             style={{
               fontSize: "1.9rem",
               fontWeight: 800,
-              color: "#0f172a",
+              color: "var(--color-text)",
               marginBottom: "10px",
             }}
           >
             علاقه‌مندی‌های من
           </h1>
-          <p style={{ color: "#64748b", fontSize: "1.05rem" }}>
+          <p style={{ color: "var(--color-text-muted)", fontSize: "1.05rem" }}>
             {favorites.length} محصول در لیست علاقه‌مندی‌ها
           </p>
         </div>

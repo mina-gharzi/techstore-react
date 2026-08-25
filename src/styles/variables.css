@@ -1,0 +1,63 @@
+/* ======================================================
+   Design Tokens
+   توکن‌های دیزاین سیستم - منبع اصلی رنگ‌ها، spacing و...
+   ====================================================== */
+
+:root {
+  /* ---------- رنگ‌ها ---------- */
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-primary-light: #eff6ff;
+
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+
+  --color-error: #ef4444;
+  --color-error-light: #fef2f2;
+  --color-error-border: #fecaca;
+
+  --color-text: #0f172a;
+  --color-text-secondary: #334155;
+  --color-text-muted: #64748b;
+  --color-text-faint: #94a3b8;
+
+  --color-border: #e2e8f0;
+  --color-bg: #f8fafc;
+  --color-bg-white: #ffffff;
+
+  /* ---------- فاصله‌ها ---------- */
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-10: 40px;
+
+  /* ---------- گردی گوشه‌ها ---------- */
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 18px;
+  --radius-full: 50px;
+
+  /* ---------- سایه‌ها ---------- */
+  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.06);
+
+  /* ---------- ترنزیشن‌ها ---------- */
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.3s ease;
+
+  /* ---------- فونت ---------- */
+  --font-family: Vazirmatn-Bold, system-ui, sans-serif;
+  --font-size-sm: 0.78rem;
+  --font-size-base: 0.85rem;
+  --font-size-md: 0.92rem;
+  --font-size-lg: 1rem;
+  --font-size-xl: 1.05rem;
+
+  --font-weight-regular: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+}

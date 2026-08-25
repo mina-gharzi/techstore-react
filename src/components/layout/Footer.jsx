@@ -13,8 +13,8 @@ export default function Footer() {
   return (
     <footer
       style={{
-        background: "#0f172a",
-        color: "#e2e8f0",
+        background: "var(--color-text)",
+        color: "var(--color-border)",
         padding: "50px 20px 30px",
         marginTop: "60px",
       }}
@@ -34,13 +34,13 @@ export default function Footer() {
             style={{
               fontSize: "1.4rem",
               fontWeight: 800,
-              color: "#fff",
+              color: "var(--color-bg-white)",
               marginBottom: "16px",
             }}
           >
             {APP_NAME}
           </h2>
-          <p style={{ lineHeight: 1.8, color: "#94a3b8", fontSize: "0.95rem" }}>
+          <p style={{ lineHeight: 1.8, color: "var(--color-text-faint)", fontSize: "0.95rem" }}>
             فروشگاه آنلاین محصولات دیجیتال با بهترین قیمت، ضمانت اصالت کالا و
             ارسال سریع.
           </p>
@@ -52,31 +52,31 @@ export default function Footer() {
             style={{
               fontSize: "1.05rem",
               fontWeight: 700,
-              color: "#fff",
+              color: "var(--color-bg-white)",
               marginBottom: "16px",
             }}
           >
             لینک‌های سریع
           </h3>
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            <Link to="/" style={{ color: "#94a3b8", textDecoration: "none" }}>
+            <Link to="/" style={{ color: "var(--color-text-faint)", textDecoration: "none" }}>
               خانه
             </Link>
             <Link
               to="/products"
-              style={{ color: "#94a3b8", textDecoration: "none" }}
+              style={{ color: "var(--color-text-faint)", textDecoration: "none" }}
             >
               محصولات
             </Link>
             <Link
               to="/about"
-              style={{ color: "#94a3b8", textDecoration: "none" }}
+              style={{ color: "var(--color-text-faint)", textDecoration: "none" }}
             >
               درباره ما
             </Link>
             <Link
               to="/contact"
-              style={{ color: "#94a3b8", textDecoration: "none" }}
+              style={{ color: "var(--color-text-faint)", textDecoration: "none" }}
             >
               تماس با ما
             </Link>
@@ -95,7 +95,7 @@ export default function Footer() {
             style={{
               fontSize: "1.05rem",
               fontWeight: 700,
-              color: "#fff",
+              color: "var(--color-bg-white)",
               marginBottom: "16px",
             }}
           >
@@ -106,7 +106,7 @@ export default function Footer() {
               <Link
                 key={cat.id}
                 to={`/products?category=${cat.id}`}
-                style={{ color: "#94a3b8", textDecoration: "none" }}
+                style={{ color: "var(--color-text-faint)", textDecoration: "none" }}
               >
                 {cat.name}
               </Link>
@@ -120,7 +120,7 @@ export default function Footer() {
             style={{
               fontSize: "1.05rem",
               fontWeight: 700,
-              color: "#fff",
+              color: "var(--color-bg-white)",
               marginBottom: "16px",
             }}
           >
@@ -131,7 +131,7 @@ export default function Footer() {
               display: "flex",
               flexDirection: "column",
               gap: "10px",
-              color: "#94a3b8",
+              color: "var(--color-text-faint)",
               fontSize: "0.95rem",
             }}
           >
@@ -150,7 +150,7 @@ export default function Footer() {
           paddingTop: "24px",
           borderTop: "1px solid #1e293b",
           textAlign: "center",
-          color: "#64748b",
+          color: "var(--color-text-muted)",
           fontSize: "0.9rem",
         }}
       >

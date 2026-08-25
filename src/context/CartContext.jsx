@@ -1,98 +1,164 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useMemo } from "react";
+import { useAuth } from "./AuthContext";
+import { useProducts, getStock } from "./ProductsContext";
 
-// ساخت Context
 const CartContext = createContext(null);
 
 // ======================================================
 // CartProvider
-// این کامپوننت کل اپ را در بر می‌گیرد
-// و اطلاعات سبد خرید را در اختیار همه قرار می‌دهد
 //
-// نکته مهم: هر آیتم سبد یک "cartItemId" دارد که ترکیب
-// id محصول + رنگ انتخابی است. این باعث می‌شود مثلاً
-// "آیفون مشکی" و "آیفون آبی" دو ردیف جدا در سبد باشند
-// و روی هم merge نشوند.
+// نسخه بازنویسی‌شده:
+//   1) Per-user: سبد هر کاربر در localStorage جداگانه ذخیره می‌شه
+//      (کلید: "techstore-cart-{userId}" یا "techstore-cart-guest")
+//   2) بدون Snapshot: فقط { productId, selectedColor, quantity }
+//      ذخیره می‌شه؛ name, price, image از ProductsContext زنده
+//      خونده می‌شه.
+//   3) Merge موقع لاگین: سبد مهمان با سبد کاربر ادغام می‌شه.
+//
+// نکته: هر آیتم سبد یک "cartItemId" دارد که ترکیب productId
+// + رنگ انتخابی است تا مثلاً "آیفون مشکی" و "آیفون آبی"
+// دو ردیف جداگانه باشند.
 // ======================================================
 
+function getStorageKey(userId) {
+  return userId ? `techstore-cart-${userId}` : "techstore-cart-guest";
+}
+
+function readRawCart(userId) {
+  try {
+    const saved = localStorage.getItem(getStorageKey(userId));
+    return saved ? JSON.parse(saved) : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeRawCart(userId, items) {
+  try {
+    localStorage.setItem(getStorageKey(userId), JSON.stringify(items));
+  } catch {
+    // localStorage ممکن است در دسترس نباشد
+  }
+}
+
+function getCartItemId(productId, selectedColor) {
+  return selectedColor ? `${productId}-${selectedColor}` : `${productId}-default`;
+}
+
 export function CartProvider({ children }) {
-  // خواندن اولیه از localStorage
-  const [cart, setCart] = useState(() => {
-    try {
-      const saved = localStorage.getItem("techstore-cart");
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const { user } = useAuth();
+  const { products } = useProducts();
 
-  // ذخیره خودکار در localStorage بعد از هر تغییر
+  const userId = user?.id ?? null;
+
+  // ---------- state خام سبد (فقط id + color + quantity) ----------
+  const [rawCart, setRawCart] = useState(() => readRawCart(null));
+
+  // ---------- لود سبد کاربر جدید موقع سویچ ----------
   useEffect(() => {
-    try {
-      localStorage.setItem("techstore-cart", JSON.stringify(cart));
-    } catch {
-      // localStorage ممکن است در برخی حالت‌ها (مثلاً حالت خصوصی مرورگر) در دسترس نباشد
+    const userCart = readRawCart(userId);
+    const guestCart = readRawCart(null);
+
+    if (userId && guestCart.length > 0) {
+      // Merge: آیتم‌های مهمان رو به سبد کاربر اضافه کن
+      setRawCart((prev) => {
+        const merged = [...userCart];
+        guestCart.forEach((gItem) => {
+          const existing = merged.find(
+            (m) => m.productId === gItem.productId && m.selectedColor === gItem.selectedColor,
+          );
+          if (existing) {
+            existing.quantity += gItem.quantity;
+          } else {
+            merged.push({ ...gItem });
+          }
+        });
+        return merged;
+      });
+      // پاک کردن سبد مهمان بعد از merge
+      writeRawCart(null, []);
+      localStorage.removeItem("techstore-cart-guest");
+    } else {
+      setRawCart(userCart);
     }
-  }, [cart]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
 
-  // ---------- ساخت شناسه یکتا برای هر واریانت محصول ----------
-  const getCartItemId = (id, selectedColor) =>
-    selectedColor ? `${id}-${selectedColor}` : `${id}-default`;
+  // ---------- ذخیره خودکار ----------
+  useEffect(() => {
+    writeRawCart(userId, rawCart);
+  }, [rawCart, userId]);
 
-  // ---------- افزودن محصول به سبد ----------
-  // product: آبجکت محصول (می‌تواند selectedColor هم داشته باشد)
-  // quantity: تعداد (پیش‌فرض ۱) - جایگزین حلقه‌ی زدن addToCart چندباره
+  // ---------- سبد resolved (با اطلاعات زنده محصول) ----------
+  const cart = useMemo(() => {
+    return rawCart
+      .map((item) => {
+        const product = products.find((p) => p.id === item.productId);
+        if (!product) return null; // محصول حذف شده
+        return {
+          ...product,
+          cartItemId: getCartItemId(item.productId, item.selectedColor),
+          productId: item.productId,
+          selectedColor: item.selectedColor,
+          quantity: item.quantity,
+          stock: getStock(product),
+        };
+      })
+      .filter(Boolean);
+  }, [rawCart, products]);
+
+  // ---------- افزودن به سبد ----------
   const addToCart = (product, quantity = 1) => {
-    const cartItemId = getCartItemId(product.id, product.selectedColor);
+    const selectedColor = product.selectedColor || null;
+    const productId = product.id;
 
-    setCart((prev) => {
-      const existingItem = prev.find((item) => item.cartItemId === cartItemId);
+    setRawCart((prev) => {
+      const existing = prev.find(
+        (item) => item.productId === productId && item.selectedColor === selectedColor,
+      );
 
-      // اگر همین محصول با همین رنگ از قبل در سبد بود → فقط تعداد را زیاد کن
-      if (existingItem) {
+      if (existing) {
         return prev.map((item) =>
-          item.cartItemId === cartItemId
+          item.productId === productId && item.selectedColor === selectedColor
             ? { ...item, quantity: item.quantity + quantity }
             : item,
         );
       }
 
-      // اگر جدید بود (یا رنگش با آیتم موجود فرق داشت) → ردیف جدید اضافه کن
-      return [...prev, { ...product, cartItemId, quantity }];
+      return [...prev, { productId, selectedColor, quantity }];
     });
   };
 
-  // ---------- حذف کامل یک واریانت از سبد ----------
+  // ---------- حذف ----------
   const removeFromCart = (cartItemId) => {
-    setCart((prev) => prev.filter((item) => item.cartItemId !== cartItemId));
+    setRawCart((prev) =>
+      prev.filter((item) => getCartItemId(item.productId, item.selectedColor) !== cartItemId),
+    );
   };
 
-  // ---------- تغییر تعداد یک واریانت ----------
+  // ---------- تغییر تعداد ----------
   const updateQuantity = (cartItemId, quantity) => {
-    // جلوگیری از تعداد صفر یا منفی: به‌جای باگ خاموش، آیتم حذف می‌شود
     if (quantity < 1) {
       removeFromCart(cartItemId);
       return;
     }
 
-    setCart((prev) =>
+    setRawCart((prev) =>
       prev.map((item) =>
-        item.cartItemId === cartItemId ? { ...item, quantity } : item,
+        getCartItemId(item.productId, item.selectedColor) === cartItemId
+          ? { ...item, quantity }
+          : item,
       ),
     );
   };
 
-  // ---------- خالی کردن کل سبد ----------
-  const clearCart = () => setCart([]);
+  // ---------- خالی کردن ----------
+  const clearCart = () => setRawCart([]);
 
-  // ---------- محاسبات ----------
+  // ---------- محاسبات (از قیمت زنده) ----------
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const totalPrice = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
-  );
-
-  // مقداری که در اختیار کامپوننت‌ها قرار می‌گیرد
   const value = {
     cart,
     addToCart,
@@ -106,16 +172,10 @@ export function CartProvider({ children }) {
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
-// ======================================================
-// هوک اختصاصی برای استفاده راحت‌تر
-// ======================================================
-
 export function useCart() {
   const context = useContext(CartContext);
-
   if (!context) {
     throw new Error("useCart باید داخل CartProvider استفاده شود");
   }
-
   return context;
 }

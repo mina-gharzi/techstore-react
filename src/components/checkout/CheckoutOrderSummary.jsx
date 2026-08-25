@@ -1,0 +1,268 @@
+import { Link } from "react-router-dom";
+import { Tag, X } from "lucide-react";
+import { formatPrice } from "../../utils/formatPrice";
+
+export default function CheckoutOrderSummary({
+  cart,
+  totalItems,
+  totalPrice,
+  discountAmount,
+  finalTotal,
+  appliedCoupon,
+  couponInput,
+  setCouponInput,
+  couponError,
+  handleApplyCoupon,
+  handleRemoveCoupon,
+  isSubmitting,
+  stockError,
+}) {
+  return (
+    <>
+      <div
+        style={{
+          background: "var(--color-bg-white)",
+          border: "1px solid var(--color-border)",
+          borderRadius: "18px",
+          padding: "24px",
+          position: "sticky",
+          top: "90px",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "1.15rem",
+            fontWeight: 800,
+            marginBottom: "18px",
+            color: "var(--color-text)",
+          }}
+        >
+          خلاصه سفارش
+        </h2>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            marginBottom: "18px",
+            maxHeight: "220px",
+            overflowY: "auto",
+          }}
+        >
+          {cart.map((item) => (
+            <div
+              key={item.cartItemId}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "10px",
+                fontSize: "0.88rem",
+              }}
+            >
+              <span style={{ color: "var(--color-text-secondary)" }}>
+                {item.name}
+                {item.selectedColor ? ` (${item.selectedColor})` : ""} ×{" "}
+                {item.quantity}
+              </span>
+              <span style={{ color: "var(--color-text)", fontWeight: 700, whiteSpace: "nowrap" }}>
+                {formatPrice(item.price * item.quantity)}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ marginBottom: "18px", paddingTop: "14px", borderTop: "1px solid var(--color-border)" }}>
+          {appliedCoupon ? (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                background: "#f0fdf4",
+                border: "1px solid #bbf7d0",
+                borderRadius: "10px",
+                padding: "10px 12px",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <Tag size={15} color="var(--color-success)" />
+                <span style={{ fontWeight: 700, color: "var(--color-success)", fontSize: "0.85rem" }}>
+                  {appliedCoupon.code} ({appliedCoupon.description})
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={handleRemoveCoupon}
+                aria-label="حذف کد تخفیف"
+                style={{
+                  color: "var(--color-text-muted)",
+                  cursor: "pointer",
+                  display: "flex",
+                }}
+              >
+                <X size={16} />
+              </button>
+            </div>
+          ) : (
+            <div>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <input
+                  type="text"
+                  value={couponInput}
+                  onChange={(e) => {
+                    setCouponInput(e.target.value);
+                    if (couponError) setCouponError("");
+                  }}
+                  placeholder="کد تخفیف"
+                  style={{
+                    flex: 1,
+                    height: "42px",
+                    padding: "0 12px",
+                    border: `1.5px solid ${couponError ? "#fca5a5" : "var(--color-border)"}`,
+                    borderRadius: "10px",
+                    fontSize: "0.85rem",
+                    outline: "none",
+                    background: couponError ? "var(--color-error-light)" : "var(--color-bg)",
+                    fontFamily: "inherit",
+                    color: "var(--color-text)",
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={handleApplyCoupon}
+                  style={{
+                    padding: "0 16px",
+                    background: "#f1f5f9",
+                    color: "var(--color-text-secondary)",
+                    border: "none",
+                    borderRadius: "10px",
+                    fontWeight: 700,
+                    fontSize: "0.85rem",
+                    cursor: "pointer",
+                    fontFamily: "inherit",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  اعمال کد
+                </button>
+              </div>
+              {couponError && (
+                <span style={{ display: "block", marginTop: "6px", color: "var(--color-error)", fontSize: "0.78rem", fontWeight: 600 }}>
+                  {couponError}
+                </span>
+              )}
+              <span style={{ display: "block", marginTop: "6px", color: "var(--color-text-faint)", fontSize: "0.75rem" }}>
+                کدهای نمونه: WELCOME10 یا TECH50
+              </span>
+            </div>
+          )}
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "12px",
+            color: "var(--color-text-muted)",
+          }}
+        >
+          <span>تعداد کالا</span>
+          <span>{totalItems}</span>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "12px",
+            color: "var(--color-text-muted)",
+            fontSize: "0.92rem",
+          }}
+        >
+          <span>مبلغ کل</span>
+          <span>{formatPrice(totalPrice)}</span>
+        </div>
+
+        {appliedCoupon && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: "12px",
+              color: "var(--color-success)",
+              fontSize: "0.92rem",
+              fontWeight: 700,
+            }}
+          >
+            <span>تخفیف</span>
+            <span>-{formatPrice(discountAmount)}</span>
+          </div>
+        )}
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "22px",
+            paddingBottom: "20px",
+            borderBottom: "1px solid var(--color-border)",
+            fontWeight: 800,
+            fontSize: "1.15rem",
+            color: "var(--color-text)",
+          }}
+        >
+          <span>مبلغ قابل پرداخت</span>
+          <span style={{ color: "var(--color-primary)" }}>{formatPrice(finalTotal)}</span>
+        </div>
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          style={{
+            width: "100%",
+            padding: "14px",
+            background: isSubmitting
+              ? "#93c5fd"
+              : "linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))",
+            color: "var(--color-bg-white)",
+            borderRadius: "12px",
+            fontWeight: 700,
+            fontSize: "1rem",
+            cursor: isSubmitting ? "not-allowed" : "pointer",
+            border: "none",
+            fontFamily: "inherit",
+            boxShadow: isSubmitting
+              ? "none"
+              : "0 10px 25px rgba(37, 99, 235, 0.25)",
+          }}
+        >
+          {isSubmitting ? "در حال ثبت سفارش..." : "ثبت نهایی سفارش"}
+        </button>
+
+        <Link
+          to="/cart"
+          style={{
+            display: "block",
+            textAlign: "center",
+            marginTop: "14px",
+            color: "var(--color-text-muted)",
+            fontWeight: 600,
+            textDecoration: "none",
+            fontSize: "0.9rem",
+          }}
+        >
+          بازگشت به سبد خرید
+        </Link>
+      </div>
+
+      <style>{`
+        @media (max-width: 800px) {
+          .checkout-layout {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
+    </>
+  );
+}

@@ -12,22 +12,22 @@ export default function About() {
 
   const features = [
     {
-      icon: <Shield size={26} color="#2563eb" />,
+      icon: <Shield size={26} color="var(--color-primary)" />,
       title: "ضمانت اصالت",
       desc: "تمام محصولات اصل و دارای گارانتی معتبر هستند.",
     },
     {
-      icon: <Truck size={26} color="#2563eb" />,
+      icon: <Truck size={26} color="var(--color-primary)" />,
       title: "ارسال سریع",
       desc: "ارسال سفارش‌ها در کوتاه‌ترین زمان ممکن.",
     },
     {
-      icon: <Headphones size={26} color="#2563eb" />,
+      icon: <Headphones size={26} color="var(--color-primary)" />,
       title: "پشتیبانی",
       desc: "پاسخگویی سریع و راهنمایی کامل خرید.",
     },
     {
-      icon: <Award size={26} color="#2563eb" />,
+      icon: <Award size={26} color="var(--color-primary)" />,
       title: "قیمت مناسب",
       desc: "بهترین قیمت بازار بدون کاهش کیفیت.",
     },
@@ -47,7 +47,7 @@ export default function About() {
         style={{
           padding: "50px 16px 40px",
           background:
-            "radial-gradient(circle at top right, rgba(37,99,235,0.1) 0%, transparent 45%), #f8fafc",
+            "radial-gradient(circle at top right, rgba(37,99,235,0.1) 0%, transparent 45%), var(--color-bg)",
         }}
       >
         <div
@@ -66,7 +66,7 @@ export default function About() {
               style={{
                 display: "inline-block",
                 background: "rgba(37, 99, 235, 0.1)",
-                color: "#2563eb",
+                color: "var(--color-primary)",
                 padding: "7px 16px",
                 borderRadius: "50px",
                 fontSize: "0.88rem",
@@ -81,18 +81,18 @@ export default function About() {
               style={{
                 fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
                 fontWeight: 900,
-                color: "#0f172a",
+                color: "var(--color-text)",
                 marginBottom: "16px",
                 lineHeight: 1.35,
               }}
             >
-              فروشگاه آنلاین <span style={{ color: "#2563eb" }}>TechStore</span>
+              فروشگاه آنلاین <span style={{ color: "var(--color-primary)" }}>TechStore</span>
             </h1>
 
             <p
               style={{
                 fontSize: "clamp(0.95rem, 2.5vw, 1.08rem)",
-                color: "#64748b",
+                color: "var(--color-text-muted)",
                 lineHeight: 1.9,
                 maxWidth: "520px",
               }}
@@ -119,7 +119,7 @@ export default function About() {
       </section>
 
       {/* ===================== Story + Stats ===================== */}
-      <section style={{ padding: "70px 20px", background: "#fff" }}>
+      <section style={{ padding: "70px 20px", background: "var(--color-bg-white)" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           {/* متن داستان */}
           <div
@@ -133,7 +133,7 @@ export default function About() {
               style={{
                 fontSize: "1.7rem",
                 fontWeight: 800,
-                color: "#0f172a",
+                color: "var(--color-text)",
                 marginBottom: "18px",
               }}
             >
@@ -168,8 +168,8 @@ export default function About() {
               <div
                 key={item.label}
                 style={{
-                  background: "#f8fafc",
-                  border: "1px solid #e2e8f0",
+                  background: "var(--color-bg)",
+                  border: "1px solid var(--color-border)",
                   borderRadius: "16px",
                   padding: "24px 16px",
                   textAlign: "center",
@@ -179,7 +179,7 @@ export default function About() {
                   style={{
                     fontSize: "1.5rem",
                     fontWeight: 900,
-                    color: "#2563eb",
+                    color: "var(--color-primary)",
                     marginBottom: "6px",
                   }}
                 >
@@ -188,7 +188,7 @@ export default function About() {
                 <div
                   style={{
                     fontSize: "0.9rem",
-                    color: "#64748b",
+                    color: "var(--color-text-muted)",
                     fontWeight: 600,
                   }}
                 >
@@ -201,7 +201,7 @@ export default function About() {
       </section>
 
       {/* ===================== Mission & Vision ===================== */}
-      <section style={{ padding: "70px 20px", background: "#f8fafc" }}>
+      <section style={{ padding: "70px 20px", background: "var(--color-bg)" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           {/*
             قبلاً "1fr 1fr" بود، یعنی روی موبایل دو کارت کنار هم فشرده
@@ -218,8 +218,8 @@ export default function About() {
             {/* ماموریت */}
             <div
               style={{
-                background: "#fff",
-                border: "1px solid #e2e8f0",
+                background: "var(--color-bg-white)",
+                border: "1px solid var(--color-border)",
                 borderRadius: "18px",
                 padding: "32px",
               }}
@@ -229,20 +229,20 @@ export default function About() {
                   width: "48px",
                   height: "48px",
                   borderRadius: "12px",
-                  background: "#eff6ff",
+                  background: "var(--color-primary-light)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   marginBottom: "16px",
                 }}
               >
-                <Target size={22} color="#2563eb" />
+                <Target size={22} color="var(--color-primary)" />
               </div>
               <h3
                 style={{
                   fontSize: "1.15rem",
                   fontWeight: 800,
-                  color: "#0f172a",
+                  color: "var(--color-text)",
                   marginBottom: "10px",
                 }}
               >
@@ -250,7 +250,7 @@ export default function About() {
               </h3>
               <p
                 style={{
-                  color: "#64748b",
+                  color: "var(--color-text-muted)",
                   lineHeight: 1.9,
                   fontSize: "0.98rem",
                 }}
@@ -262,8 +262,8 @@ export default function About() {
             {/* چشم‌انداز */}
             <div
               style={{
-                background: "#fff",
-                border: "1px solid #e2e8f0",
+                background: "var(--color-bg-white)",
+                border: "1px solid var(--color-border)",
                 borderRadius: "18px",
                 padding: "32px",
               }}
@@ -273,20 +273,20 @@ export default function About() {
                   width: "48px",
                   height: "48px",
                   borderRadius: "12px",
-                  background: "#eff6ff",
+                  background: "var(--color-primary-light)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   marginBottom: "16px",
                 }}
               >
-                <Eye size={22} color="#2563eb" />
+                <Eye size={22} color="var(--color-primary)" />
               </div>
               <h3
                 style={{
                   fontSize: "1.15rem",
                   fontWeight: 800,
-                  color: "#0f172a",
+                  color: "var(--color-text)",
                   marginBottom: "10px",
                 }}
               >
@@ -294,7 +294,7 @@ export default function About() {
               </h3>
               <p
                 style={{
-                  color: "#64748b",
+                  color: "var(--color-text-muted)",
                   lineHeight: 1.9,
                   fontSize: "0.98rem",
                 }}
@@ -308,20 +308,20 @@ export default function About() {
       </section>
 
       {/* ===================== Features ===================== */}
-      <section style={{ padding: "70px 20px", background: "#fff" }}>
+      <section style={{ padding: "70px 20px", background: "var(--color-bg-white)" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "40px" }}>
             <h2
               style={{
                 fontSize: "1.7rem",
                 fontWeight: 800,
-                color: "#0f172a",
+                color: "var(--color-text)",
                 marginBottom: "10px",
               }}
             >
               چرا TechStore؟
             </h2>
-            <p style={{ color: "#64748b" }}>
+            <p style={{ color: "var(--color-text-muted)" }}>
               مزیت‌هایی که خرید از ما را متمایز می‌کند
             </p>
           </div>
@@ -338,8 +338,8 @@ export default function About() {
               <div
                 key={item.title}
                 style={{
-                  background: "#f8fafc",
-                  border: "1px solid #e2e8f0",
+                  background: "var(--color-bg)",
+                  border: "1px solid var(--color-border)",
                   borderRadius: "16px",
                   padding: "26px 18px",
                   textAlign: "center",
@@ -350,7 +350,7 @@ export default function About() {
                     width: "52px",
                     height: "52px",
                     borderRadius: "14px",
-                    background: "#eff6ff",
+                    background: "var(--color-primary-light)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -363,7 +363,7 @@ export default function About() {
                   style={{
                     fontSize: "1rem",
                     fontWeight: 800,
-                    color: "#0f172a",
+                    color: "var(--color-text)",
                     marginBottom: "8px",
                   }}
                 >
@@ -371,7 +371,7 @@ export default function About() {
                 </h3>
                 <p
                   style={{
-                    color: "#64748b",
+                    color: "var(--color-text-muted)",
                     lineHeight: 1.7,
                     fontSize: "0.9rem",
                   }}
@@ -389,11 +389,11 @@ export default function About() {
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
           <div
             style={{
-              background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
+              background: "linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))",
               borderRadius: "24px",
               padding: "50px 30px",
               textAlign: "center",
-              color: "#fff",
+              color: "var(--color-bg-white)",
             }}
           >
             <h2
@@ -427,8 +427,8 @@ export default function About() {
                 to="/products"
                 style={{
                   padding: "12px 28px",
-                  background: "#fff",
-                  color: "#1d4ed8",
+                  background: "var(--color-bg-white)",
+                  color: "var(--color-primary-dark)",
                   borderRadius: "50px",
                   fontWeight: 800,
                   textDecoration: "none",
@@ -441,7 +441,7 @@ export default function About() {
                 style={{
                   padding: "12px 28px",
                   background: "transparent",
-                  color: "#fff",
+                  color: "var(--color-bg-white)",
                   borderRadius: "50px",
                   fontWeight: 700,
                   textDecoration: "none",

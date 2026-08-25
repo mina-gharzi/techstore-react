@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Trash2, Plus, Minus, ShoppingBag, AlertTriangle } from "lucide-react";
 import { useCart } from "../context/CartContext";
-import { useProducts, getStock } from "../context/ProductsContext";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { formatPrice } from "../utils/formatPrice";
 
@@ -22,17 +21,6 @@ export default function Cart() {
     totalItems,
     totalPrice,
   } = useCart();
-  const { products } = useProducts();
-
-  // ---------- کمکی: موجودی فعلی یک آیتم سبد ----------
-  // مهم: موجودی رو از خودِ سبد نمی‌خونیم (چون snapshot لحظه‌ی
-  // افزودنه)، بلکه از ProductsContext می‌خونیم که همیشه آخرین
-  // مقدار واقعیه - مثلاً اگه ادمین بعد از اینکه کاربر این محصول
-  // رو به سبد اضافه کرده، موجودی رو کم کرده باشه.
-  const getItemStock = (item) => {
-    const liveProduct = products.find((p) => p.id === item.id);
-    return liveProduct ? getStock(liveProduct) : getStock(item);
-  };
 
   // ---------- اگر سبد خالی بود ----------
   if (cart.length === 0) {
@@ -45,20 +33,20 @@ export default function Cart() {
       >
         <ShoppingBag
           size={64}
-          color="#94a3b8"
+          color="var(--color-text-faint)"
           style={{ margin: "0 auto 24px" }}
         />
         <h1
           style={{
             fontSize: "1.8rem",
             fontWeight: 800,
-            color: "#0f172a",
+            color: "var(--color-text)",
             marginBottom: "12px",
           }}
         >
           سبد خرید خالی است
         </h1>
-        <p style={{ color: "#64748b", marginBottom: "28px" }}>
+        <p style={{ color: "var(--color-text-muted)", marginBottom: "28px" }}>
           هنوز محصولی به سبد اضافه نکرده‌اید.
         </p>
         <Link
@@ -66,8 +54,8 @@ export default function Cart() {
           style={{
             display: "inline-block",
             padding: "12px 28px",
-            background: "#2563eb",
-            color: "#fff",
+            background: "var(--color-primary)",
+            color: "var(--color-bg-white)",
             borderRadius: "12px",
             fontWeight: 700,
             textDecoration: "none",
@@ -98,7 +86,7 @@ export default function Cart() {
             style={{
               fontSize: "1.8rem",
               fontWeight: 800,
-              color: "#0f172a",
+              color: "var(--color-text)",
             }}
           >
             سبد خرید ({totalItems} کالا)
@@ -107,7 +95,7 @@ export default function Cart() {
           <button
             onClick={clearCart}
             style={{
-              color: "#ef4444",
+              color: "var(--color-error)",
               fontWeight: 600,
               fontSize: "0.95rem",
               cursor: "pointer",
@@ -131,15 +119,14 @@ export default function Cart() {
             style={{ display: "flex", flexDirection: "column", gap: "16px" }}
           >
             {cart.map((item) => {
-              const itemStock = getItemStock(item);
-              const exceedsStock = item.quantity > itemStock;
+              const exceedsStock = item.quantity > item.stock;
 
               return (
               <div
                 key={item.cartItemId}
                 style={{
-                  background: "#fff",
-                  border: exceedsStock ? "1.5px solid #fca5a5" : "1px solid #e2e8f0",
+                  background: "var(--color-bg-white)",
+                  border: exceedsStock ? "1.5px solid #fca5a5" : "1px solid var(--color-border)",
                   borderRadius: "16px",
                   padding: "18px",
                   display: "flex",
@@ -157,7 +144,7 @@ export default function Cart() {
                       width: "90px",
                       height: "90px",
                       objectFit: "contain",
-                      background: "#f8fafc",
+                      background: "var(--color-bg)",
                       borderRadius: "12px",
                       padding: "8px",
                     }}
@@ -174,7 +161,7 @@ export default function Cart() {
                     style={{
                       fontSize: "1.05rem",
                       fontWeight: 700,
-                      color: "#0f172a",
+                      color: "var(--color-text)",
                       textDecoration: "none",
                       display: "block",
                       marginBottom: "6px",
@@ -189,7 +176,7 @@ export default function Cart() {
                       style={{
                         display: "inline-block",
                         fontSize: "0.82rem",
-                        color: "#64748b",
+                        color: "var(--color-text-muted)",
                         fontWeight: 600,
                         marginBottom: "6px",
                       }}
@@ -201,7 +188,7 @@ export default function Cart() {
                   <span
                     style={{
                       display: "block",
-                      color: "#2563eb",
+                      color: "var(--color-primary)",
                       fontWeight: 700,
                     }}
                   >
@@ -216,13 +203,13 @@ export default function Cart() {
                         alignItems: "center",
                         gap: "5px",
                         marginTop: "6px",
-                        color: "#ef4444",
+                        color: "var(--color-error)",
                         fontSize: "0.8rem",
                         fontWeight: 700,
                       }}
                     >
                       <AlertTriangle size={13} />
-                      فقط {itemStock} عدد در انبار موجود است
+                      فقط {item.stock} عدد در انبار موجود است
                     </span>
                   )}
                 </div>
@@ -233,7 +220,7 @@ export default function Cart() {
                     display: "flex",
                     alignItems: "center",
                     gap: "10px",
-                    background: "#f8fafc",
+                    background: "var(--color-bg)",
                     borderRadius: "10px",
                     padding: "6px 10px",
                   }}
@@ -249,8 +236,8 @@ export default function Cart() {
                       alignItems: "center",
                       justifyContent: "center",
                       borderRadius: "8px",
-                      background: "#fff",
-                      border: "1px solid #e2e8f0",
+                      background: "var(--color-bg-white)",
+                      border: "1px solid var(--color-border)",
                       cursor: "pointer",
                     }}
                     aria-label="کم کردن تعداد"
@@ -270,9 +257,9 @@ export default function Cart() {
 
                   <button
                     onClick={() =>
-                      updateQuantity(item.cartItemId, Math.min(itemStock, item.quantity + 1))
+                      updateQuantity(item.cartItemId, Math.min(item.stock, item.quantity + 1))
                     }
-                    disabled={item.quantity >= itemStock}
+                    disabled={item.quantity >= item.stock}
                     style={{
                       width: "30px",
                       height: "30px",
@@ -280,10 +267,10 @@ export default function Cart() {
                       alignItems: "center",
                       justifyContent: "center",
                       borderRadius: "8px",
-                      background: "#fff",
-                      border: "1px solid #e2e8f0",
-                      cursor: item.quantity >= itemStock ? "not-allowed" : "pointer",
-                      opacity: item.quantity >= itemStock ? 0.5 : 1,
+                      background: "var(--color-bg-white)",
+                      border: "1px solid var(--color-border)",
+                      cursor: item.quantity >= item.stock ? "not-allowed" : "pointer",
+                      opacity: item.quantity >= item.stock ? 0.5 : 1,
                     }}
                     aria-label="زیاد کردن تعداد"
                   >
@@ -295,7 +282,7 @@ export default function Cart() {
                 <div
                   style={{
                     fontWeight: 800,
-                    color: "#0f172a",
+                    color: "var(--color-text)",
                     minWidth: "120px",
                     textAlign: "left",
                   }}
@@ -313,7 +300,7 @@ export default function Cart() {
                     alignItems: "center",
                     justifyContent: "center",
                     borderRadius: "10px",
-                    color: "#ef4444",
+                    color: "var(--color-error)",
                     cursor: "pointer",
                   }}
                   title="حذف"
@@ -329,8 +316,8 @@ export default function Cart() {
           {/* ---------- خلاصه سفارش ---------- */}
           <div
             style={{
-              background: "#fff",
-              border: "1px solid #e2e8f0",
+              background: "var(--color-bg-white)",
+              border: "1px solid var(--color-border)",
               borderRadius: "16px",
               padding: "24px",
               position: "sticky",
@@ -342,7 +329,7 @@ export default function Cart() {
                 fontSize: "1.2rem",
                 fontWeight: 800,
                 marginBottom: "20px",
-                color: "#0f172a",
+                color: "var(--color-text)",
               }}
             >
               خلاصه سفارش
@@ -353,7 +340,7 @@ export default function Cart() {
                 display: "flex",
                 justifyContent: "space-between",
                 marginBottom: "12px",
-                color: "#64748b",
+                color: "var(--color-text-muted)",
               }}
             >
               <span>تعداد کالا</span>
@@ -366,14 +353,14 @@ export default function Cart() {
                 justifyContent: "space-between",
                 marginBottom: "20px",
                 paddingBottom: "20px",
-                borderBottom: "1px solid #e2e8f0",
+                borderBottom: "1px solid var(--color-border)",
                 fontWeight: 800,
                 fontSize: "1.15rem",
-                color: "#0f172a",
+                color: "var(--color-text)",
               }}
             >
               <span>مبلغ کل</span>
-              <span style={{ color: "#2563eb" }}>
+              <span style={{ color: "var(--color-primary)" }}>
                 {formatPrice(totalPrice)}
               </span>
             </div>
@@ -390,8 +377,8 @@ export default function Cart() {
                 display: "block",
                 width: "100%",
                 padding: "14px",
-                background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
-                color: "#fff",
+                background: "linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))",
+                color: "var(--color-bg-white)",
                 borderRadius: "12px",
                 fontWeight: 700,
                 fontSize: "1rem",
@@ -410,7 +397,7 @@ export default function Cart() {
                 display: "block",
                 textAlign: "center",
                 marginTop: "14px",
-                color: "#64748b",
+                color: "var(--color-text-muted)",
                 fontWeight: 600,
                 textDecoration: "none",
                 fontSize: "0.95rem",

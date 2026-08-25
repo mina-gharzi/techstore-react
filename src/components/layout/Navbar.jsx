@@ -105,8 +105,8 @@ export default function Navbar() {
                       position: "absolute",
                       top: "50px",
                       left: 0,
-                      background: "#fff",
-                      border: "1px solid #e2e8f0",
+                      background: "var(--color-bg-white)",
+                      border: "1px solid var(--color-border)",
                       borderRadius: "14px",
                       boxShadow: "0 12px 30px rgba(15, 23, 42, 0.12)",
                       padding: "10px",
@@ -121,10 +121,10 @@ export default function Navbar() {
                         borderBottom: "1px solid #f1f5f9",
                       }}
                     >
-                      <div style={{ fontWeight: 700, color: "#0f172a", fontSize: "0.92rem" }}>
+                      <div style={{ fontWeight: 700, color: "var(--color-text)", fontSize: "0.92rem" }}>
                         {user.fullName}
                       </div>
-                      <div style={{ color: "#94a3b8", fontSize: "0.78rem" }}>
+                      <div style={{ color: "var(--color-text-faint)", fontSize: "0.78rem" }}>
                         {user.email}
                       </div>
                     </div>
@@ -138,7 +138,7 @@ export default function Navbar() {
                         gap: "8px",
                         padding: "10px",
                         borderRadius: "10px",
-                        color: "#334155",
+                        color: "var(--color-text-secondary)",
                         fontWeight: 600,
                         fontSize: "0.9rem",
                         textDecoration: "none",
@@ -158,7 +158,7 @@ export default function Navbar() {
                           gap: "8px",
                           padding: "10px",
                           borderRadius: "10px",
-                          color: "#2563eb",
+                          color: "var(--color-primary)",
                           fontWeight: 600,
                           fontSize: "0.9rem",
                           textDecoration: "none",
@@ -178,7 +178,7 @@ export default function Navbar() {
                         gap: "8px",
                         padding: "10px",
                         borderRadius: "10px",
-                        color: "#ef4444",
+                        color: "var(--color-error)",
                         fontWeight: 600,
                         fontSize: "0.9rem",
                         cursor: "pointer",
@@ -246,7 +246,7 @@ export default function Navbar() {
             <div className="navbar__mobile-divider" />
             <div
               className="navbar__mobile-link"
-              style={{ color: "#94a3b8", fontWeight: 600, cursor: "default" }}
+              style={{ color: "var(--color-text-faint)", fontWeight: 600, cursor: "default" }}
             >
               👋 {user.fullName}
             </div>
@@ -271,7 +271,7 @@ export default function Navbar() {
               className="navbar__mobile-link"
               style={{
                 textAlign: "right",
-                color: "#ef4444",
+                color: "var(--color-error)",
                 fontFamily: "inherit",
                 fontSize: "1.02rem",
                 background: "none",
