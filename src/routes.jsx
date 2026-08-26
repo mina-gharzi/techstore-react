@@ -31,7 +31,19 @@ import RequireAdmin from "./components/RequireAdmin";
 
 export default function AppRoutes() {
   return (
-    <Suspense fallback={<div style={{ padding: "100px 20px", textAlign: "center", color: "var(--color-text-muted)" }}>در حال بارگذاری...</div>}>
+    <Suspense
+      fallback={
+        <div
+          style={{
+            padding: "100px 20px",
+            textAlign: "center",
+            color: "var(--color-text-muted)",
+          }}
+        >
+          در حال بارگذاری...
+        </div>
+      }
+    >
       <Routes>
         {/* صفحه اصلی */}
         <Route path="/" element={<Home />} />
