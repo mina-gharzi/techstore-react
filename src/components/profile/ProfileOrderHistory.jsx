@@ -19,7 +19,7 @@ export default function ProfileOrderHistory({ myOrders, handleCancelOrder }) {
     <div className="card--profile">
       <h2
         style={{
-          fontSize: "1.1rem",
+          fontSize: "var(--font-size-xl)",
           fontWeight: 800,
           color: "var(--color-text)",
           marginBottom: "20px",
@@ -31,7 +31,7 @@ export default function ProfileOrderHistory({ myOrders, handleCancelOrder }) {
         <Package size={18} color="var(--color-primary)" />
         تاریخچه خرید
         {myOrders.length > 0 && (
-          <span style={{ color: "var(--color-text-faint)", fontWeight: 600, fontSize: "0.85rem" }}>
+          <span style={{ color: "var(--color-text-faint)", fontWeight: 600, fontSize: "var(--font-size-base)" }}>
             ({myOrders.length} سفارش)
           </span>
         )}
@@ -52,7 +52,7 @@ export default function ProfileOrderHistory({ myOrders, handleCancelOrder }) {
               borderRadius: "10px",
               fontWeight: 700,
               textDecoration: "none",
-              fontSize: "0.9rem",
+              fontSize: "var(--font-size-md)",
             }}
           >
             مشاهده محصولات
@@ -80,10 +80,10 @@ export default function ProfileOrderHistory({ myOrders, handleCancelOrder }) {
                 }}
               >
                 <div>
-                  <div style={{ fontWeight: 700, color: "var(--color-text)", fontSize: "0.92rem" }}>
+                  <div style={{ fontWeight: 700, color: "var(--color-text)", fontSize: "var(--font-size-md)" }}>
                     کد پیگیری: {order.orderNumber}
                   </div>
-                  <div style={{ color: "var(--color-text-faint)", fontSize: "0.8rem", marginTop: "2px" }}>
+                  <div style={{ color: "var(--color-text-faint)", fontSize: "var(--font-size-sm)", marginTop: "2px" }}>
                     {formatOrderDate(order.createdAt)}
                   </div>
                 </div>
@@ -91,12 +91,12 @@ export default function ProfileOrderHistory({ myOrders, handleCancelOrder }) {
                   style={{
                     background:
                       order.status === "تحویل داده شد"
-                        ? "#f0fdf4"
+                        ? "var(--green-50)"
                         : order.status === "لغو شده"
                           ? "var(--color-error-light)"
                           : order.status === "ارسال شد"
                             ? "var(--color-primary-light)"
-                            : "#fffbeb",
+                            : "var(--yellow-50)",
                     color:
                       order.status === "تحویل داده شد"
                         ? "var(--color-success)"
@@ -104,8 +104,8 @@ export default function ProfileOrderHistory({ myOrders, handleCancelOrder }) {
                           ? "var(--color-error)"
                           : order.status === "ارسال شد"
                             ? "var(--color-primary)"
-                            : "#d97706",
-                    fontSize: "0.78rem",
+                            : "var(--yellow-600)",
+                    fontSize: "var(--font-size-sm)",
                     fontWeight: 700,
                     padding: "4px 12px",
                     borderRadius: "50px",
@@ -123,7 +123,7 @@ export default function ProfileOrderHistory({ myOrders, handleCancelOrder }) {
                   gap: "4px",
                   marginBottom: "10px",
                   paddingTop: "10px",
-                  borderTop: "1px dashed #f1f5f9",
+                  borderTop: "1px dashed var(--slate-100)",
                 }}
               >
                 {order.items?.map((item) => (
@@ -132,7 +132,7 @@ export default function ProfileOrderHistory({ myOrders, handleCancelOrder }) {
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
-                      fontSize: "0.85rem",
+                      fontSize: "var(--font-size-base)",
                       color: "var(--color-text-muted)",
                     }}
                   >
@@ -151,10 +151,10 @@ export default function ProfileOrderHistory({ myOrders, handleCancelOrder }) {
                   justifyContent: "space-between",
                   alignItems: "center",
                   paddingTop: "10px",
-                  borderTop: "1px solid #f1f5f9",
+                  borderTop: "1px solid var(--slate-100)",
                 }}
               >
-                <span style={{ color: "var(--color-text-muted)", fontSize: "0.85rem" }}>
+                <span style={{ color: "var(--color-text-muted)", fontSize: "var(--font-size-base)" }}>
                   {order.totalItems} کالا
                 </span>
                 <span style={{ fontWeight: 800, color: "var(--color-primary)" }}>
@@ -163,7 +163,7 @@ export default function ProfileOrderHistory({ myOrders, handleCancelOrder }) {
               </div>
 
               {order.status === "در حال پردازش" && (
-                <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px dashed #f1f5f9" }}>
+                <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px dashed var(--slate-100)" }}>
                   <button
                     type="button"
                     onClick={() => handleCancelOrder(order)}
@@ -177,7 +177,7 @@ export default function ProfileOrderHistory({ myOrders, handleCancelOrder }) {
                       border: "1px solid var(--color-error-border)",
                       borderRadius: "10px",
                       fontWeight: 700,
-                      fontSize: "0.82rem",
+                      fontSize: "var(--font-size-base)",
                       cursor: "pointer",
                       fontFamily: "inherit",
                     }}

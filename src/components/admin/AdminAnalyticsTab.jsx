@@ -69,7 +69,7 @@ export default function AdminAnalyticsTab({ analytics }) {
             >
               {card.value}
             </div>
-            <div style={{ color: "var(--color-text-muted)", fontSize: "0.85rem" }}>
+            <div style={{ color: "var(--color-text-muted)", fontSize: "var(--font-size-base)" }}>
               {card.label}
             </div>
           </div>
@@ -94,7 +94,7 @@ export default function AdminAnalyticsTab({ analytics }) {
         >
           <h2
             style={{
-              fontSize: "1.05rem",
+              fontSize: "var(--font-size-xl)",
               fontWeight: 800,
               color: "var(--color-text)",
               marginBottom: "20px",
@@ -107,7 +107,7 @@ export default function AdminAnalyticsTab({ analytics }) {
             <p
               style={{
                 color: "var(--color-text-faint)",
-                fontSize: "0.88rem",
+                fontSize: "var(--font-size-base)",
                 textAlign: "center",
                 padding: "20px 0",
               }}
@@ -135,7 +135,7 @@ export default function AdminAnalyticsTab({ analytics }) {
                     style={{
                       width: "34px",
                       color: "var(--color-text-muted)",
-                      fontSize: "0.78rem",
+                      fontSize: "var(--font-size-sm)",
                       flexShrink: 0,
                     }}
                   >
@@ -145,7 +145,7 @@ export default function AdminAnalyticsTab({ analytics }) {
                     style={{
                       flex: 1,
                       height: "20px",
-                      background: "#f1f5f9",
+                      background: "var(--slate-100)",
                       borderRadius: "6px",
                       overflow: "hidden",
                     }}
@@ -155,7 +155,7 @@ export default function AdminAnalyticsTab({ analytics }) {
                         width: `${(day.revenue / analytics.maxDayRevenue) * 100}%`,
                         height: "100%",
                         background:
-                          "linear-gradient(90deg, var(--color-primary), #3b82f6)",
+                          "linear-gradient(90deg, var(--color-primary), var(--blue-500))",
                         borderRadius: "6px",
                         transition: "width 0.3s ease",
                       }}
@@ -166,7 +166,7 @@ export default function AdminAnalyticsTab({ analytics }) {
                       width: "90px",
                       textAlign: "left",
                       color: "var(--color-text)",
-                      fontSize: "0.78rem",
+                      fontSize: "var(--font-size-sm)",
                       fontWeight: 700,
                       flexShrink: 0,
                     }}
@@ -190,7 +190,7 @@ export default function AdminAnalyticsTab({ analytics }) {
         >
           <h2
             style={{
-              fontSize: "1.05rem",
+              fontSize: "var(--font-size-xl)",
               fontWeight: 800,
               color: "var(--color-text)",
               marginBottom: "20px",
@@ -203,7 +203,7 @@ export default function AdminAnalyticsTab({ analytics }) {
             <p
               style={{
                 color: "var(--color-text-faint)",
-                fontSize: "0.88rem",
+                fontSize: "var(--font-size-base)",
                 textAlign: "center",
                 padding: "20px 0",
               }}
@@ -225,7 +225,7 @@ export default function AdminAnalyticsTab({ analytics }) {
                       display: "flex",
                       justifyContent: "space-between",
                       marginBottom: "6px",
-                      fontSize: "0.85rem",
+                      fontSize: "var(--font-size-base)",
                     }}
                   >
                     <span style={{ color: "var(--color-text-secondary)", fontWeight: 600 }}>
@@ -238,7 +238,7 @@ export default function AdminAnalyticsTab({ analytics }) {
                   <div
                     style={{
                       height: "8px",
-                      background: "#f1f5f9",
+                      background: "var(--slate-100)",
                       borderRadius: "6px",
                       overflow: "hidden",
                     }}
@@ -248,7 +248,7 @@ export default function AdminAnalyticsTab({ analytics }) {
                         width: `${(qty / analytics.maxQty) * 100}%`,
                         height: "100%",
                         background:
-                          "linear-gradient(90deg, var(--color-success), #22c55e)",
+                          "linear-gradient(90deg, var(--color-success), var(--green-500))",
                         borderRadius: "6px",
                       }}
                     />
@@ -270,7 +270,7 @@ export default function AdminAnalyticsTab({ analytics }) {
         >
           <h2
             style={{
-              fontSize: "1.05rem",
+              fontSize: "var(--font-size-xl)",
               fontWeight: 800,
               color: "var(--color-text)",
               marginBottom: "20px",
@@ -283,7 +283,7 @@ export default function AdminAnalyticsTab({ analytics }) {
             <p
               style={{
                 color: "var(--color-text-faint)",
-                fontSize: "0.88rem",
+                fontSize: "var(--font-size-base)",
                 textAlign: "center",
                 padding: "20px 0",
               }}
@@ -310,7 +310,7 @@ export default function AdminAnalyticsTab({ analytics }) {
                         display: "flex",
                         justifyContent: "space-between",
                         marginBottom: "6px",
-                        fontSize: "0.85rem",
+                        fontSize: "var(--font-size-base)",
                       }}
                     >
                       <span style={{ color: "var(--color-text-secondary)", fontWeight: 600 }}>
@@ -323,7 +323,7 @@ export default function AdminAnalyticsTab({ analytics }) {
                     <div
                       style={{
                         height: "8px",
-                        background: "#f1f5f9",
+                        background: "var(--slate-100)",
                         borderRadius: "6px",
                         overflow: "hidden",
                       }}

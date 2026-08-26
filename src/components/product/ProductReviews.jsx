@@ -52,7 +52,7 @@ export default function ProductReviews({
               style={{
                 color: "var(--color-text-faint)",
                 fontWeight: 600,
-                fontSize: "0.95rem",
+                fontSize: "var(--font-size-md)",
               }}
             >
               {" "}
@@ -81,7 +81,7 @@ export default function ProductReviews({
                 fontWeight: 700,
                 color: "var(--color-text-secondary)",
                 marginBottom: "8px",
-                fontSize: "0.92rem",
+                fontSize: "var(--font-size-md)",
               }}
             >
               {myReview ? "ویرایش امتیاز شما" : "امتیاز شما"}
@@ -118,7 +118,7 @@ export default function ProductReviews({
                   display: "block",
                   marginTop: "8px",
                   color: "var(--color-error)",
-                  fontSize: "0.82rem",
+                  fontSize: "var(--font-size-base)",
                   fontWeight: 600,
                 }}
               >
@@ -138,7 +138,7 @@ export default function ProductReviews({
                 padding: "12px 14px",
                 border: "1.5px solid var(--color-border)",
                 borderRadius: "12px",
-                fontSize: "0.92rem",
+                fontSize: "var(--font-size-md)",
                 outline: "none",
                 background: "var(--color-bg-white)",
                 fontFamily: "inherit",
@@ -165,7 +165,7 @@ export default function ProductReviews({
                 color: "var(--color-bg-white)",
                 borderRadius: "12px",
                 fontWeight: 700,
-                fontSize: "0.9rem",
+                fontSize: "var(--font-size-md)",
                 border: "none",
                 cursor: "pointer",
                 fontFamily: "inherit",
@@ -188,7 +188,7 @@ export default function ProductReviews({
                   gap: "6px",
                   color: "var(--color-error)",
                   fontWeight: 600,
-                  fontSize: "0.85rem",
+                  fontSize: "var(--font-size-base)",
                   cursor: "pointer",
                 }}
               >
@@ -213,7 +213,7 @@ export default function ProductReviews({
             style={{
               color: "var(--color-text-muted)",
               marginBottom: "12px",
-              fontSize: "0.9rem",
+              fontSize: "var(--font-size-md)",
             }}
           >
             برای ثبت نظر و امتیاز، ابتدا وارد حساب کاربری خود شوید.
@@ -228,7 +228,7 @@ export default function ProductReviews({
               color: "var(--color-bg-white)",
               borderRadius: "10px",
               fontWeight: 700,
-              fontSize: "0.85rem",
+              fontSize: "var(--font-size-base)",
               textDecoration: "none",
             }}
           >
@@ -244,7 +244,7 @@ export default function ProductReviews({
             color: "var(--color-text-faint)",
             textAlign: "center",
             padding: "20px 0",
-            fontSize: "0.9rem",
+            fontSize: "var(--font-size-md)",
           }}
         >
           هنوز نظری برای این محصول ثبت نشده - اولین نفر باشید!
@@ -262,7 +262,7 @@ export default function ProductReviews({
               key={review.id}
               style={{
                 paddingBottom: "16px",
-                borderBottom: "1px solid #f1f5f9",
+                borderBottom: "1px solid var(--slate-100)",
               }}
             >
               <div
@@ -293,7 +293,7 @@ export default function ProductReviews({
                       alignItems: "center",
                       justifyContent: "center",
                       fontWeight: 800,
-                      fontSize: "0.85rem",
+                      fontSize: "var(--font-size-base)",
                       flexShrink: 0,
                     }}
                   >
@@ -311,7 +311,7 @@ export default function ProductReviews({
                         style={{
                           fontWeight: 700,
                           color: "var(--color-text)",
-                          fontSize: "0.88rem",
+                          fontSize: "var(--font-size-base)",
                         }}
                       >
                         {review.userName}
@@ -324,7 +324,7 @@ export default function ProductReviews({
                             alignItems: "center",
                             gap: "3px",
                             color: "var(--color-success)",
-                            fontSize: "0.72rem",
+                            fontSize: "var(--font-size-xs)",
                             fontWeight: 700,
                           }}
                         >
@@ -357,7 +357,7 @@ export default function ProductReviews({
                 <span
                   style={{
                     color: "var(--color-text-faint)",
-                    fontSize: "0.78rem",
+                    fontSize: "var(--font-size-sm)",
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -375,8 +375,8 @@ export default function ProductReviews({
               {review.comment && (
                 <p
                   style={{
-                    color: "#475569",
-                    fontSize: "0.9rem",
+                    color: "var(--slate-600)",
+                    fontSize: "var(--font-size-md)",
                     lineHeight: 1.8,
                     marginRight: "42px",
                   }}

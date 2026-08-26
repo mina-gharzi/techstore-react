@@ -60,31 +60,27 @@ export default function Login() {
       <div className="auth-container">
         {/* Brand */}
         <div className="auth-header">
-          <div className="auth-brand">
-            <div className="auth-brand-mark">
-              <LogIn size={17} />
-            </div>
-
-            <span>TechStore</span>
-          </div>
-
-          <div className="auth-header-icon">
-            <LogIn size={23} />
-          </div>
-
           <h1 className="auth-header__title">ورود به حساب کاربری</h1>
 
-          <p className="auth-header__subtitle">برای ادامه‌ی خرید وارد حساب خود شوید</p>
+          <p className="auth-header__subtitle">
+            برای ادامه‌ی خرید وارد حساب خود شوید
+          </p>
         </div>
 
         {/* Error */}
-        {error && <div className="auth-general-error" id="login-error">{error}</div>}
+        {error && (
+          <div className="auth-general-error" id="login-error">
+            {error}
+          </div>
+        )}
 
         {/* Form */}
         <form className="auth-form" onSubmit={handleSubmit}>
           {/* Email */}
           <div className="auth-field">
-            <label className="auth-label" htmlFor="email">ایمیل</label>
+            <label className="auth-label" htmlFor="email">
+              ایمیل
+            </label>
 
             <div className="auth-input-wrapper">
               <Mail size={18} className="auth-input-icon" />
@@ -104,7 +100,9 @@ export default function Login() {
 
           {/* Password */}
           <div className="auth-field">
-            <label className="auth-label" htmlFor="password">رمز عبور</label>
+            <label className="auth-label" htmlFor="password">
+              رمز عبور
+            </label>
 
             <div className="auth-input-wrapper">
               <Lock size={18} className="auth-input-icon" />
@@ -124,7 +122,11 @@ export default function Login() {
             <div style={{ textAlign: "left", marginTop: "8px" }}>
               <Link
                 to="/forgot-password"
-                style={{ color: "var(--color-primary)", fontSize: "0.82rem", fontWeight: 700 }}
+                style={{
+                  color: "var(--color-primary)",
+                  fontSize: "var(--font-size-base)",
+                  fontWeight: 700,
+                }}
               >
                 رمز عبور را فراموش کرده‌اید؟
               </Link>
@@ -140,7 +142,9 @@ export default function Login() {
         {/* Register link */}
         <p className="auth-switch">
           حساب کاربری ندارید؟{" "}
-          <Link to="/register" className="auth-switch__link">ثبت‌نام کنید</Link>
+          <Link to="/register" className="auth-switch__link">
+            ثبت‌نام کنید
+          </Link>
         </p>
       </div>
     </section>

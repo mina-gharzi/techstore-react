@@ -165,7 +165,7 @@ export default function AdminProductsTab({
             border: "none",
             cursor: "pointer",
             fontFamily: "inherit",
-            boxShadow: "0 10px 25px rgba(37, 99, 235, 0.25)",
+            boxShadow: "var(--shadow-cta)",
           }}
         >
           <Plus size={18} />
@@ -194,7 +194,7 @@ export default function AdminProductsTab({
           >
             <h2
               style={{
-                fontSize: "1.1rem",
+                fontSize: "var(--font-size-xl)",
                 fontWeight: 800,
                 color: "var(--color-text)",
               }}
@@ -420,7 +420,7 @@ export default function AdminProductsTab({
                   }}
                 >
                   {!formData.image.trim() ? (
-                    <ImageIcon size={22} color="#cbd5e1" />
+                    <ImageIcon size={22} color="var(--slate-300)" />
                   ) : imagePreviewError ? (
                     <div style={{ textAlign: "center", padding: "4px" }}>
                       <ImageOff
@@ -509,7 +509,7 @@ export default function AdminProductsTab({
                 style={{
                   fontWeight: 600,
                   color: "var(--color-text-secondary)",
-                  fontSize: "0.9rem",
+                  fontSize: "var(--font-size-md)",
                 }}
               >
                 نشان "جدید" روی این محصول نمایش داده شود
@@ -616,7 +616,7 @@ export default function AdminProductsTab({
                   style={{
                     fontWeight: 700,
                     color: "var(--color-text)",
-                    fontSize: "0.95rem",
+                    fontSize: "var(--font-size-md)",
                   }}
                 >
                   {product.name}
@@ -626,7 +626,7 @@ export default function AdminProductsTab({
                         marginRight: "8px",
                         background: "var(--color-primary-light)",
                         color: "var(--color-primary)",
-                        fontSize: "0.72rem",
+                        fontSize: "var(--font-size-xs)",
                         fontWeight: 700,
                         padding: "2px 8px",
                         borderRadius: "50px",
@@ -636,7 +636,7 @@ export default function AdminProductsTab({
                     </span>
                   )}
                 </div>
-                <div style={{ color: "var(--color-text-faint)", fontSize: "0.82rem" }}>
+                <div style={{ color: "var(--color-text-faint)", fontSize: "var(--font-size-base)" }}>
                   {product.brand} ·{" "}
                   {
                     categories.find((c) => c.id === product.category)
@@ -662,7 +662,7 @@ export default function AdminProductsTab({
                   alignItems: "center",
                   gap: "4px",
                   minWidth: "90px",
-                  fontSize: "0.82rem",
+                  fontSize: "var(--font-size-base)",
                   fontWeight: 700,
                   color:
                     stock === 0

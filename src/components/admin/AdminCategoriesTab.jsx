@@ -98,7 +98,7 @@ export default function AdminCategoriesTab({
             border: "none",
             cursor: "pointer",
             fontFamily: "inherit",
-            boxShadow: "0 10px 25px rgba(37, 99, 235, 0.25)",
+            boxShadow: "var(--shadow-cta)",
           }}
         >
           <Plus size={18} />
@@ -117,7 +117,7 @@ export default function AdminCategoriesTab({
             color: "var(--color-error)",
             borderRadius: "12px",
             padding: "12px 16px",
-            fontSize: "0.88rem",
+            fontSize: "var(--font-size-base)",
             fontWeight: 600,
             marginBottom: "18px",
           }}
@@ -148,7 +148,7 @@ export default function AdminCategoriesTab({
           >
             <h2
               style={{
-                fontSize: "1.05rem",
+                fontSize: "var(--font-size-xl)",
                 fontWeight: 800,
                 color: "var(--color-text)",
               }}
@@ -282,12 +282,12 @@ export default function AdminCategoriesTab({
                     style={{
                       fontWeight: 700,
                       color: "var(--color-text)",
-                      fontSize: "0.95rem",
+                      fontSize: "var(--font-size-md)",
                     }}
                   >
                     {cat.name}
                   </div>
-                  <div style={{ color: "var(--color-text-faint)", fontSize: "0.8rem" }}>
+                  <div style={{ color: "var(--color-text-faint)", fontSize: "var(--font-size-sm)" }}>
                     {count} محصول
                   </div>
                 </div>

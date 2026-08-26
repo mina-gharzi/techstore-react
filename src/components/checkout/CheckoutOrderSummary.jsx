@@ -57,7 +57,7 @@ export default function CheckoutOrderSummary({
                 display: "flex",
                 justifyContent: "space-between",
                 gap: "10px",
-                fontSize: "0.88rem",
+                fontSize: "var(--font-size-base)",
               }}
             >
               <span style={{ color: "var(--color-text-secondary)" }}>
@@ -79,15 +79,15 @@ export default function CheckoutOrderSummary({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                background: "#f0fdf4",
-                border: "1px solid #bbf7d0",
+                background: "var(--green-50)",
+                border: "1px solid var(--green-200)",
                 borderRadius: "10px",
                 padding: "10px 12px",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <Tag size={15} color="var(--color-success)" />
-                <span style={{ fontWeight: 700, color: "var(--color-success)", fontSize: "0.85rem" }}>
+                <span style={{ fontWeight: 700, color: "var(--color-success)", fontSize: "var(--font-size-base)" }}>
                   {appliedCoupon.code} ({appliedCoupon.description})
                 </span>
               </div>
@@ -119,9 +119,9 @@ export default function CheckoutOrderSummary({
                     flex: 1,
                     height: "42px",
                     padding: "0 12px",
-                    border: `1.5px solid ${couponError ? "#fca5a5" : "var(--color-border)"}`,
+                    border: `1.5px solid ${couponError ? "var(--red-300)" : "var(--color-border)"}`,
                     borderRadius: "10px",
-                    fontSize: "0.85rem",
+                    fontSize: "var(--font-size-base)",
                     outline: "none",
                     background: couponError ? "var(--color-error-light)" : "var(--color-bg)",
                     fontFamily: "inherit",
@@ -133,12 +133,12 @@ export default function CheckoutOrderSummary({
                   onClick={handleApplyCoupon}
                   style={{
                     padding: "0 16px",
-                    background: "#f1f5f9",
+                    background: "var(--slate-100)",
                     color: "var(--color-text-secondary)",
                     border: "none",
                     borderRadius: "10px",
                     fontWeight: 700,
-                    fontSize: "0.85rem",
+                    fontSize: "var(--font-size-base)",
                     cursor: "pointer",
                     fontFamily: "inherit",
                     whiteSpace: "nowrap",
@@ -148,11 +148,11 @@ export default function CheckoutOrderSummary({
                 </button>
               </div>
               {couponError && (
-                <span style={{ display: "block", marginTop: "6px", color: "var(--color-error)", fontSize: "0.78rem", fontWeight: 600 }}>
+                <span style={{ display: "block", marginTop: "6px", color: "var(--color-error)", fontSize: "var(--font-size-sm)", fontWeight: 600 }}>
                   {couponError}
                 </span>
               )}
-              <span style={{ display: "block", marginTop: "6px", color: "var(--color-text-faint)", fontSize: "0.75rem" }}>
+              <span style={{ display: "block", marginTop: "6px", color: "var(--color-text-faint)", fontSize: "var(--font-size-sm)" }}>
                 کدهای نمونه: WELCOME10 یا TECH50
               </span>
             </div>
@@ -177,7 +177,7 @@ export default function CheckoutOrderSummary({
             justifyContent: "space-between",
             marginBottom: "12px",
             color: "var(--color-text-muted)",
-            fontSize: "0.92rem",
+            fontSize: "var(--font-size-md)",
           }}
         >
           <span>مبلغ کل</span>
@@ -191,7 +191,7 @@ export default function CheckoutOrderSummary({
               justifyContent: "space-between",
               marginBottom: "12px",
               color: "var(--color-success)",
-              fontSize: "0.92rem",
+              fontSize: "var(--font-size-md)",
               fontWeight: 700,
             }}
           >
@@ -223,18 +223,18 @@ export default function CheckoutOrderSummary({
             width: "100%",
             padding: "14px",
             background: isSubmitting
-              ? "#93c5fd"
+              ? "var(--blue-300)"
               : "linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))",
             color: "var(--color-bg-white)",
             borderRadius: "12px",
             fontWeight: 700,
-            fontSize: "1rem",
+            fontSize: "var(--font-size-lg)",
             cursor: isSubmitting ? "not-allowed" : "pointer",
             border: "none",
             fontFamily: "inherit",
             boxShadow: isSubmitting
               ? "none"
-              : "0 10px 25px rgba(37, 99, 235, 0.25)",
+              : "var(--shadow-cta)",
           }}
         >
           {isSubmitting ? "در حال ثبت سفارش..." : "ثبت نهایی سفارش"}
@@ -249,7 +249,7 @@ export default function CheckoutOrderSummary({
             color: "var(--color-text-muted)",
             fontWeight: 600,
             textDecoration: "none",
-            fontSize: "0.9rem",
+            fontSize: "var(--font-size-md)",
           }}
         >
           بازگشت به سبد خرید

@@ -189,7 +189,7 @@ export default function ProductDetails() {
               gap: "6px",
               color: "var(--color-text-muted)",
               fontWeight: 600,
-              fontSize: "0.92rem",
+              fontSize: "var(--font-size-md)",
               textDecoration: "none",
               marginBottom: "24px",
             }}

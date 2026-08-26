@@ -59,7 +59,7 @@ export default function Contact() {
         style={{
           padding: "50px 16px 40px",
           background:
-            "radial-gradient(circle at top right, rgba(37,99,235,0.1) 0%, transparent 45%), var(--color-bg)",
+            "radial-gradient(circle at top right, var(--color-primary-tint-10) 0%, transparent 45%), var(--color-bg)",
         }}
       >
         <div
@@ -77,11 +77,11 @@ export default function Contact() {
             <span
               style={{
                 display: "inline-block",
-                background: "rgba(37, 99, 235, 0.1)",
+                background: "var(--color-primary-tint-10)",
                 color: "var(--color-primary)",
                 padding: "7px 16px",
                 borderRadius: "50px",
-                fontSize: "0.88rem",
+                fontSize: "var(--font-size-base)",
                 fontWeight: 700,
                 marginBottom: "18px",
               }}
@@ -148,7 +148,7 @@ export default function Contact() {
                 border: "1px solid var(--color-border)",
                 borderRadius: "22px",
                 padding: "32px 26px",
-                boxShadow: "0 10px 30px rgba(15, 23, 42, 0.04)",
+                boxShadow: "var(--shadow-soft)",
               }}
             >
               <h2
@@ -165,7 +165,7 @@ export default function Contact() {
                 style={{
                   color: "var(--color-text-muted)",
                   marginBottom: "28px",
-                  fontSize: "0.95rem",
+                  fontSize: "var(--font-size-md)",
                   lineHeight: 1.8,
                 }}
               >
@@ -189,7 +189,7 @@ export default function Contact() {
                       padding: "14px",
                       background: "var(--color-bg)",
                       borderRadius: "14px",
-                      border: "1px solid #f1f5f9",
+                      border: "1px solid var(--slate-100)",
                     }}
                   >
                     <div
@@ -209,7 +209,7 @@ export default function Contact() {
                     <div>
                       <div
                         style={{
-                          fontSize: "0.85rem",
+                          fontSize: "var(--font-size-base)",
                           color: "var(--color-text-faint)",
                           fontWeight: 600,
                           marginBottom: "2px",
@@ -219,7 +219,7 @@ export default function Contact() {
                       </div>
                       <div
                         style={{
-                          fontSize: "0.98rem",
+                          fontSize: "var(--font-size-lg)",
                           color: "var(--color-text)",
                           fontWeight: 700,
                         }}
@@ -239,7 +239,7 @@ export default function Contact() {
                 border: "1px solid var(--color-border)",
                 borderRadius: "22px",
                 padding: "32px 26px",
-                boxShadow: "0 10px 30px rgba(15, 23, 42, 0.04)",
+                boxShadow: "var(--shadow-soft)",
               }}
             >
               <h2
@@ -256,7 +256,7 @@ export default function Contact() {
                 style={{
                   color: "var(--color-text-muted)",
                   marginBottom: "26px",
-                  fontSize: "0.95rem",
+                  fontSize: "var(--font-size-md)",
                 }}
               >
                 فرم زیر را پر کنید تا در اسرع وقت پاسخ دهیم.
@@ -271,8 +271,8 @@ export default function Contact() {
                       display: "block",
                       marginBottom: "8px",
                       fontWeight: 700,
-                      color: "#1e293b",
-                      fontSize: "0.92rem",
+                      color: "var(--slate-800)",
+                      fontSize: "var(--font-size-md)",
                     }}
                   >
                     نام شما
@@ -297,8 +297,8 @@ export default function Contact() {
                       display: "block",
                       marginBottom: "8px",
                       fontWeight: 700,
-                      color: "#1e293b",
-                      fontSize: "0.92rem",
+                      color: "var(--slate-800)",
+                      fontSize: "var(--font-size-md)",
                     }}
                   >
                     ایمیل
@@ -323,8 +323,8 @@ export default function Contact() {
                       display: "block",
                       marginBottom: "8px",
                       fontWeight: 700,
-                      color: "#1e293b",
-                      fontSize: "0.92rem",
+                      color: "var(--slate-800)",
+                      fontSize: "var(--font-size-md)",
                     }}
                   >
                     موضوع
@@ -349,8 +349,8 @@ export default function Contact() {
                       display: "block",
                       marginBottom: "8px",
                       fontWeight: 700,
-                      color: "#1e293b",
-                      fontSize: "0.92rem",
+                      color: "var(--slate-800)",
+                      fontSize: "var(--font-size-md)",
                     }}
                   >
                     پیام شما
@@ -389,7 +389,7 @@ export default function Contact() {
                       textAlign: "center",
                       color: "var(--color-success)",
                       fontWeight: 700,
-                      background: "#f0fdf4",
+                      background: "var(--green-50)",
                       padding: "12px",
                       borderRadius: "12px",
                     }}

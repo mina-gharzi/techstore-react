@@ -36,7 +36,7 @@ export default function OrderSuccess() {
             width: "88px",
             height: "88px",
             borderRadius: "50%",
-            background: "#f0fdf4",
+            background: "var(--green-50)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -95,7 +95,7 @@ export default function OrderSuccess() {
               justifyContent: "space-between",
               marginBottom: "12px",
               color: "var(--color-text-muted)",
-              fontSize: "0.95rem",
+              fontSize: "var(--font-size-md)",
             }}
           >
             <span>تعداد کالا</span>
@@ -108,7 +108,7 @@ export default function OrderSuccess() {
               justifyContent: "space-between",
               marginBottom: "12px",
               color: "var(--color-text-muted)",
-              fontSize: "0.95rem",
+              fontSize: "var(--font-size-md)",
             }}
           >
             <span>روش پرداخت</span>
@@ -142,7 +142,7 @@ export default function OrderSuccess() {
                 justifyContent: "space-between",
                 marginBottom: "12px",
                 color: "var(--color-success)",
-                fontSize: "0.95rem",
+                fontSize: "var(--font-size-md)",
                 fontWeight: 700,
               }}
             >
@@ -158,7 +158,7 @@ export default function OrderSuccess() {
               paddingTop: "14px",
               borderTop: "1px solid var(--color-border)",
               fontWeight: 800,
-              fontSize: "1.1rem",
+              fontSize: "var(--font-size-xl)",
               color: "var(--color-text)",
             }}
           >

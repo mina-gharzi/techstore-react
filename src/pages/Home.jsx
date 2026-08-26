@@ -34,7 +34,7 @@ export default function Home() {
           position: "relative",
           padding: "100px 20px 90px",
           background:
-            "radial-gradient(circle at top right, rgba(37,99,235,0.12) 0%, transparent 40%), radial-gradient(circle at bottom left, rgba(59,130,246,0.08) 0%, transparent 40%), linear-gradient(180deg, #f8fbff 0%, var(--color-bg-white) 100%)",
+            "radial-gradient(circle at top right, rgba(37,99,235,0.12) 0%, transparent 40%), radial-gradient(circle at bottom left, rgba(59,130,246,0.08) 0%, transparent 40%), linear-gradient(180deg, var(--color-bg-hero) 0%, var(--color-bg-white) 100%)",
         }}
       >
         <div
@@ -51,11 +51,11 @@ export default function Home() {
               display: "inline-flex",
               alignItems: "center",
               gap: "8px",
-              background: "rgba(37, 99, 235, 0.1)",
+              background: "var(--color-primary-tint-10)",
               color: "var(--color-primary)",
               padding: "9px 20px",
               borderRadius: "50px",
-              fontSize: "0.92rem",
+              fontSize: "var(--font-size-md)",
               fontWeight: 700,
               marginBottom: "28px",
               border: "1px solid rgba(37, 99, 235, 0.15)",
@@ -78,7 +78,7 @@ export default function Home() {
             <br />
             <span
               style={{
-                background: "linear-gradient(135deg, var(--color-primary), #3b82f6)",
+                background: "linear-gradient(135deg, var(--color-primary), var(--blue-500))",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
@@ -89,7 +89,7 @@ export default function Home() {
 
           <p
             style={{
-              fontSize: "1.12rem",
+              fontSize: "var(--font-size-xl)",
               color: "var(--color-text-muted)",
               maxWidth: "560px",
               margin: "0 auto 36px",
@@ -117,9 +117,9 @@ export default function Home() {
                 color: "var(--color-bg-white)",
                 borderRadius: "50px",
                 fontWeight: 700,
-                fontSize: "1rem",
+                fontSize: "var(--font-size-lg)",
                 textDecoration: "none",
-                boxShadow: "0 14px 32px rgba(37, 99, 235, 0.32)",
+                boxShadow: "var(--shadow-button-hero)",
               }}
             >
               مشاهده محصولات
@@ -133,9 +133,9 @@ export default function Home() {
                 color: "var(--color-primary)",
                 borderRadius: "50px",
                 fontWeight: 700,
-                fontSize: "1rem",
+                fontSize: "var(--font-size-lg)",
                 textDecoration: "none",
-                border: "1.5px solid #bfdbfe",
+                border: "1.5px solid var(--blue-200)",
                 boxShadow: "0 4px 16px rgba(15, 23, 42, 0.04)",
               }}
             >
@@ -168,7 +168,7 @@ export default function Home() {
                   borderRadius: "50px",
                   padding: "11px 22px",
                   fontWeight: 600,
-                  fontSize: "0.92rem",
+                  fontSize: "var(--font-size-md)",
                   color: "var(--color-text-secondary)",
                   boxShadow: "0 6px 18px rgba(15, 23, 42, 0.05)",
                 }}
@@ -183,7 +183,7 @@ export default function Home() {
 
       {/* ===================== Categories ===================== */}
       <section style={{ padding: "80px 20px", background: "var(--color-bg-white)" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div className="container--plain">
           <div style={{ textAlign: "center", marginBottom: "50px" }}>
             <h2
               style={{
@@ -195,7 +195,7 @@ export default function Home() {
             >
               دسته‌بندی محصولات
             </h2>
-            <p style={{ color: "var(--color-text-muted)", fontSize: "1.05rem" }}>
+            <p style={{ color: "var(--color-text-muted)", fontSize: "var(--font-size-xl)" }}>
               محصول موردنظرتان را سریع‌تر پیدا کنید
             </p>
           </div>
@@ -221,8 +221,8 @@ export default function Home() {
                   textDecoration: "none",
                   color: "var(--color-text)",
                   fontWeight: 700,
-                  fontSize: "1.12rem",
-                  boxShadow: "0 4px 20px rgba(15, 23, 42, 0.04)",
+                  fontSize: "var(--font-size-xl)",
+                  boxShadow: "var(--shadow-navbar)",
                 }}
               >
                 {cat.name}
@@ -234,7 +234,7 @@ export default function Home() {
 
       {/* ===================== Featured Products ===================== */}
       <section style={{ padding: "80px 20px", background: "var(--color-bg)" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div className="container--plain">
           <div style={{ textAlign: "center", marginBottom: "50px" }}>
             <h2
               style={{
@@ -246,7 +246,7 @@ export default function Home() {
             >
               محصولات ویژه
             </h2>
-            <p style={{ color: "var(--color-text-muted)", fontSize: "1.05rem" }}>
+            <p style={{ color: "var(--color-text-muted)", fontSize: "var(--font-size-xl)" }}>
               جدیدترین و محبوب‌ترین محصولات فروشگاه
             </p>
           </div>
@@ -276,7 +276,7 @@ export default function Home() {
                 borderRadius: "14px",
                 fontWeight: 700,
                 textDecoration: "none",
-                boxShadow: "0 4px 14px rgba(37, 99, 235, 0.1)",
+                boxShadow: "var(--shadow-button-outline)",
               }}
             >
               مشاهده همه محصولات
@@ -287,7 +287,7 @@ export default function Home() {
 
       {/* ===================== New Products ===================== */}
       <section style={{ padding: "80px 20px", background: "var(--color-bg-white)" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div className="container--plain">
           <div style={{ textAlign: "center", marginBottom: "50px" }}>
             <h2
               style={{
@@ -299,7 +299,7 @@ export default function Home() {
             >
               محصولات جدید
             </h2>
-            <p style={{ color: "var(--color-text-muted)", fontSize: "1.05rem" }}>
+            <p style={{ color: "var(--color-text-muted)", fontSize: "var(--font-size-xl)" }}>
               تازه‌ترین محصولات اضافه‌شده به فروشگاه
             </p>
           </div>
@@ -329,7 +329,7 @@ export default function Home() {
                 borderRadius: "14px",
                 fontWeight: 700,
                 textDecoration: "none",
-                boxShadow: "0 4px 14px rgba(37, 99, 235, 0.1)",
+                boxShadow: "var(--shadow-button-outline)",
               }}
             >
               مشاهده همه محصولات جدید
@@ -340,7 +340,7 @@ export default function Home() {
 
       {/* ===================== Discounted Products ===================== */}
       <section style={{ padding: "80px 20px", background: "var(--color-bg)" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div className="container--plain">
           <div style={{ textAlign: "center", marginBottom: "50px" }}>
             <h2
               style={{
@@ -352,7 +352,7 @@ export default function Home() {
             >
               محصولات تخفیفی
             </h2>
-            <p style={{ color: "var(--color-text-muted)", fontSize: "1.05rem" }}>
+            <p style={{ color: "var(--color-text-muted)", fontSize: "var(--font-size-xl)" }}>
               محصولات با بیشترین تخفیف
             </p>
           </div>
@@ -382,7 +382,7 @@ export default function Home() {
                 borderRadius: "14px",
                 fontWeight: 700,
                 textDecoration: "none",
-                boxShadow: "0 4px 14px rgba(37, 99, 235, 0.1)",
+                boxShadow: "var(--shadow-button-outline)",
               }}
             >
               مشاهده همه محصولات تخفیفی
@@ -393,18 +393,18 @@ export default function Home() {
 
       {/* ===================== Special Offer ===================== */}
       <section style={{ padding: "30px 20px 90px" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div className="container--plain">
           <div
             style={{
               position: "relative",
               overflow: "hidden",
               background:
-                "linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 55%, #1e40af 100%)",
+                "linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 55%, var(--blue-800) 100%)",
               borderRadius: "28px",
               padding: "70px 40px",
               textAlign: "center",
               color: "var(--color-bg-white)",
-              boxShadow: "0 28px 60px rgba(37, 99, 235, 0.35)",
+              boxShadow: "var(--shadow-hero)",
             }}
           >
             <span
@@ -414,7 +414,7 @@ export default function Home() {
                 border: "1px solid rgba(255,255,255,0.25)",
                 padding: "9px 20px",
                 borderRadius: "50px",
-                fontSize: "0.9rem",
+                fontSize: "var(--font-size-md)",
                 fontWeight: 700,
                 marginBottom: "22px",
               }}
@@ -439,7 +439,7 @@ export default function Home() {
                 margin: "0 auto 30px",
                 opacity: 0.93,
                 lineHeight: 1.9,
-                fontSize: "1.05rem",
+                fontSize: "var(--font-size-xl)",
               }}
             >
               فرصت را از دست ندهید و جدیدترین محصولات را با قیمت ویژه تهیه کنید.

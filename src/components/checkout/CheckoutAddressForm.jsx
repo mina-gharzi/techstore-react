@@ -1,6 +1,10 @@
 import { MapPin } from "lucide-react";
 
-export default function CheckoutAddressForm({ formData, errors, handleChange }) {
+export default function CheckoutAddressForm({
+  formData,
+  errors,
+  handleChange,
+}) {
   return (
     <div
       style={{
@@ -19,7 +23,13 @@ export default function CheckoutAddressForm({ formData, errors, handleChange }) 
         }}
       >
         <MapPin size={20} color="var(--color-primary)" />
-        <h2 style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--color-text)" }}>
+        <h2
+          style={{
+            fontSize: "1.15rem",
+            fontWeight: 800,
+            color: "var(--color-text)",
+          }}
+        >
           اطلاعات ارسال
         </h2>
       </div>
@@ -33,23 +43,35 @@ export default function CheckoutAddressForm({ formData, errors, handleChange }) 
         }}
       >
         <div>
-          <label className="form-label" htmlFor="checkout-fullName">نام و نام خانوادگی</label>
+          <label className="form-label" htmlFor="checkout-fullName">
+            نام و نام خانوادگی
+          </label>
           <input
             type="text"
             name="fullName"
             id="checkout-fullName"
-            aria-describedby={errors.fullName ? "checkout-fullName-error" : undefined}
+            aria-describedby={
+              errors.fullName ? "checkout-fullName-error" : undefined
+            }
             aria-invalid={!!errors.fullName}
             value={formData.fullName}
             onChange={handleChange}
-            placeholder="مثلاً: مینا قرضی"
-            className={errors.fullName ? "form-input form-input--error" : "form-input"}
+            placeholder="مثلاً: مینا قارزی"
+            className={
+              errors.fullName ? "form-input form-input--error" : "form-input"
+            }
           />
-          {errors.fullName && <span className="form-error" id="checkout-fullName-error">{errors.fullName}</span>}
+          {errors.fullName && (
+            <span className="form-error" id="checkout-fullName-error">
+              {errors.fullName}
+            </span>
+          )}
         </div>
 
         <div>
-          <label className="form-label" htmlFor="checkout-phone">شماره موبایل</label>
+          <label className="form-label" htmlFor="checkout-phone">
+            شماره موبایل
+          </label>
           <input
             type="tel"
             name="phone"
@@ -59,9 +81,15 @@ export default function CheckoutAddressForm({ formData, errors, handleChange }) 
             value={formData.phone}
             onChange={handleChange}
             placeholder="09xxxxxxxxx"
-            className={errors.phone ? "form-input form-input--error" : "form-input"}
+            className={
+              errors.phone ? "form-input form-input--error" : "form-input"
+            }
           />
-          {errors.phone && <span className="form-error" id="checkout-phone-error">{errors.phone}</span>}
+          {errors.phone && (
+            <span className="form-error" id="checkout-phone-error">
+              {errors.phone}
+            </span>
+          )}
         </div>
       </div>
 
@@ -74,7 +102,9 @@ export default function CheckoutAddressForm({ formData, errors, handleChange }) 
         }}
       >
         <div>
-          <label className="form-label" htmlFor="checkout-city">شهر</label>
+          <label className="form-label" htmlFor="checkout-city">
+            شهر
+          </label>
           <input
             type="text"
             name="city"
@@ -84,42 +114,62 @@ export default function CheckoutAddressForm({ formData, errors, handleChange }) 
             value={formData.city}
             onChange={handleChange}
             placeholder="مثلاً: تهران"
-            className={errors.city ? "form-input form-input--error" : "form-input"}
+            className={
+              errors.city ? "form-input form-input--error" : "form-input"
+            }
           />
-          {errors.city && <span className="form-error" id="checkout-city-error">{errors.city}</span>}
+          {errors.city && (
+            <span className="form-error" id="checkout-city-error">
+              {errors.city}
+            </span>
+          )}
         </div>
 
         <div>
-          <label className="form-label" htmlFor="checkout-postalCode">کد پستی</label>
+          <label className="form-label" htmlFor="checkout-postalCode">
+            کد پستی
+          </label>
           <input
             type="text"
             name="postalCode"
             id="checkout-postalCode"
-            aria-describedby={errors.postalCode ? "checkout-postalCode-error" : undefined}
+            aria-describedby={
+              errors.postalCode ? "checkout-postalCode-error" : undefined
+            }
             aria-invalid={!!errors.postalCode}
             value={formData.postalCode}
             onChange={handleChange}
             placeholder="۱۰ رقم"
-            className={errors.postalCode ? "form-input form-input--error" : "form-input"}
+            className={
+              errors.postalCode ? "form-input form-input--error" : "form-input"
+            }
           />
           {errors.postalCode && (
-            <span className="form-error" id="checkout-postalCode-error">{errors.postalCode}</span>
+            <span className="form-error" id="checkout-postalCode-error">
+              {errors.postalCode}
+            </span>
           )}
         </div>
       </div>
 
       <div>
-        <label className="form-label" htmlFor="checkout-address">آدرس کامل</label>
+        <label className="form-label" htmlFor="checkout-address">
+          آدرس کامل
+        </label>
         <textarea
           name="address"
           id="checkout-address"
-          aria-describedby={errors.address ? "checkout-address-error" : undefined}
+          aria-describedby={
+            errors.address ? "checkout-address-error" : undefined
+          }
           aria-invalid={!!errors.address}
           value={formData.address}
           onChange={handleChange}
           rows={3}
           placeholder="خیابان، کوچه، پلاک، واحد..."
-          className={errors.address ? "form-input form-input--error" : "form-input"}
+          className={
+            errors.address ? "form-input form-input--error" : "form-input"
+          }
           style={{
             height: "auto",
             padding: "14px 16px",
@@ -127,7 +177,11 @@ export default function CheckoutAddressForm({ formData, errors, handleChange }) 
             lineHeight: 1.7,
           }}
         />
-        {errors.address && <span className="form-error" id="checkout-address-error">{errors.address}</span>}
+        {errors.address && (
+          <span className="form-error" id="checkout-address-error">
+            {errors.address}
+          </span>
+        )}
       </div>
     </div>
   );

@@ -39,7 +39,7 @@ export default function AdminUsersTab({ users, currentUser, deleteUser, setUserR
             color: "var(--color-error)",
             borderRadius: "12px",
             padding: "12px 16px",
-            fontSize: "0.88rem",
+            fontSize: "var(--font-size-base)",
             fontWeight: 600,
             marginBottom: "18px",
           }}
@@ -118,7 +118,7 @@ export default function AdminUsersTab({ users, currentUser, deleteUser, setUserR
                     style={{
                       fontWeight: 700,
                       color: "var(--color-text)",
-                      fontSize: "0.95rem",
+                      fontSize: "var(--font-size-md)",
                     }}
                   >
                     {u.fullName}
@@ -127,7 +127,7 @@ export default function AdminUsersTab({ users, currentUser, deleteUser, setUserR
                         style={{
                           color: "var(--color-text-faint)",
                           fontWeight: 600,
-                          fontSize: "0.78rem",
+                          fontSize: "var(--font-size-sm)",
                         }}
                       >
                         {" "}
@@ -135,16 +135,16 @@ export default function AdminUsersTab({ users, currentUser, deleteUser, setUserR
                       </span>
                     )}
                   </div>
-                  <div style={{ color: "var(--color-text-faint)", fontSize: "0.82rem" }}>
+                  <div style={{ color: "var(--color-text-faint)", fontSize: "var(--font-size-base)" }}>
                     {u.email} · {u.phone}
                   </div>
                 </div>
 
                 <span
                   style={{
-                    background: isAdminUser ? "var(--color-primary-light)" : "#f1f5f9",
+                    background: isAdminUser ? "var(--color-primary-light)" : "var(--slate-100)",
                     color: isAdminUser ? "var(--color-primary)" : "var(--color-text-muted)",
-                    fontSize: "0.78rem",
+                    fontSize: "var(--font-size-sm)",
                     fontWeight: 700,
                     padding: "4px 12px",
                     borderRadius: "50px",
@@ -164,6 +164,11 @@ export default function AdminUsersTab({ users, currentUser, deleteUser, setUserR
                         ? "تبدیل به کاربر عادی"
                         : "تبدیل به ادمین"
                     }
+                    aria-label={
+                      isAdminUser
+                        ? "تبدیل به کاربر عادی"
+                        : "تبدیل به ادمین"
+                    }
                     style={{
                       width: "38px",
                       height: "38px",
@@ -172,7 +177,7 @@ export default function AdminUsersTab({ users, currentUser, deleteUser, setUserR
                       justifyContent: "center",
                       borderRadius: "10px",
                       border: "1px solid var(--color-border)",
-                      color: isSelf ? "#cbd5e1" : "var(--color-primary)",
+                      color: isSelf ? "var(--slate-300)" : "var(--color-primary)",
                       cursor: isSelf ? "not-allowed" : "pointer",
                       background: "var(--color-bg-white)",
                     }}
@@ -188,6 +193,7 @@ export default function AdminUsersTab({ users, currentUser, deleteUser, setUserR
                     onClick={() => handleDeleteUser(u)}
                     disabled={isSelf}
                     title="حذف کاربر"
+                    aria-label="حذف کاربر"
                     style={{
                       width: "38px",
                       height: "38px",
@@ -196,7 +202,7 @@ export default function AdminUsersTab({ users, currentUser, deleteUser, setUserR
                       justifyContent: "center",
                       borderRadius: "10px",
                       border: "1px solid var(--color-error-border)",
-                      color: isSelf ? "#fca5a5" : "var(--color-error)",
+                      color: isSelf ? "var(--red-300)" : "var(--color-error)",
                       cursor: isSelf ? "not-allowed" : "pointer",
                       background: "var(--color-bg-white)",
                       opacity: isSelf ? 0.6 : 1,

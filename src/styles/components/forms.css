@@ -92,3 +92,12 @@
   height: var(--input-height-sm);
   font-size: var(--font-size-base);
 }
+
+/* ---------- آیکون داخل اینپوت ---------- */
+.form-input-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}

@@ -119,10 +119,12 @@ export default function AdminDashboard() {
       activeTab === tab ? "2px solid var(--color-primary)" : "2px solid transparent",
     color: activeTab === tab ? "var(--color-primary)" : "var(--color-text-muted)",
     fontWeight: 700,
-    fontSize: "0.95rem",
+    fontSize: "var(--font-size-md)",
     cursor: "pointer",
     fontFamily: "inherit",
     marginBottom: "-1px",
+    whiteSpace: "nowrap",
+    flexShrink: 0,
   });
 
   return (
@@ -140,7 +142,7 @@ export default function AdminDashboard() {
           >
             پنل مدیریت
           </h1>
-          <p style={{ color: "var(--color-text-muted)", fontSize: "0.92rem" }}>
+          <p style={{ color: "var(--color-text-muted)", fontSize: "var(--font-size-md)" }}>
             {activeTab === "products" && `${products.length} محصول در فروشگاه`}
             {activeTab === "orders" && `${orders.length} سفارش ثبت‌شده`}
             {activeTab === "users" && `${users.length} کاربر ثبت‌نام‌شده`}
@@ -155,6 +157,8 @@ export default function AdminDashboard() {
             gap: "8px",
             marginBottom: "24px",
             borderBottom: "1px solid var(--color-border)",
+            overflowX: "auto",
+            WebkitOverflowScrolling: "touch",
           }}
         >
           <button type="button" onClick={() => setActiveTab("products")} style={tabBtnStyle("products")}>
@@ -169,7 +173,7 @@ export default function AdminDashboard() {
                 style={{
                   background: activeTab === "orders" ? "var(--color-primary)" : "var(--color-border)",
                   color: activeTab === "orders" ? "var(--color-bg-white)" : "var(--color-text-muted)",
-                  fontSize: "0.72rem",
+                  fontSize: "var(--font-size-xs)",
                   fontWeight: 700,
                   padding: "1px 7px",
                   borderRadius: "50px",

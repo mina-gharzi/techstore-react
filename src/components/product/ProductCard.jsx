@@ -48,6 +48,8 @@ export default memo(function ProductCard({ product }) {
         onClick={handleToggleFavorite}
         className={`product-card__favorite-btn ${favorited ? "is-active" : ""}`}
         title="افزودن به علاقه‌مندی‌ها"
+        aria-label={favorited ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
+        aria-pressed={favorited}
       >
         <Heart size={18} fill={favorited ? "var(--color-error)" : "none"} />
       </button>

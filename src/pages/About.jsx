@@ -47,7 +47,7 @@ export default function About() {
         style={{
           padding: "50px 16px 40px",
           background:
-            "radial-gradient(circle at top right, rgba(37,99,235,0.1) 0%, transparent 45%), var(--color-bg)",
+            "radial-gradient(circle at top right, var(--color-primary-tint-10) 0%, transparent 45%), var(--color-bg)",
         }}
       >
         <div
@@ -65,11 +65,11 @@ export default function About() {
             <span
               style={{
                 display: "inline-block",
-                background: "rgba(37, 99, 235, 0.1)",
+                background: "var(--color-primary-tint-10)",
                 color: "var(--color-primary)",
                 padding: "7px 16px",
                 borderRadius: "50px",
-                fontSize: "0.88rem",
+                fontSize: "var(--font-size-base)",
                 fontWeight: 700,
                 marginBottom: "18px",
               }}
@@ -141,9 +141,9 @@ export default function About() {
             </h2>
             <p
               style={{
-                color: "#475569",
+                color: "var(--slate-600)",
                 lineHeight: 2,
-                fontSize: "1.05rem",
+                fontSize: "var(--font-size-xl)",
               }}
             >
               TechStore با هدف ساده کردن خرید آنلاین محصولات تکنولوژی شکل گرفت.
@@ -187,7 +187,7 @@ export default function About() {
                 </div>
                 <div
                   style={{
-                    fontSize: "0.9rem",
+                    fontSize: "var(--font-size-md)",
                     color: "var(--color-text-muted)",
                     fontWeight: 600,
                   }}
@@ -252,7 +252,7 @@ export default function About() {
                 style={{
                   color: "var(--color-text-muted)",
                   lineHeight: 1.9,
-                  fontSize: "0.98rem",
+                  fontSize: "var(--font-size-lg)",
                 }}
               >
                 ارائه تجربه خرید آنلاین سریع، شفاف و مطمئن برای محصولات دیجیتال.
@@ -296,7 +296,7 @@ export default function About() {
                 style={{
                   color: "var(--color-text-muted)",
                   lineHeight: 1.9,
-                  fontSize: "0.98rem",
+                  fontSize: "var(--font-size-lg)",
                 }}
               >
                 تبدیل شدن به یکی از معتبرترین فروشگاه‌های آنلاین تکنولوژی در
@@ -361,7 +361,7 @@ export default function About() {
                 </div>
                 <h3
                   style={{
-                    fontSize: "1rem",
+                    fontSize: "var(--font-size-lg)",
                     fontWeight: 800,
                     color: "var(--color-text)",
                     marginBottom: "8px",
@@ -373,7 +373,7 @@ export default function About() {
                   style={{
                     color: "var(--color-text-muted)",
                     lineHeight: 1.7,
-                    fontSize: "0.9rem",
+                    fontSize: "var(--font-size-md)",
                   }}
                 >
                   {item.desc}
@@ -409,7 +409,7 @@ export default function About() {
               style={{
                 opacity: 0.92,
                 marginBottom: "26px",
-                fontSize: "1rem",
+                fontSize: "var(--font-size-lg)",
               }}
             >
               محصولات اصل را با اطمینان از TechStore تهیه کنید.

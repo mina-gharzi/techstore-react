@@ -41,7 +41,7 @@ export default function Favorites() {
   // ---------- Render ----------
   return (
     <section className="page-favorites" style={{ padding: "50px 20px" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+      <div className="container--plain">
         <div style={{ marginBottom: "40px", textAlign: "center" }}>
           <h1
             style={{
@@ -53,7 +53,7 @@ export default function Favorites() {
           >
             علاقه‌مندی‌های من
           </h1>
-          <p style={{ color: "var(--color-text-muted)", fontSize: "1.05rem" }}>
+          <p style={{ color: "var(--color-text-muted)", fontSize: "var(--font-size-xl)" }}>
             {favorites.length} محصول در لیست علاقه‌مندی‌ها
           </p>
         </div>

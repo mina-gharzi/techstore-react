@@ -43,11 +43,16 @@ function App() {
                 <FavoritesProvider>
                   <ReviewsProvider>
                     <div className="app">
+                      {/* لینک پرش برای کاربران کیبورد/صفحه‌خوان */}
+                      <a href="#main-content" className="skip-link">
+                        رفتن به محتوای اصلی
+                      </a>
+
                       {/* هدر ثابت در همه صفحات */}
                       <Navbar />
 
                       {/* محتوای اصلی هر صفحه */}
-                      <main className="main-content">
+                      <main id="main-content" className="main-content">
                         <ErrorBoundary>
                           <AppRoutes />
                         </ErrorBoundary>

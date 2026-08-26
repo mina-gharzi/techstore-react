@@ -104,10 +104,10 @@ export default function Products() {
         style={{
           padding: "50px 16px 30px",
           background:
-            "radial-gradient(circle at top left, rgba(37,99,235,0.1) 0%, transparent 40%), var(--color-bg)",
+            "radial-gradient(circle at top left, var(--color-primary-tint-10) 0%, transparent 40%), var(--color-bg)",
         }}
       >
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div className="container--plain">
           <h1
             style={{
               fontSize: "clamp(1.7rem, 4vw, 2.4rem)",
@@ -131,7 +131,7 @@ export default function Products() {
 
       {/* ===================== Main ===================== */}
       <section style={{ padding: "var(--space-5) 16px 70px" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div className="container--plain">
           {/* نوار ابزار موبایل */}
           <div
             style={{

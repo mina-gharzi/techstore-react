@@ -13,7 +13,7 @@ export default function ProductImage({ product, discountPercent }) {
         justifyContent: "center",
         minHeight: "380px",
         border: "1px solid var(--color-border)",
-        boxShadow: "0 10px 30px rgba(15, 23, 42, 0.04)",
+        boxShadow: "var(--shadow-soft)",
       }}
     >
       {discountPercent > 0 && (
@@ -26,7 +26,7 @@ export default function ProductImage({ product, discountPercent }) {
             color: "var(--color-bg-white)",
             padding: "6px 12px",
             borderRadius: "50px",
-            fontSize: "0.85rem",
+            fontSize: "var(--font-size-base)",
             fontWeight: 800,
           }}
         >
@@ -44,7 +44,7 @@ export default function ProductImage({ product, discountPercent }) {
             color: "var(--color-bg-white)",
             padding: "6px 12px",
             borderRadius: "50px",
-            fontSize: "0.85rem",
+            fontSize: "var(--font-size-base)",
             fontWeight: 800,
           }}
         >

@@ -47,7 +47,7 @@ const ProductSpecs = ({ product, categoryName, ratingInfo }) => {
               padding: "14px 16px",
               background: "var(--color-bg)",
               borderRadius: "12px",
-              border: "1px solid #f1f5f9",
+              border: "1px solid var(--slate-100)",
             }}
           >
             <span style={{ color: "var(--color-text-muted)", fontWeight: 600 }}>

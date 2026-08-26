@@ -1,12 +1,5 @@
 import { User, Phone, Mail, Check } from "lucide-react";
 
-const iconStyle = {
-  position: "absolute",
-  right: "14px",
-  top: "50%",
-  transform: "translateY(-50%)",
-};
-
 export default function ProfileInfoForm({
   user,
   infoData,
@@ -17,7 +10,7 @@ export default function ProfileInfoForm({
 }) {
   return (
     <div className="card--profile">
-      <h2 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--color-text)", marginBottom: "20px" }}>
+      <h2 style={{ fontSize: "var(--font-size-xl)", fontWeight: 800, color: "var(--color-text)", marginBottom: "20px" }}>
         اطلاعات شخصی
       </h2>
 
@@ -25,7 +18,7 @@ export default function ProfileInfoForm({
         <div style={{ marginBottom: "16px" }}>
           <label className="form-label" htmlFor="fullName">نام و نام خانوادگی</label>
           <div style={{ position: "relative" }}>
-            <User size={18} color="var(--color-text-faint)" style={iconStyle} />
+            <User size={18} color="var(--color-text-faint)" className="form-input-icon" />
             <input
               type="text"
               name="fullName"
@@ -43,7 +36,7 @@ export default function ProfileInfoForm({
         <div style={{ marginBottom: "16px" }}>
           <label className="form-label" htmlFor="phone">شماره موبایل</label>
           <div style={{ position: "relative" }}>
-            <Phone size={18} color="var(--color-text-faint)" style={iconStyle} />
+            <Phone size={18} color="var(--color-text-faint)" className="form-input-icon" />
             <input
               type="tel"
               name="phone"
@@ -61,7 +54,7 @@ export default function ProfileInfoForm({
         <div style={{ marginBottom: "22px" }}>
           <label className="form-label" htmlFor="email">ایمیل</label>
           <div style={{ position: "relative" }}>
-            <Mail size={18} color="var(--color-text-faint)" style={iconStyle} />
+            <Mail size={18} color="var(--color-text-faint)" className="form-input-icon" />
             <input
               type="email"
               id="email"
@@ -70,7 +63,7 @@ export default function ProfileInfoForm({
               disabled
               className="form-input"
               style={{
-                background: "#f1f5f9",
+                background: "var(--slate-100)",
                 color: "var(--color-text-faint)",
                 cursor: "not-allowed",
               }}

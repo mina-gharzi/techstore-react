@@ -50,7 +50,7 @@ export default function Checkout() {
           <h1 style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--color-text)", marginBottom: "8px" }}>
             تکمیل خرید
           </h1>
-          <p style={{ color: "var(--color-text-muted)", fontSize: "1rem" }}>
+          <p style={{ color: "var(--color-text-muted)", fontSize: "var(--font-size-lg)" }}>
             اطلاعات ارسال و روش پرداخت را مشخص کنید.
           </p>
         </div>

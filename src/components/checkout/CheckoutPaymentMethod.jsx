@@ -47,10 +47,10 @@ export default function CheckoutPaymentMethod({ paymentMethod, setPaymentMethod 
           />
           <CreditCard size={20} color="var(--color-primary)" />
           <div>
-            <div style={{ fontWeight: 700, color: "var(--color-text)", fontSize: "0.95rem" }}>
+            <div style={{ fontWeight: 700, color: "var(--color-text)", fontSize: "var(--font-size-md)" }}>
               پرداخت آنلاین (کارت بانکی)
             </div>
-            <div style={{ color: "var(--color-text-secondary)", fontSize: "0.82rem" }}>
+            <div style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-base)" }}>
               از طریق درگاه بانکی
             </div>
           </div>
@@ -81,10 +81,10 @@ export default function CheckoutPaymentMethod({ paymentMethod, setPaymentMethod 
           />
           <Wallet size={20} color="var(--color-primary)" />
           <div>
-            <div style={{ fontWeight: 700, color: "var(--color-text)", fontSize: "0.95rem" }}>
+            <div style={{ fontWeight: 700, color: "var(--color-text)", fontSize: "var(--font-size-md)" }}>
               پرداخت در محل
             </div>
-            <div style={{ color: "var(--color-text-secondary)", fontSize: "0.82rem" }}>
+            <div style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-base)" }}>
               پرداخت نقدی یا کارت‌خوان هنگام تحویل
             </div>
           </div>

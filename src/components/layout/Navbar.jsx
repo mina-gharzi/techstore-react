@@ -66,6 +66,7 @@ export default function Navbar() {
             to="/favorites"
             className="navbar__icon-btn"
             title="علاقه‌مندی‌ها"
+            aria-label="علاقه‌مندی‌ها"
           >
             <Heart size={22} />
             {favorites.length > 0 && (
@@ -74,7 +75,7 @@ export default function Navbar() {
           </Link>
 
           {/* سبد خرید */}
-          <Link to="/cart" className="navbar__icon-btn" title="سبد خرید">
+          <Link to="/cart" className="navbar__icon-btn" title="سبد خرید" aria-label="سبد خرید">
             <ShoppingCart size={22} />
             {totalItems > 0 && (
               <span className="navbar__badge">{totalItems}</span>
@@ -121,13 +122,13 @@ export default function Navbar() {
                       style={{
                         padding: "8px 10px",
                         marginBottom: "6px",
-                        borderBottom: "1px solid #f1f5f9",
+                        borderBottom: "1px solid var(--slate-100)",
                       }}
                     >
-                      <div style={{ fontWeight: 700, color: "var(--color-text)", fontSize: "0.92rem" }}>
+                      <div style={{ fontWeight: 700, color: "var(--color-text)", fontSize: "var(--font-size-md)" }}>
                         {user.fullName}
                       </div>
-                      <div style={{ color: "var(--color-text-faint)", fontSize: "0.78rem" }}>
+                      <div style={{ color: "var(--color-text-faint)", fontSize: "var(--font-size-sm)" }}>
                         {user.email}
                       </div>
                     </div>
@@ -143,7 +144,7 @@ export default function Navbar() {
                         borderRadius: "10px",
                         color: "var(--color-text-secondary)",
                         fontWeight: 600,
-                        fontSize: "0.9rem",
+                        fontSize: "var(--font-size-md)",
                         textDecoration: "none",
                       }}
                     >
@@ -163,7 +164,7 @@ export default function Navbar() {
                           borderRadius: "10px",
                           color: "var(--color-primary)",
                           fontWeight: 600,
-                          fontSize: "0.9rem",
+                          fontSize: "var(--font-size-md)",
                           textDecoration: "none",
                         }}
                       >
@@ -184,7 +185,7 @@ export default function Navbar() {
                         borderRadius: "10px",
                         color: "var(--color-error)",
                         fontWeight: 600,
-                        fontSize: "0.9rem",
+                        fontSize: "var(--font-size-md)",
                         cursor: "pointer",
                         fontFamily: "inherit",
                       }}
@@ -201,6 +202,7 @@ export default function Navbar() {
               to="/login"
               className="navbar__icon-btn"
               title="ورود / ثبت‌نام"
+              aria-label="ورود / ثبت‌نام"
             >
               <User size={22} />
             </Link>
@@ -279,7 +281,7 @@ export default function Navbar() {
                 textAlign: "right",
                 color: "var(--color-error)",
                 fontFamily: "inherit",
-                fontSize: "1.02rem",
+                fontSize: "var(--font-size-lg)",
                 background: "none",
                 border: "none",
                 cursor: "pointer",

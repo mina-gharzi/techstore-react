@@ -39,7 +39,7 @@ export default function NotFound() {
       <p
         style={{
           color: "var(--color-text-muted)",
-          fontSize: "1.05rem",
+          fontSize: "var(--font-size-xl)",
           marginBottom: "32px",
         }}
       >
@@ -56,7 +56,7 @@ export default function NotFound() {
           borderRadius: "12px",
           fontWeight: 700,
           textDecoration: "none",
-          boxShadow: "0 10px 25px rgba(37, 99, 235, 0.25)",
+          boxShadow: "var(--shadow-cta)",
         }}
       >
         بازگشت به صفحه اصلی

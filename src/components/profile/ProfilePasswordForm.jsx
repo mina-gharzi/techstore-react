@@ -1,12 +1,5 @@
 import { Lock, ChevronDown, ChevronUp, Check } from "lucide-react";
 
-const iconStyle = {
-  position: "absolute",
-  right: "14px",
-  top: "50%",
-  transform: "translateY(-50%)",
-};
-
 export default function ProfilePasswordForm({
   isPasswordFormOpen,
   togglePasswordForm,
@@ -35,7 +28,7 @@ export default function ProfilePasswordForm({
       >
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <Lock size={18} color="var(--color-primary)" />
-          <span style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--color-text)" }}>
+          <span style={{ fontSize: "var(--font-size-xl)", fontWeight: 800, color: "var(--color-text)" }}>
             تغییر رمز عبور
           </span>
         </div>
@@ -65,7 +58,7 @@ export default function ProfilePasswordForm({
             <div style={{ marginBottom: "16px" }}>
               <label className="form-label" htmlFor="currentPassword">رمز عبور فعلی</label>
               <div style={{ position: "relative" }}>
-                <Lock size={18} color="var(--color-text-faint)" style={iconStyle} />
+                <Lock size={18} color="var(--color-text-faint)" className="form-input-icon" />
                 <input
                   type="password"
                   name="currentPassword"
@@ -81,7 +74,7 @@ export default function ProfilePasswordForm({
             <div style={{ marginBottom: "16px" }}>
               <label className="form-label" htmlFor="newPassword">رمز عبور جدید</label>
               <div style={{ position: "relative" }}>
-                <Lock size={18} color="var(--color-text-faint)" style={iconStyle} />
+                <Lock size={18} color="var(--color-text-faint)" className="form-input-icon" />
                 <input
                   type="password"
                   name="newPassword"
@@ -98,7 +91,7 @@ export default function ProfilePasswordForm({
             <div style={{ marginBottom: "22px" }}>
               <label className="form-label" htmlFor="confirmNewPassword">تکرار رمز عبور جدید</label>
               <div style={{ position: "relative" }}>
-                <Lock size={18} color="var(--color-text-faint)" style={iconStyle} />
+                <Lock size={18} color="var(--color-text-faint)" className="form-input-icon" />
                 <input
                   type="password"
                   name="confirmNewPassword"

@@ -52,7 +52,7 @@ export default function ProductInfo({
             color: "var(--color-primary)",
             padding: "6px 14px",
             borderRadius: "50px",
-            fontSize: "0.85rem",
+            fontSize: "var(--font-size-base)",
             fontWeight: 700,
           }}
         >
@@ -61,11 +61,11 @@ export default function ProductInfo({
         {categoryName && (
           <span
             style={{
-              background: "#f1f5f9",
-              color: "#475569",
+              background: "var(--slate-100)",
+              color: "var(--slate-600)",
               padding: "6px 14px",
               borderRadius: "50px",
-              fontSize: "0.85rem",
+              fontSize: "var(--font-size-base)",
               fontWeight: 700,
             }}
           >
@@ -112,7 +112,7 @@ export default function ProductInfo({
           style={{
             color: "var(--color-text-muted)",
             fontWeight: 600,
-            fontSize: "0.95rem",
+            fontSize: "var(--font-size-md)",
           }}
         >
           {ratingInfo.average.toFixed(1)} از ۵
@@ -136,7 +136,7 @@ export default function ProductInfo({
               display: "block",
               color: "var(--color-text-faint)",
               textDecoration: "line-through",
-              fontSize: "1rem",
+              fontSize: "var(--font-size-lg)",
               marginBottom: "4px",
             }}
           >
@@ -159,7 +159,7 @@ export default function ProductInfo({
         style={{
           color: "var(--color-text-muted)",
           lineHeight: 1.95,
-          fontSize: "1.02rem",
+          fontSize: "var(--font-size-lg)",
           marginBottom: "24px",
         }}
       >
@@ -201,7 +201,7 @@ export default function ProductInfo({
                     border: isActive
                       ? "3px solid var(--color-primary)"
                       : "2px solid var(--color-border)",
-                    outline: isActive ? "2px solid #bfdbfe" : "none",
+                    outline: isActive ? "2px solid var(--blue-200)" : "none",
                     cursor: "pointer",
                     boxShadow: isActive
                       ? "0 0 0 3px rgba(37,99,235,0.2)"
@@ -289,7 +289,7 @@ export default function ProductInfo({
             style={{
               color: "var(--color-warning)",
               fontWeight: 700,
-              fontSize: "0.85rem",
+              fontSize: "var(--font-size-base)",
             }}
           >
             تنها {stock} عدد موجود است
@@ -317,11 +317,11 @@ export default function ProductInfo({
             background: isOutOfStock
               ? "var(--color-border)"
               : added
-                ? "linear-gradient(135deg, var(--color-success), #15803d)"
+                ? "linear-gradient(135deg, var(--color-success), var(--green-700))"
                 : "linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))",
             color: isOutOfStock ? "var(--color-text-faint)" : "var(--color-bg-white)",
             borderRadius: "14px",
-            fontSize: "1rem",
+            fontSize: "var(--font-size-lg)",
             fontWeight: 800,
             display: "flex",
             alignItems: "center",
@@ -386,7 +386,7 @@ export default function ProductInfo({
               border: "1px solid var(--color-border)",
               borderRadius: "12px",
               padding: "12px 14px",
-              fontSize: "0.88rem",
+              fontSize: "var(--font-size-base)",
               fontWeight: 600,
               color: "var(--color-text-secondary)",
             }}

@@ -40,7 +40,7 @@ export default function Footer() {
           >
             {APP_NAME}
           </h2>
-          <p style={{ lineHeight: 1.8, color: "var(--color-text-faint)", fontSize: "0.95rem" }}>
+          <p style={{ lineHeight: 1.8, color: "var(--color-text-faint)", fontSize: "var(--font-size-md)" }}>
             فروشگاه آنلاین محصولات دیجیتال با بهترین قیمت، ضمانت اصالت کالا و
             ارسال سریع.
           </p>
@@ -50,7 +50,7 @@ export default function Footer() {
         <div>
           <h3
             style={{
-              fontSize: "1.05rem",
+              fontSize: "var(--font-size-xl)",
               fontWeight: 700,
               color: "var(--color-bg-white)",
               marginBottom: "16px",
@@ -93,7 +93,7 @@ export default function Footer() {
         <div>
           <h3
             style={{
-              fontSize: "1.05rem",
+              fontSize: "var(--font-size-xl)",
               fontWeight: 700,
               color: "var(--color-bg-white)",
               marginBottom: "16px",
@@ -118,7 +118,7 @@ export default function Footer() {
         <div>
           <h3
             style={{
-              fontSize: "1.05rem",
+              fontSize: "var(--font-size-xl)",
               fontWeight: 700,
               color: "var(--color-bg-white)",
               marginBottom: "16px",
@@ -132,7 +132,7 @@ export default function Footer() {
               flexDirection: "column",
               gap: "10px",
               color: "var(--color-text-faint)",
-              fontSize: "0.95rem",
+              fontSize: "var(--font-size-md)",
             }}
           >
             <span>📍 تهران، ایران</span>
@@ -148,10 +148,10 @@ export default function Footer() {
           maxWidth: "1200px",
           margin: "40px auto 0",
           paddingTop: "24px",
-          borderTop: "1px solid #1e293b",
+          borderTop: "1px solid var(--slate-800)",
           textAlign: "center",
           color: "var(--color-text-muted)",
-          fontSize: "0.9rem",
+          fontSize: "var(--font-size-md)",
         }}
       >
         © ۲۰۲۶ {APP_NAME} — تمامی حقوق محفوظ است

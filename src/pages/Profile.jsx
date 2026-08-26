@@ -149,7 +149,7 @@ export default function Profile() {
               width: "64px",
               height: "64px",
               borderRadius: "50%",
-              background: "linear-gradient(135deg, var(--color-primary), #7c3aed)",
+              background: "linear-gradient(135deg, var(--color-primary), var(--violet-600))",
               color: "var(--color-bg-white)",
               display: "flex",
               alignItems: "center",
@@ -172,7 +172,7 @@ export default function Profile() {
             >
               {user.fullName}
             </h1>
-            <p style={{ color: "var(--color-text-muted)", fontSize: "0.92rem" }}>
+            <p style={{ color: "var(--color-text-muted)", fontSize: "var(--font-size-md)" }}>
               {user.email}
             </p>
           </div>

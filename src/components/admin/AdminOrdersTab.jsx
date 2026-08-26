@@ -79,7 +79,7 @@ export default function AdminOrdersTab({
                   style={{
                     fontWeight: 800,
                     color: "var(--color-text)",
-                    fontSize: "0.98rem",
+                    fontSize: "var(--font-size-lg)",
                   }}
                 >
                   {order.orderNumber}
@@ -87,7 +87,7 @@ export default function AdminOrdersTab({
                 <div
                   style={{
                     color: "var(--color-text-muted)",
-                    fontSize: "0.85rem",
+                    fontSize: "var(--font-size-base)",
                     marginTop: "3px",
                   }}
                 >
@@ -104,7 +104,7 @@ export default function AdminOrdersTab({
                     background: colors.bg,
                     color: colors.text,
                     fontWeight: 700,
-                    fontSize: "0.85rem",
+                    fontSize: "var(--font-size-base)",
                   }}
                 >
                   {order.status}
@@ -120,7 +120,7 @@ export default function AdminOrdersTab({
                     background: colors.bg,
                     color: colors.text,
                     fontWeight: 700,
-                    fontSize: "0.85rem",
+                    fontSize: "var(--font-size-base)",
                     fontFamily: "inherit",
                     cursor: "pointer",
                   }}
@@ -142,7 +142,7 @@ export default function AdminOrdersTab({
                 flexDirection: "column",
                 gap: "4px",
                 paddingTop: "12px",
-                borderTop: "1px dashed #f1f5f9",
+                borderTop: "1px dashed var(--slate-100)",
                 marginBottom: "12px",
               }}
             >
@@ -152,7 +152,7 @@ export default function AdminOrdersTab({
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
-                    fontSize: "0.85rem",
+                    fontSize: "var(--font-size-base)",
                     color: "var(--color-text-muted)",
                   }}
                 >
@@ -172,7 +172,7 @@ export default function AdminOrdersTab({
             {order.shippingAddress && (
               <div
                 style={{
-                  fontSize: "0.82rem",
+                  fontSize: "var(--font-size-base)",
                   color: "var(--color-text-faint)",
                   marginBottom: "12px",
                 }}
@@ -189,10 +189,10 @@ export default function AdminOrdersTab({
                 justifyContent: "space-between",
                 alignItems: "center",
                 paddingTop: "12px",
-                borderTop: "1px solid #f1f5f9",
+                borderTop: "1px solid var(--slate-100)",
               }}
             >
-              <span style={{ color: "var(--color-text-muted)", fontSize: "0.85rem" }}>
+              <span style={{ color: "var(--color-text-muted)", fontSize: "var(--font-size-base)" }}>
                 {order.totalItems} کالا ·{" "}
                 {order.paymentMethod === "online"
                   ? "پرداخت آنلاین"
@@ -202,7 +202,7 @@ export default function AdminOrdersTab({
                 style={{
                   fontWeight: 800,
                   color: "var(--color-primary)",
-                  fontSize: "1.02rem",
+                  fontSize: "var(--font-size-lg)",
                 }}
               >
                 {formatPrice(order.totalPrice)}
