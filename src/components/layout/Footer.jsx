@@ -31,6 +31,7 @@ export default function Footer() {
         {/* ---------- معرفی فروشگاه ---------- */}
         <div>
           <h2
+            className="brand-text"
             style={{
               fontSize: "1.4rem",
               fontWeight: 800,
