@@ -11,16 +11,16 @@
   /* ====================================================
      COLOR — PRIMITIVES
      ==================================================== */
-  --blue-50:  #eff6ff;
-  --blue-100: #dbeafe;
-  --blue-200: #bfdbfe;
-  --blue-300: #93c5fd;
-  --blue-400: #60a5fa;
-  --blue-500: #3b82f6;
-  --blue-600: #2563eb;
-  --blue-700: #1d4ed8;
-  --blue-800: #1e40af;
-  --blue-900: #1e3a8a;
+  --blue-50:  #e8ebf2;
+  --blue-100: #d0d5e5;
+  --blue-200: #b0b9d1;
+  --blue-300: #909dbe;
+  --blue-400: #7288AE;
+  --blue-500: #5c72a0;
+  --blue-600: #4B5694;
+  --blue-700: #3a4475;
+  --blue-800: #1e2448;
+  --blue-900: #111844;
 
   --red-50:  #fef2f2;
   --red-100: #fee2e2;
@@ -44,28 +44,28 @@
   --yellow-500: #f59e0b;
   --yellow-600: #d97706;
 
-  --violet-600: #7c3aed;
+  --violet-600: #4B5694;
 
-  --slate-50:  #f8fafc;
-  --slate-100: #f1f5f9;
-  --slate-200: #e2e8f0;
-  --slate-300: #cbd5e1;
-  --slate-400: #94a3b8;
-  --slate-500: #64748b;
-  --slate-600: #475569;
-  --slate-700: #334155;
-  --slate-800: #1e293b;
-  --slate-900: #0f172a;
+  --slate-50:  #F5F5F5;
+  --slate-100: #EFECE8;
+  --slate-200: #EAE0CF;
+  --slate-300: #d8cfc0;
+  --slate-400: #a09488;
+  --slate-500: #7a7068;
+  --slate-600: #5a534c;
+  --slate-700: #3d3833;
+  --slate-800: #1e1b19;
+  --slate-900: #111844;
 
-  --color-bg-hero: #f8fbff;
-  --color-primary-tint-10: rgba(37, 99, 235, 0.1);
+  --color-bg-hero: #F5F5F5;
+  --color-primary-tint-10: rgba(75, 86, 148, 0.1);
 
   /* ====================================================
      COLOR — SEMANTIC
      ==================================================== */
   --color-primary:         var(--blue-600);
   --color-primary-dark:    var(--blue-700);
-  --color-primary-darkest: var(--blue-800);
+  --color-primary-darkest: var(--blue-900);
   --color-primary-medium:  var(--blue-500);
   --color-primary-light:   var(--blue-50);
   --color-primary-border:  var(--blue-200);
@@ -106,9 +106,9 @@
   --color-bg-subtle:       var(--slate-100);
   --color-border:          var(--slate-200);
   --color-border-hover:    var(--slate-300);
-  --color-border-dark:     #dbe2ea;
-  --color-overlay:         rgba(15, 23, 42, 0.35);
-  --color-overlay-light:   rgba(15, 23, 42, 0.08);
+  --color-border-dark:     var(--slate-300);
+  --color-overlay:         rgba(17, 24, 68, 0.35);
+  --color-overlay-light:   rgba(17, 24, 68, 0.08);
 
   /* ====================================================
      SPACING
@@ -149,24 +149,24 @@
   /* ====================================================
      SHADOWS
      ==================================================== */
-  --shadow-xs:    0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-xs:    0 1px 2px rgba(17, 24, 68, 0.04);
   --shadow-sm:    0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-md:    0 4px 16px rgba(15, 23, 42, 0.06);
-  --shadow-lg:    0 8px 24px rgba(15, 23, 42, 0.08);
-  --shadow-xl:    0 12px 32px rgba(15, 23, 42, 0.12);
-  --shadow-card:  0 20px 50px rgba(15, 23, 42, 0.06);
-  --shadow-hero:  0 28px 60px rgba(37, 99, 235, 0.35);
+  --shadow-md:    0 4px 16px rgba(17, 24, 68, 0.06);
+  --shadow-lg:    0 8px 24px rgba(17, 24, 68, 0.08);
+  --shadow-xl:    0 12px 32px rgba(17, 24, 68, 0.12);
+  --shadow-card:  0 20px 50px rgba(17, 24, 68, 0.06);
+  --shadow-hero:  0 28px 60px rgba(75, 86, 148, 0.35);
 
-  --shadow-button:         0 8px 18px rgba(37, 99, 235, 0.18);
-  --shadow-button-hover:   0 10px 22px rgba(37, 99, 235, 0.23);
-  --shadow-button-hero:    0 14px 32px rgba(37, 99, 235, 0.32);
-  --shadow-button-outline: 0 4px 14px rgba(37, 99, 235, 0.10);
+  --shadow-button:         0 8px 18px rgba(75, 86, 148, 0.18);
+  --shadow-button-hover:   0 10px 22px rgba(75, 86, 148, 0.23);
+  --shadow-button-hero:    0 14px 32px rgba(75, 86, 148, 0.32);
+  --shadow-button-outline: 0 4px 14px rgba(75, 86, 148, 0.10);
 
-  --shadow-focus-primary: 0 0 0 3px rgba(37, 99, 235, 0.08);
+  --shadow-focus-primary: 0 0 0 3px rgba(75, 86, 148, 0.08);
   --shadow-focus-error:   0 0 0 3px rgba(239, 68, 68, 0.07);
-  --shadow-navbar:        0 4px 20px rgba(15, 23, 42, 0.04);
-  --shadow-cta:           0 10px 25px rgba(37, 99, 235, 0.25);
-  --shadow-soft:          0 10px 30px rgba(15, 23, 42, 0.04);
+  --shadow-navbar:        0 4px 20px rgba(17, 24, 68, 0.04);
+  --shadow-cta:           0 10px 25px rgba(75, 86, 148, 0.25);
+  --shadow-soft:          0 10px 30px rgba(17, 24, 68, 0.04);
 
   /* ====================================================
      TRANSITIONS

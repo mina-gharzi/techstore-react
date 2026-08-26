@@ -112,7 +112,7 @@ export default function Navbar() {
                       background: "var(--color-bg-white)",
                       border: "1px solid var(--color-border)",
                       borderRadius: "14px",
-                      boxShadow: "0 12px 30px rgba(15, 23, 42, 0.12)",
+                      boxShadow: "0 12px 30px rgba(17, 24, 68, 0.12)",
                       padding: "10px",
                       minWidth: "180px",
                       zIndex: 20,

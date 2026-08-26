@@ -88,7 +88,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(245, 245, 245, 0.96);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
   box-shadow: 0 4px 20px var(--shadow-navbar);
@@ -258,7 +258,7 @@ body {
   position: fixed;
   inset: 0;
   top: 70px;
-  background: rgba(15, 23, 42, 0.35);
+  background: rgba(17, 24, 68, 0.35);
   z-index: 90;
 }
 

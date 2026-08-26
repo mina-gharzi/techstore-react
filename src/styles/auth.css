@@ -177,7 +177,7 @@
 
 .auth-input::placeholder,
 .form-input::placeholder {
-  color: #a1aab8;
+  color: #a09488;
 }
 
 .auth-input:hover,
@@ -231,7 +231,7 @@
 .form-input--error {
   border-color: var(--color-error-border-strong);
 
-  background: #fffafa;
+  background: #fffdfb;
 }
 
 .auth-input-error:focus,
@@ -265,7 +265,7 @@
   border: 1px solid var(--red-200);
   border-radius: 10px;
 
-  background: #fff7f7;
+  background: #fff8f7;
 
   color: var(--color-error-dark);
 

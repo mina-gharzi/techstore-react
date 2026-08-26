@@ -204,7 +204,7 @@ export default function ProductInfo({
                     outline: isActive ? "2px solid var(--blue-200)" : "none",
                     cursor: "pointer",
                     boxShadow: isActive
-                      ? "0 0 0 3px rgba(37,99,235,0.2)"
+                      ? "0 0 0 3px rgba(75,86,148,0.2)"
                       : "none",
                   }}
                 />
@@ -332,7 +332,7 @@ export default function ProductInfo({
             fontFamily: "inherit",
             boxShadow: isOutOfStock
               ? "none"
-              : "0 12px 28px rgba(37, 99, 235, 0.28)",
+              : "0 12px 28px rgba(75, 86, 148, 0.28)",
           }}
         >
           <ShoppingCart size={20} />
