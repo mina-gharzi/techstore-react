@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, memo } from "react";
 import { Link } from "react-router-dom";
 import { Heart, ShoppingCart, Check, Ban, Star } from "lucide-react";
 import { useCart } from "../../context/CartContext";
@@ -6,7 +6,6 @@ import { useFavorites } from "../../context/FavoritesContext";
 import { getStock } from "../../context/ProductsContext";
 import { useReviews } from "../../context/ReviewsContext";
 import { formatPrice } from "../../utils/formatPrice";
-import { TIMEOUT_ADDED_TO_CART, LOW_STOCK_THRESHOLD } from "../../utils/constants";
 import "../../styles/product-card.css";
 
 // ======================================================
@@ -14,31 +13,26 @@ import "../../styles/product-card.css";
 // کارت نمایش یک محصول
 // ======================================================
 
-export default function ProductCard({ product }) {
+export default memo(function ProductCard({ product }) {
   const { addToCart } = useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { getAverageRating } = useReviews();
 
   const [added, setAdded] = useState(false);
 
-  useEffect(() => {
-    if (!added) return;
-    const id = setTimeout(() => setAdded(false), TIMEOUT_ADDED_TO_CART);
-    return () => clearTimeout(id);
-  }, [added]);
-
   const stock = getStock(product);
   const isOutOfStock = stock <= 0;
   const ratingInfo = getAverageRating(product.id, product.rating);
   const favorited = isFavorite(product.id);
 
-  const handleAddToCart = useCallback((e) => {
+  const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (isOutOfStock) return;
     addToCart(product);
     setAdded(true);
-  }, [addToCart, product, isOutOfStock]);
+    setTimeout(() => setAdded(false), 1500);
+  };
 
   const handleToggleFavorite = (e) => {
     e.preventDefault();
@@ -132,7 +126,7 @@ export default function ProductCard({ product }) {
           </button>
         </div>
 
-        {!isOutOfStock && stock <= LOW_STOCK_THRESHOLD && (
+        {!isOutOfStock && stock <= 5 && (
           <span className="product-card__low-stock">
             تنها {stock} عدد باقی مانده
           </span>
@@ -140,4 +134,4 @@ export default function ProductCard({ product }) {
       </div>
     </div>
   );
-}
+});

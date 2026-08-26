@@ -19,7 +19,7 @@ export default function AdminUsersTab({ users, currentUser, deleteUser, setUserR
     if (currentUser && u.id === currentUser.id) return;
     try {
       setUserActionError("");
-      const newRole = u.role === "admin" ? "customer" : "admin";
+      const newRole = u.role === "admin" ? "user" : "admin";
       await setUserRole(u.id, newRole);
     } catch (err) {
       setUserActionError(err?.message || "خطا در تغییر نقش کاربر");

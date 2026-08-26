@@ -150,21 +150,18 @@ export default function AdminDashboard() {
         </div>
 
         <div
-          role="tablist"
-          aria-label="پنل مدیریت"
           style={{
             display: "flex",
-            flexWrap: "wrap",
             gap: "8px",
             marginBottom: "24px",
             borderBottom: "1px solid var(--color-border)",
           }}
         >
-          <button role="tab" aria-selected={activeTab === "products"} type="button" onClick={() => setActiveTab("products")} style={tabBtnStyle("products")}>
+          <button type="button" onClick={() => setActiveTab("products")} style={tabBtnStyle("products")}>
             <Package size={17} />
             محصولات
           </button>
-          <button role="tab" aria-selected={activeTab === "orders"} type="button" onClick={() => setActiveTab("orders")} style={tabBtnStyle("orders")}>
+          <button type="button" onClick={() => setActiveTab("orders")} style={tabBtnStyle("orders")}>
             <ClipboardList size={17} />
             سفارش‌ها
             {orders.length > 0 && (
@@ -182,72 +179,62 @@ export default function AdminDashboard() {
               </span>
             )}
           </button>
-          <button role="tab" aria-selected={activeTab === "users"} type="button" onClick={() => setActiveTab("users")} style={tabBtnStyle("users")}>
+          <button type="button" onClick={() => setActiveTab("users")} style={tabBtnStyle("users")}>
             <Users size={17} />
             کاربران
           </button>
-          <button role="tab" aria-selected={activeTab === "categories"} type="button" onClick={() => setActiveTab("categories")} style={tabBtnStyle("categories")}>
+          <button type="button" onClick={() => setActiveTab("categories")} style={tabBtnStyle("categories")}>
             <Tags size={17} />
             دسته‌بندی‌ها
           </button>
-          <button role="tab" aria-selected={activeTab === "analytics"} type="button" onClick={() => setActiveTab("analytics")} style={tabBtnStyle("analytics")}>
+          <button type="button" onClick={() => setActiveTab("analytics")} style={tabBtnStyle("analytics")}>
             <BarChart3 size={17} />
             آمار
           </button>
         </div>
 
         {/* ---------- محتوای تب‌ها ---------- */}
-        <div role="tabpanel" aria-label="محصولات">
-          {activeTab === "products" && (
-            <AdminProductsTab
-              products={products}
-              categories={categories}
-              addProduct={addProduct}
-              updateProduct={updateProduct}
-              deleteProduct={deleteProduct}
-            />
-          )}
-        </div>
+        {activeTab === "products" && (
+          <AdminProductsTab
+            products={products}
+            categories={categories}
+            addProduct={addProduct}
+            updateProduct={updateProduct}
+            deleteProduct={deleteProduct}
+          />
+        )}
 
-        <div role="tabpanel" aria-label="سفارش‌ها">
-          {activeTab === "orders" && (
-            <AdminOrdersTab
-              orders={orders}
-              updateOrderStatus={updateOrderStatus}
-              cancelOrder={cancelOrder}
-              restoreStock={restoreStock}
-            />
-          )}
-        </div>
+        {activeTab === "orders" && (
+          <AdminOrdersTab
+            orders={orders}
+            updateOrderStatus={updateOrderStatus}
+            cancelOrder={cancelOrder}
+            restoreStock={restoreStock}
+          />
+        )}
 
-        <div role="tabpanel" aria-label="کاربران">
-          {activeTab === "users" && (
-            <AdminUsersTab
-              users={users}
-              currentUser={currentUser}
-              deleteUser={deleteUser}
-              setUserRole={setUserRole}
-            />
-          )}
-        </div>
+        {activeTab === "users" && (
+          <AdminUsersTab
+            users={users}
+            currentUser={currentUser}
+            deleteUser={deleteUser}
+            setUserRole={setUserRole}
+          />
+        )}
 
-        <div role="tabpanel" aria-label="دسته‌بندی‌ها">
-          {activeTab === "categories" && (
-            <AdminCategoriesTab
-              products={products}
-              categories={categories}
-              addCategory={addCategory}
-              updateCategory={updateCategory}
-              deleteCategory={deleteCategory}
-            />
-          )}
-        </div>
+        {activeTab === "categories" && (
+          <AdminCategoriesTab
+            products={products}
+            categories={categories}
+            addCategory={addCategory}
+            updateCategory={updateCategory}
+            deleteCategory={deleteCategory}
+          />
+        )}
 
-        <div role="tabpanel" aria-label="آمار">
-          {activeTab === "analytics" && (
-            <AdminAnalyticsTab analytics={analytics} />
-          )}
-        </div>
+        {activeTab === "analytics" && (
+          <AdminAnalyticsTab analytics={analytics} />
+        )}
       </div>
     </section>
   );

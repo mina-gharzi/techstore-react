@@ -9,13 +9,13 @@ export default function NotFound() {
   return (
     <section
       style={{
-        padding: "clamp(60px, 15vw, 120px) 20px",
+        padding: "120px 20px",
         textAlign: "center",
       }}
     >
       <h1
         style={{
-          fontSize: "clamp(3.5rem, 10vw, 6rem)",
+          fontSize: "6rem",
           fontWeight: 900,
           color: "var(--color-primary)",
           marginBottom: "10px",
@@ -27,7 +27,7 @@ export default function NotFound() {
 
       <h2
         style={{
-          fontSize: "var(--font-size-4xl)",
+          fontSize: "1.6rem",
           fontWeight: 800,
           color: "var(--color-text)",
           marginBottom: "14px",
@@ -39,7 +39,7 @@ export default function NotFound() {
       <p
         style={{
           color: "var(--color-text-muted)",
-          fontSize: "var(--font-size-xl)",
+          fontSize: "1.05rem",
           marginBottom: "32px",
         }}
       >
@@ -48,7 +48,16 @@ export default function NotFound() {
 
       <Link
         to="/"
-        className="btn btn--primary"
+        style={{
+          display: "inline-block",
+          padding: "13px 32px",
+          background: "linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))",
+          color: "var(--color-bg-white)",
+          borderRadius: "12px",
+          fontWeight: 700,
+          textDecoration: "none",
+          boxShadow: "0 10px 25px rgba(37, 99, 235, 0.25)",
+        }}
       >
         بازگشت به صفحه اصلی
       </Link>

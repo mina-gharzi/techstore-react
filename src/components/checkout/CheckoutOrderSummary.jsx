@@ -15,6 +15,7 @@ export default function CheckoutOrderSummary({
   handleApplyCoupon,
   handleRemoveCoupon,
   isSubmitting,
+  stockError,
 }) {
   return (
     <>
@@ -111,9 +112,9 @@ export default function CheckoutOrderSummary({
                   value={couponInput}
                   onChange={(e) => {
                     setCouponInput(e.target.value);
+                    if (couponError) setCouponError("");
                   }}
                   placeholder="کد تخفیف"
-                  aria-label="کد تخفیف"
                   style={{
                     flex: 1,
                     height: "42px",
@@ -147,7 +148,7 @@ export default function CheckoutOrderSummary({
                 </button>
               </div>
               {couponError && (
-                <span role="alert" style={{ display: "block", marginTop: "6px", color: "var(--color-error)", fontSize: "0.78rem", fontWeight: 600 }}>
+                <span style={{ display: "block", marginTop: "6px", color: "var(--color-error)", fontSize: "0.78rem", fontWeight: 600 }}>
                   {couponError}
                 </span>
               )}
@@ -254,6 +255,14 @@ export default function CheckoutOrderSummary({
           بازگشت به سبد خرید
         </Link>
       </div>
+
+      <style>{`
+        @media (max-width: 800px) {
+          .checkout-layout {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { Package, XCircle } from "lucide-react";
+import { Package, XCircle, AlertTriangle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { formatPrice } from "../../utils/formatPrice";
 
@@ -14,16 +14,9 @@ const formatOrderDate = (isoString) => {
   }
 };
 
-const cardStyle = {
-  background: "var(--color-bg-white)",
-  border: "1px solid var(--color-border)",
-  borderRadius: "18px",
-  padding: "28px 26px",
-};
-
 export default function ProfileOrderHistory({ myOrders, handleCancelOrder }) {
   return (
-    <div style={cardStyle}>
+    <div className="card--profile">
       <h2
         style={{
           fontSize: "1.1rem",

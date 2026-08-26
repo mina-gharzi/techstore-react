@@ -110,7 +110,7 @@ export function AuthProvider({ children }) {
     persistUsers([...currentUsers, newUser]);
 
     // بعد از ثبت‌نام موفق، خودکار لاگین کن
-    const { password: _password, ...safeUser } = newUser;
+    const { password: _pw, ...safeUser } = newUser;
     setUser(safeUser);
 
     return { success: true };
@@ -251,10 +251,7 @@ export function AuthProvider({ children }) {
   }, [user]);
 
   // لیست کاربرها بدون پسورد - برای نمایش در پنل ادمین
-  const safeUsers = useMemo(
-    () => users.map(({ password: _pw, ...rest }) => rest),
-    [users],
-  );
+  const safeUsers = users.map(({ password: _pw, ...rest }) => rest);
 
   const value = useMemo(() => ({
     user,

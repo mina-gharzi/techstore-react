@@ -24,6 +24,14 @@
   box-shadow: var(--shadow-lg);
 }
 
+/* ---------- کارت‌های پروفایل (اطلاعات، تغییر رمز، تاریخچه سفارش) ---------- */
+.card--profile {
+  background: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  padding: 28px 26px;
+}
+
 /* ---------- کارت خالی (empty state) ---------- */
 .empty-state {
   padding: var(--space-25) var(--space-5);

@@ -1,10 +1,14 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Mail, Lock, LogIn, ArrowLeft } from "lucide-react";
+import { LogIn, Mail, Lock } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { usePageTitle } from "../hooks/usePageTitle";
-import { TIMEOUT_LOGIN } from "../utils/constants";
 import "../styles/auth.css";
+
+// ======================================================
+// Login
+// صفحه ورود
+// ======================================================
 
 export default function Login() {
   usePageTitle("ورود");
@@ -13,35 +17,18 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // اگر کاربر از یک صفحه‌ی محافظت‌شده به اینجا هدایت شده،
+  // بعد از لاگین موفق به همون صفحه برگرده (مثلاً از Checkout)
   const redirectTo = location.state?.from || "/";
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const mountedRef = useRef(true);
-
-  useEffect(() => {
-    return () => {
-      mountedRef.current = false;
-    };
-  }, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    if (error) {
-      setError("");
-    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (error) setError("");
   };
 
   const handleSubmit = (e) => {
@@ -54,62 +41,58 @@ export default function Login() {
 
     setIsSubmitting(true);
 
+    // یک تاخیر کوتاه شبیه درخواست به سرور (چون بک‌اند واقعی نداریم)
     setTimeout(() => {
       const result = login(formData);
 
       if (!result.success) {
-        if (!mountedRef.current) return;
-
         setError(result.message);
         setIsSubmitting(false);
         return;
       }
 
-      if (!mountedRef.current) return;
-
-      navigate(redirectTo, {
-        replace: true,
-      });
-    }, TIMEOUT_LOGIN);
+      navigate(redirectTo, { replace: true });
+    }, 500);
   };
 
   return (
-    <main className="auth-page">
+    <section className="auth-page">
       <div className="auth-container">
         {/* Brand */}
-        <header className="auth-header">
-          <h1 className="auth-header__title">ورود به حساب</h1>
+        <div className="auth-header">
+          <div className="auth-brand">
+            <div className="auth-brand-mark">
+              <LogIn size={17} />
+            </div>
 
-          <p className="auth-header__description">
-            برای ادامه خرید، وارد حساب کاربری خود شوید.
-          </p>
-        </header>
+            <span>TechStore</span>
+          </div>
+
+          <div className="auth-header-icon">
+            <LogIn size={23} />
+          </div>
+
+          <h1 className="auth-header__title">ورود به حساب کاربری</h1>
+
+          <p className="auth-header__subtitle">برای ادامه‌ی خرید وارد حساب خود شوید</p>
+        </div>
 
         {/* Error */}
-        {error && (
-          <div className="auth-general-error" id="login-error" role="alert">
-            {error}
-          </div>
-        )}
+        {error && <div className="auth-general-error" id="login-error">{error}</div>}
 
         {/* Form */}
-        <form className="auth-form" onSubmit={handleSubmit} noValidate>
+        <form className="auth-form" onSubmit={handleSubmit}>
           {/* Email */}
           <div className="auth-field">
-            <label className="auth-label" htmlFor="email">
-              ایمیل
-            </label>
+            <label className="auth-label" htmlFor="email">ایمیل</label>
 
             <div className="auth-input-wrapper">
-              <Mail size={18} className="auth-input-icon" aria-hidden="true" />
+              <Mail size={18} className="auth-input-icon" />
 
               <input
                 type="email"
                 name="email"
                 id="email"
-                autoComplete="email"
-                aria-required="true"
-                aria-invalid={!!error}
                 aria-describedby={error ? "login-error" : undefined}
                 value={formData.email}
                 onChange={handleChange}
@@ -121,51 +104,45 @@ export default function Login() {
 
           {/* Password */}
           <div className="auth-field">
-            <div className="auth-label-row">
-              <label className="auth-label" htmlFor="password">
-                رمز عبور
-              </label>
-            </div>
+            <label className="auth-label" htmlFor="password">رمز عبور</label>
 
             <div className="auth-input-wrapper">
-              <Lock size={18} className="auth-input-icon" aria-hidden="true" />
+              <Lock size={18} className="auth-input-icon" />
 
               <input
                 type="password"
                 name="password"
                 id="password"
-                autoComplete="current-password"
-                aria-required="true"
-                aria-invalid={!!error}
                 aria-describedby={error ? "login-error" : undefined}
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"
                 className="auth-input"
               />
-              <Link to="/forgot-password" className="auth-forgot-link">
-                فراموش کرده‌اید؟
+            </div>
+
+            <div style={{ textAlign: "left", marginTop: "8px" }}>
+              <Link
+                to="/forgot-password"
+                style={{ color: "var(--color-primary)", fontSize: "0.82rem", fontWeight: 700 }}
+              >
+                رمز عبور را فراموش کرده‌اید؟
               </Link>
             </div>
           </div>
 
           {/* Submit */}
           <button type="submit" disabled={isSubmitting} className="auth-submit">
-            <span>{isSubmitting ? "در حال ورود..." : "ورود به حساب"}</span>
-
-            {!isSubmitting && <ArrowLeft size={18} aria-hidden="true" />}
+            {isSubmitting ? "در حال ورود..." : "ورود به حساب"}
           </button>
         </form>
 
-        {/* Register */}
-        <footer className="auth-switch">
-          <span>حساب کاربری ندارید؟</span>
-
-          <Link to="/register" className="auth-switch__link">
-            ثبت‌نام کنید
-          </Link>
-        </footer>
+        {/* Register link */}
+        <p className="auth-switch">
+          حساب کاربری ندارید؟{" "}
+          <Link to="/register" className="auth-switch__link">ثبت‌نام کنید</Link>
+        </p>
       </div>
-    </main>
+    </section>
   );
 }

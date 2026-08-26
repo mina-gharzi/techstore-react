@@ -34,23 +34,31 @@ export function FavoritesProvider({ children }) {
   const userId = user?.id ?? null;
 
   // ---------- state خام (فقط آرایه‌ای از { id }) ----------
-  // initState: merge مهمان ↔ کاربر در همون ابتدا انجام می‌شه، نه در useEffect
-  const [rawFavorites, setRawFavorites] = useState(() => {
-    const currentUserFavs = readRawFavorites(userId);
+  const [rawFavorites, setRawFavorites] = useState(() => readRawFavorites(null));
+
+  // ---------- لود موقع سویچ کاربر ----------
+  useEffect(() => {
+    const userFavs = readRawFavorites(userId);
     const guestFavs = readRawFavorites(null);
+
     if (userId && guestFavs.length > 0) {
-      const merged = [...currentUserFavs];
-      guestFavs.forEach((gf) => {
-        if (!merged.some((m) => m.id === gf.id)) {
-          merged.push(gf);
-        }
+      // Merge: آیتم‌های مهمان رو اضافه کن (بدون تکرار)
+      setRawFavorites((prev) => {
+        const merged = [...userFavs];
+        guestFavs.forEach((gf) => {
+          if (!merged.some((m) => m.id === gf.id)) {
+            merged.push(gf);
+          }
+        });
+        return merged;
       });
       writeRawFavorites(null, []);
       removeItem("techstore-favorites-guest");
-      return merged;
+    } else {
+      setRawFavorites(userFavs);
     }
-    return currentUserFavs;
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
 
   // ---------- ذخیره خودکار ----------
   useEffect(() => {

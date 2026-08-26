@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
 import { products as seedProducts } from "../data/products";
 import { readJSON, writeJSON } from "../utils/storage";
-import { DEFAULT_STOCK } from "../utils/constants";
 
 const ProductsContext = createContext(null);
 const STORAGE_KEY = "techstore-products";
@@ -39,7 +38,7 @@ export function ProductsProvider({ children }) {
           description: p.description ?? "",
           image: p.image ?? "",
           colors: p.colors ?? [],
-          stock: Number.isFinite(p.stock) ? p.stock : DEFAULT_STOCK,
+          stock: Number.isFinite(p.stock) ? p.stock : 10,
         }))
       : seedProducts;
   });
@@ -71,14 +70,9 @@ export function ProductsProvider({ children }) {
   }, []);
 
   // ---------- ویرایش محصول موجود ----------
-  // updates می‌تونه آبجکت یا تابعی باشه که prev رو می‌گیره و آبجکت برمی‌گردونه
   const updateProduct = useCallback((id, updates) => {
     setProducts((prev) =>
-      prev.map((p) => {
-        if (p.id !== id) return p;
-        const patch = typeof updates === "function" ? updates(p) : updates;
-        return { ...p, ...patch };
-      }),
+      prev.map((p) => (p.id === id ? { ...p, ...updates } : p)),
     );
   }, []);
 
@@ -121,5 +115,5 @@ export function useProducts() {
 // اینکه با undefined همه‌جا "ناموجود" یا "بی‌نهایت" نشون بدیم،
 // یک مقدار پیش‌فرض معقول (۱۰) در نظر می‌گیریم.
 export function getStock(product) {
-  return Number.isFinite(product?.stock) ? product.stock : DEFAULT_STOCK;
+  return Number.isFinite(product?.stock) ? product.stock : 10;
 }

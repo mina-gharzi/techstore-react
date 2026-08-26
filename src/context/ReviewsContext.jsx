@@ -42,7 +42,7 @@ export function ReviewsProvider({ children }) {
 
     const sum = productReviews.reduce((acc, r) => acc + r.rating, 0);
     return { average: sum / productReviews.length, count: productReviews.length };
-  }, [getReviewsByProduct]);
+  }, [reviews]);
 
   // ---------- نظر یک کاربر خاص برای یک محصول خاص ----------
   const getUserReview = useCallback((productId, userId) =>

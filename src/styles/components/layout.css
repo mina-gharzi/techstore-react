@@ -89,23 +89,3 @@
   white-space: nowrap;
   border: 0;
 }
-
-/* ---------- Skip link — WCAG 2.4.1 ---------- */
-.skip-link {
-  position: fixed;
-  top: -100%;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 9999;
-  padding: var(--space-3) var(--space-6);
-  background: var(--color-primary);
-  color: var(--color-bg-white);
-  font-weight: var(--font-weight-bold);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  text-decoration: none;
-  transition: top var(--transition-fast);
-}
-
-.skip-link:focus {
-  top: 0;
-}

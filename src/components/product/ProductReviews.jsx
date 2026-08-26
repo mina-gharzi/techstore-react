@@ -8,7 +8,6 @@ export default function ProductReviews({
   hasPurchased,
   reviewRating,
   setReviewRating,
-  setReviewError,
   hoveredStar,
   setHoveredStar,
   reviewComment,

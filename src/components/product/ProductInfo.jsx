@@ -9,12 +9,12 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { formatPrice } from "../../utils/formatPrice";
-import { LOW_STOCK_THRESHOLD } from "../../utils/constants";
 
 export default function ProductInfo({
   product,
   categoryName,
   ratingInfo,
+  discountPercent,
   selectedColor,
   setSelectedColor,
   quantity,
@@ -284,7 +284,7 @@ export default function ProductInfo({
             <Plus size={14} />
           </button>
         </div>
-        {!isOutOfStock && stock <= LOW_STOCK_THRESHOLD && (
+        {!isOutOfStock && stock <= 5 && (
           <span
             style={{
               color: "var(--color-warning)",

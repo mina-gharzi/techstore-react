@@ -5,21 +5,6 @@
 
 export const APP_NAME = "TechStore";
 
-// ---------- Timeouts ----------
-export const TIMEOUT_LOGIN = 500;
-export const TIMEOUT_REGISTER = 500;
-export const TIMEOUT_PASSWORD_RESET = 600;
-export const TIMEOUT_CHECKOUT = 900;
-export const TIMEOUT_REVIEW_SAVED = 2000;
-export const TIMEOUT_PROFILE_SAVED = 2500;
-export const TIMEOUT_PASSWORD_SAVED = 3000;
-export const TIMEOUT_CONTACT_SUBMIT = 3500;
-export const TIMEOUT_ADDED_TO_CART = 1500;
-
-// ---------- Stock ----------
-export const DEFAULT_STOCK = 10;
-export const LOW_STOCK_THRESHOLD = 5;
-
 // نکته: ROUTES.PRODUCT_DETAILS قبلاً یک رشته‌ی ثابت "/products/:id" بود.
 // این فرمت برای تعریف <Route path="..."> توی routes.jsx درسته، ولی وقتی
 // بخوای واقعاً به یک محصول خاص لینک بدی (مثلاً <Link to={...}>) به‌کارت

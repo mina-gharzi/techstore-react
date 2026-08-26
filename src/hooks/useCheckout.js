@@ -1,12 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useOrders } from "../context/OrdersContext";
 import { useAuth } from "../context/AuthContext";
-import { DEFAULT_STOCK } from "../utils/constants";
 import { useProducts } from "../context/ProductsContext";
 import { applyCoupon, calculateDiscount } from "../services/couponService";
-import { TIMEOUT_CHECKOUT } from "../utils/constants";
 
 // ======================================================
 // useCheckout
@@ -37,11 +35,6 @@ export function useCheckout() {
   // ---------- Submission State ----------
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [stockError, setStockError] = useState("");
-  const mountedRef = useRef(true);
-
-  useEffect(() => {
-    return () => { mountedRef.current = false; };
-  }, []);
 
   // ---------- Coupon State ----------
   const [couponInput, setCouponInput] = useState("");
@@ -147,22 +140,12 @@ export function useCheckout() {
         },
       });
 
-      // کاهش موجودی: اگه چند آیتم سبد مربوط به یک محصول باشن (رنگ‌های مختلف)
-      // باید مقدارشون جمع بشه تا موجودی فقط یک‌بار کم بشه (نه overwrite).
-      const stockDeductions = {};
       cart.forEach((item) => {
-        stockDeductions[item.id] = (stockDeductions[item.id] || 0) + item.quantity;
-      });
-      Object.entries(stockDeductions).forEach(([productId, totalQty]) => {
-        updateProduct(Number(productId), (prev) => ({
-          ...prev,
-          stock: Math.max(0, (prev.stock ?? DEFAULT_STOCK) - totalQty),
-        }));
+        updateProduct(item.id, { stock: Math.max(0, item.stock - item.quantity) });
       });
 
       clearCart();
 
-      if (!mountedRef.current) return;
       navigate("/order-success", {
         state: {
           orderNumber,
@@ -173,7 +156,7 @@ export function useCheckout() {
           customerName: formData.fullName,
         },
       });
-    }, TIMEOUT_CHECKOUT);
+    }, 900);
   };
 
   return {

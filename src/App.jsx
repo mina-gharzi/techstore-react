@@ -43,16 +43,11 @@ function App() {
                 <FavoritesProvider>
                   <ReviewsProvider>
                     <div className="app">
-                      {/* لینک رد شدن از ناوبری — WCAG 2.4.1 */}
-                      <a href="#main-content" className="skip-link">
-                        رد شدن از ناوبری
-                      </a>
-
                       {/* هدر ثابت در همه صفحات */}
                       <Navbar />
 
                       {/* محتوای اصلی هر صفحه */}
-                      <main className="main-content" id="main-content">
+                      <main className="main-content">
                         <ErrorBoundary>
                           <AppRoutes />
                         </ErrorBoundary>

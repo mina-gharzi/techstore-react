@@ -122,9 +122,9 @@ export default function AdminAnalyticsTab({ analytics }) {
                 gap: "12px",
               }}
             >
-              {analytics.revenueByDay.map((day, i) => (
+              {analytics.revenueByDay.map((day) => (
                 <div
-                  key={i}
+                  key={day.label}
                   style={{
                     display: "flex",
                     alignItems: "center",

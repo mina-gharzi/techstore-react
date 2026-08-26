@@ -1,12 +1,5 @@
 import { User, Phone, Mail, Check } from "lucide-react";
 
-const cardStyle = {
-  background: "var(--color-bg-white)",
-  border: "1px solid var(--color-border)",
-  borderRadius: "18px",
-  padding: "28px 26px",
-};
-
 const iconStyle = {
   position: "absolute",
   right: "14px",
@@ -23,7 +16,7 @@ export default function ProfileInfoForm({
   handleInfoSubmit,
 }) {
   return (
-    <div style={cardStyle}>
+    <div className="card--profile">
       <h2 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--color-text)", marginBottom: "20px" }}>
         اطلاعات شخصی
       </h2>
@@ -41,7 +34,7 @@ export default function ProfileInfoForm({
               aria-invalid={!!infoErrors.fullName}
               value={infoData.fullName}
               onChange={handleInfoChange}
-              className={infoErrors.fullName ? "form-input form-input--error" : "form-input"}
+              className={!!infoErrors.fullName ? "form-input form-input--error" : "form-input"}
             />
           </div>
           {infoErrors.fullName && <span className="form-error" id="profile-fullName-error">{infoErrors.fullName}</span>}
@@ -59,7 +52,7 @@ export default function ProfileInfoForm({
               aria-invalid={!!infoErrors.phone}
               value={infoData.phone}
               onChange={handleInfoChange}
-              className={infoErrors.phone ? "form-input form-input--error" : "form-input"}
+              className={!!infoErrors.phone ? "form-input form-input--error" : "form-input"}
             />
           </div>
           {infoErrors.phone && <span className="form-error" id="profile-phone-error">{infoErrors.phone}</span>}

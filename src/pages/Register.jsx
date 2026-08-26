@@ -1,8 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserPlus, User, Mail, Phone, Lock } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { TIMEOUT_REGISTER } from "../utils/constants";
 import "../styles/auth.css";
 
 // ======================================================
@@ -24,13 +23,6 @@ export default function Register() {
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const mountedRef = useRef(true);
-
-  useEffect(() => {
-    return () => {
-      mountedRef.current = false;
-    };
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -84,16 +76,21 @@ export default function Register() {
       const result = register(formData);
 
       if (!result.success) {
-        if (!mountedRef.current) return;
         setErrors({ email: result.message });
         setIsSubmitting(false);
         return;
       }
 
       // register() در AuthContext بعد از ثبت‌نام موفق خودکار لاگین هم می‌کند
-      if (!mountedRef.current) return;
       navigate("/", { replace: true });
-    }, TIMEOUT_REGISTER);
+    }, 500);
+  };
+
+  const iconStyle = {
+    position: "absolute",
+    right: "14px",
+    top: "50%",
+    transform: "translateY(-50%)",
   };
 
   return (
@@ -101,24 +98,28 @@ export default function Register() {
       <div className="auth-container auth-register-container">
         {/* Header */}
         <div className="auth-header">
+          <div className="auth-brand">
+            <div className="auth-brand-mark">
+              <UserPlus size={17} />
+            </div>
+
+            <span>TechStore</span>
+          </div>
+
           <div className="auth-header-icon">
             <UserPlus size={23} />
           </div>
 
           <h1 className="auth-header__title">ساخت حساب کاربری</h1>
 
-          <p className="auth-header__subtitle">
-            حساب خود را بسازید و خریدتان را شروع کنید
-          </p>
+          <p className="auth-header__subtitle">حساب خود را بسازید و خریدتان را شروع کنید</p>
         </div>
 
         {/* Form */}
         <form className="auth-form" onSubmit={handleSubmit}>
           {/* Full Name */}
           <div className="auth-field">
-            <label className="form-label" htmlFor="fullName">
-              نام و نام خانوادگی
-            </label>
+            <label className="form-label" htmlFor="fullName">نام و نام خانوادگی</label>
 
             <div className="auth-input-wrapper">
               <User size={18} className="auth-input-icon" />
@@ -127,33 +128,25 @@ export default function Register() {
                 type="text"
                 name="fullName"
                 id="fullName"
-                aria-describedby={
-                  errors.fullName ? "reg-fullName-error" : undefined
-                }
+                aria-describedby={errors.fullName ? "reg-fullName-error" : undefined}
                 aria-invalid={!!errors.fullName}
                 value={formData.fullName}
                 onChange={handleChange}
-                placeholder="مثلاً:    مینا قارزی  "
+                placeholder="مثلاً: مینا قارزی "
                 className={
-                  errors.fullName
-                    ? "form-input form-input--error"
-                    : "form-input"
+                  errors.fullName ? "form-input form-input--error" : "form-input"
                 }
               />
             </div>
 
             {errors.fullName && (
-              <span className="form-error" id="reg-fullName-error">
-                {errors.fullName}
-              </span>
+              <span className="form-error" id="reg-fullName-error">{errors.fullName}</span>
             )}
           </div>
 
           {/* Email */}
           <div className="auth-field">
-            <label className="form-label" htmlFor="email">
-              ایمیل
-            </label>
+            <label className="form-label" htmlFor="email">ایمیل</label>
 
             <div className="auth-input-wrapper">
               <Mail size={18} className="auth-input-icon" />
@@ -173,18 +166,12 @@ export default function Register() {
               />
             </div>
 
-            {errors.email && (
-              <span className="form-error" id="reg-email-error">
-                {errors.email}
-              </span>
-            )}
+            {errors.email && <span className="form-error" id="reg-email-error">{errors.email}</span>}
           </div>
 
           {/* Phone */}
           <div className="auth-field">
-            <label className="form-label" htmlFor="phone">
-              شماره موبایل
-            </label>
+            <label className="form-label" htmlFor="phone">شماره موبایل</label>
 
             <div className="auth-input-wrapper">
               <Phone size={18} className="auth-input-icon" />
@@ -204,18 +191,12 @@ export default function Register() {
               />
             </div>
 
-            {errors.phone && (
-              <span className="form-error" id="reg-phone-error">
-                {errors.phone}
-              </span>
-            )}
+            {errors.phone && <span className="form-error" id="reg-phone-error">{errors.phone}</span>}
           </div>
 
           {/* Password */}
           <div className="auth-field">
-            <label className="form-label" htmlFor="password">
-              رمز عبور
-            </label>
+            <label className="form-label" htmlFor="password">رمز عبور</label>
 
             <div className="auth-input-wrapper">
               <Lock size={18} className="auth-input-icon" />
@@ -224,33 +205,25 @@ export default function Register() {
                 type="password"
                 name="password"
                 id="password"
-                aria-describedby={
-                  errors.password ? "reg-password-error" : undefined
-                }
+                aria-describedby={errors.password ? "reg-password-error" : undefined}
                 aria-invalid={!!errors.password}
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="حداقل ۶ کاراکتر"
                 className={
-                  errors.password
-                    ? "form-input form-input--error"
-                    : "form-input"
+                  errors.password ? "form-input form-input--error" : "form-input"
                 }
               />
             </div>
 
             {errors.password && (
-              <span className="form-error" id="reg-password-error">
-                {errors.password}
-              </span>
+              <span className="form-error" id="reg-password-error">{errors.password}</span>
             )}
           </div>
 
           {/* Confirm Password */}
           <div className="auth-field">
-            <label className="form-label" htmlFor="confirmPassword">
-              تکرار رمز عبور
-            </label>
+            <label className="form-label" htmlFor="confirmPassword">تکرار رمز عبور</label>
 
             <div className="auth-input-wrapper">
               <Lock size={18} className="auth-input-icon" />
@@ -259,46 +232,31 @@ export default function Register() {
                 type="password"
                 name="confirmPassword"
                 id="confirmPassword"
-                aria-describedby={
-                  errors.confirmPassword
-                    ? "reg-confirmPassword-error"
-                    : undefined
-                }
+                aria-describedby={errors.confirmPassword ? "reg-confirmPassword-error" : undefined}
                 aria-invalid={!!errors.confirmPassword}
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="••••••••"
                 className={
-                  errors.confirmPassword
-                    ? "form-input form-input--error"
-                    : "form-input"
+                  errors.confirmPassword ? "form-input form-input--error" : "form-input"
                 }
               />
             </div>
 
             {errors.confirmPassword && (
-              <span className="form-error" id="reg-confirmPassword-error">
-                {errors.confirmPassword}
-              </span>
+              <span className="form-error" id="reg-confirmPassword-error">{errors.confirmPassword}</span>
             )}
           </div>
 
           {/* Submit */}
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="btn btn--primary"
-          >
+          <button type="submit" disabled={isSubmitting} className="btn btn--primary">
             {isSubmitting ? "در حال ساخت حساب..." : "ساخت حساب کاربری"}
           </button>
         </form>
 
         {/* Login link */}
         <p className="auth-switch">
-          قبلاً ثبت‌نام کرده‌اید؟{" "}
-          <Link to="/login" className="auth-switch__link">
-            وارد شوید
-          </Link>
+          قبلاً ثبت‌نام کرده‌اید؟ <Link to="/login" className="auth-switch__link">وارد شوید</Link>
         </p>
       </div>
     </section>

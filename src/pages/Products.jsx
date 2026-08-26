@@ -157,7 +157,6 @@ export default function Products() {
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                aria-label="جستجوی محصولات"
                 placeholder="جستجوی محصول، برند..."
                 style={{
                   width: "100%",

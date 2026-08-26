@@ -1,12 +1,5 @@
 import { Lock, ChevronDown, ChevronUp, Check } from "lucide-react";
 
-const cardStyle = {
-  background: "var(--color-bg-white)",
-  border: "1px solid var(--color-border)",
-  borderRadius: "18px",
-  padding: "28px 26px",
-};
-
 const iconStyle = {
   position: "absolute",
   right: "14px",
@@ -24,11 +17,10 @@ export default function ProfilePasswordForm({
   handlePasswordSubmit,
 }) {
   return (
-    <div style={cardStyle}>
+    <div className="card--profile">
       <button
         type="button"
         onClick={togglePasswordForm}
-        aria-expanded={isPasswordFormOpen}
         style={{
           width: "100%",
           display: "flex",

@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { useFavorites } from "../context/FavoritesContext";
-import { usePageTitle } from "../hooks/usePageTitle";
 import ProductCard from "../components/product/ProductCard";
 
 // ======================================================
@@ -10,7 +9,6 @@ import ProductCard from "../components/product/ProductCard";
 // ======================================================
 
 export default function Favorites() {
-  usePageTitle("علاقه‌مندی‌ها");
   // ---------- Context ----------
   const { favorites } = useFavorites();
 

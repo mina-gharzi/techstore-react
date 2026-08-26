@@ -5,6 +5,7 @@ import {
   Trash2,
   PackageSearch,
   X,
+  Check,
   AlertTriangle,
   Image as ImageIcon,
   ImageOff,
@@ -237,7 +238,7 @@ export default function AdminProductsTab({
                   id="productName"
                   value={formData.name}
                   onChange={handleChange}
-                  className={errors.name ? "form-input form-input--error" : "form-input"}
+                  className={!!errors.name ? "form-input form-input--error" : "form-input"}
                   aria-invalid={!!errors.name}
                   aria-describedby={errors.name ? "productName-error" : undefined}
                 />
@@ -254,7 +255,7 @@ export default function AdminProductsTab({
                   id="brand"
                   value={formData.brand}
                   onChange={handleChange}
-                  className={errors.brand ? "form-input form-input--error" : "form-input"}
+                  className={!!errors.brand ? "form-input form-input--error" : "form-input"}
                   aria-invalid={!!errors.brand}
                   aria-describedby={errors.brand ? "brand-error" : undefined}
                 />
@@ -315,7 +316,7 @@ export default function AdminProductsTab({
                   step="1"
                   value={formData.stock}
                   onChange={handleChange}
-                  className={errors.stock ? "form-input form-input--error" : "form-input"}
+                  className={!!errors.stock ? "form-input form-input--error" : "form-input"}
                   aria-invalid={!!errors.stock}
                   aria-describedby={errors.stock ? "stock-error" : undefined}
                 />
@@ -342,7 +343,7 @@ export default function AdminProductsTab({
                   id="price"
                   value={formData.price}
                   onChange={handleChange}
-                  className={errors.price ? "form-input form-input--error" : "form-input"}
+                  className={!!errors.price ? "form-input form-input--error" : "form-input"}
                   aria-invalid={!!errors.price}
                   aria-describedby={errors.price ? "price-error" : undefined}
                 />
@@ -361,7 +362,7 @@ export default function AdminProductsTab({
                   id="oldPrice"
                   value={formData.oldPrice}
                   onChange={handleChange}
-                  className={errors.oldPrice ? "form-input form-input--error" : "form-input"}
+                  className={!!errors.oldPrice ? "form-input form-input--error" : "form-input"}
                   aria-invalid={!!errors.oldPrice}
                   aria-describedby={errors.oldPrice ? "oldPrice-error" : undefined}
                 />
