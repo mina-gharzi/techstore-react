@@ -1,10 +1,22 @@
 # TechStore 🛒
 
-A modern, responsive e-commerce web application built with **React** and **JavaScript**.
+### Modern E-commerce Web Application
 
-TechStore is a portfolio-focused online store that simulates a complete shopping experience, including product discovery, filtering, cart management, checkout, authentication, favorites, reviews, order management, and an admin dashboard.
+TechStore is a modern, responsive e-commerce web application built with **React and JavaScript**, designed to simulate a realistic online shopping experience.
 
-The project focuses not only on UI implementation, but also on **component architecture, state management, business logic separation, responsive design, accessibility, and reusable design patterns**.
+The project goes beyond a static UI and focuses on **component architecture, global state management, business logic separation, persistent client-side data, responsive design, accessibility, and reusable design patterns**.
+
+---
+
+## 🔗 Live Demo
+
+**[View Live Demo](https://techstorereactshop.netlify.app/)**
+
+---
+
+## 📸 Preview
+
+![TechStore Preview](./public/preview.png)
 
 ---
 
@@ -12,91 +24,55 @@ The project focuses not only on UI implementation, but also on **component archi
 
 ### 🛍️ Shopping Experience
 
-* Browse products by category
-* Search products by name, brand, and description
-* Filter products by:
-
-  * Category
-  * New products
-  * Discounted products
-* Sort products by:
-
-  * Price: low to high
-  * Price: high to low
-  * Rating
-  * Newest
-* Product detail pages
-* Related products
-* Product reviews and ratings
-* Product color selection
-* Favorites / wishlist
-* Persistent shopping cart
-* Guest cart support
-* Automatic guest-cart merge after login
-
----
+- Browse products by category
+- Search products by name, brand, and description
+- Filter by category, new products, and discounted products
+- Sort by price, rating, and newest
+- Product detail pages
+- Related products
+- Product color selection
+- Product reviews and ratings
+- Favorites / wishlist
 
 ### 🛒 Cart & Checkout
 
-* Add products to cart
-* Update product quantities
-* Remove products
-* Clear cart
-* Live product information from the Products state
-* Stock validation
-* Discount / coupon support
-* Checkout form validation
-* Address information
-* Payment method selection
-* Order summary
-* Order creation
-* Order success page
+- Add, remove, and update cart items
+- Persistent shopping cart
+- Guest cart support
+- Automatic guest-cart merge after login
+- Stock validation
+- Coupon / discount support
+- Checkout form validation
+- Address information
+- Payment method selection
+- Order summary
+- Order creation
+- Order success flow
 
-The cart intentionally stores only the minimum required data:
+### 👤 Authentication & Account
 
-```js
-{
-  productId,
-  selectedColor,
-  quantity
-}
-```
-
-Product information such as price, name, image, and stock is resolved from the current product state instead of storing a full product snapshot.
-
----
-
-### 👤 Authentication & User Account
-
-* User registration
-* Login / logout
-* Forgot-password flow
-* Protected routes
-* User profile
-* Profile information management
-* Password management
-* Order history
-* Order cancellation
-* User-specific cart persistence
-
-> **Note:** Authentication is intentionally implemented as a frontend-only demo using `localStorage`. It is not intended for production use. Passwords are stored as plain text only because this is a portfolio/demo project.
-
----
+- User registration
+- Login / logout
+- Forgot-password flow
+- Protected routes
+- User profile
+- Profile information management
+- Password management
+- Order history
+- Order cancellation
+- User-specific cart persistence
 
 ### ⭐ Favorites & Reviews
 
-* Add/remove products from favorites
-* Persistent favorites
-* User-specific favorite lists
-* Product reviews
-* Rating system
-* Review management
-
----
+- User-specific favorites
+- Persistent favorites
+- Product reviews
+- Rating system
+- Review management
 
 ### 📦 Order Management
 
-Orders support controlled status transitions:
+Orders follow controlled status transitions:
 
 ```text
 Processing
@@ -114,54 +90,153 @@ Processing
 Cancelled
 ```
 
-Completed or cancelled orders cannot be moved to another status.
+Completed and cancelled orders cannot be moved to another status.
 
-Order cancellation also handles inventory restoration.
-
----
+Order cancellation also restores the affected inventory.
 
 ### 🧑‍💼 Admin Dashboard
 
-The project includes a dedicated admin area with protected access.
+The project includes a protected admin area with:
 
-Admin functionality includes:
+- Dashboard overview
+- Product management
+- Add / edit / delete products
+- Category management
+- User management
+- Order management
+- Order status management
+- Product stock management
+- Analytics
 
-* Dashboard overview
-* Product management
-* Add products
-* Edit products
-* Delete products
-* Category management
-* User management
-* Order management
-* Order status management
-* Analytics
-* Product stock management
+Admin access is protected through a dedicated route guard.
 
-The admin area is protected using a dedicated `RequireAdmin` route guard.
+---
+
+## 🧠 Technical Highlights
+
+This project was built to demonstrate practical frontend engineering rather than only visual implementation.
+
+### Component Architecture
+
+The application follows a modular React architecture with reusable components organized by responsibility and domain.
+
+### Global State Management
+
+The **React Context API** is used to separate global application state into focused domains:
+
+- Authentication
+- Products
+- Categories
+- Cart
+- Orders
+- Favorites
+- Reviews
+
+This keeps domain-specific state and logic isolated and easier to maintain.
+
+### Business Logic Separation
+
+Business logic is extracted from UI components whenever possible.
+
+For example, the `useCheckout` custom hook handles:
+
+- Checkout validation
+- Coupon handling
+- Stock validation
+- Order creation
+- Checkout submission
+
+This keeps pages focused on rendering and user interaction.
+
+### Persistent Client-side Data
+
+Because this is a frontend-only portfolio project, application data is persisted through `localStorage`.
+
+Persisted data includes:
+
+- Users
+- Current user
+- Products
+- Cart
+- Favorites
+- Orders
+- Reviews
+- Categories
+
+A reusable storage utility is used instead of accessing `localStorage` directly throughout the application.
+
+### Efficient Cart Data Model
+
+Cart items intentionally store only the minimum required information:
+
+```js
+{
+  productId,
+  selectedColor,
+  quantity
+}
+```
+
+Product details such as price, name, image, and stock are resolved from the current product state instead of storing a complete product snapshot.
+
+This keeps cart state smaller and avoids unnecessary duplication.
+
+### Protected Navigation
+
+The application separates:
+
+- Public routes
+- Authenticated user routes
+- Admin-only routes
+
+The admin area is protected through a dedicated `RequireAdmin` route guard.
+
+### Lazy Loading
+
+Heavier sections such as:
+
+- Admin Dashboard
+- Product Details
+- Checkout
+- Profile
+
+use lazy loading to reduce the initial loading cost.
+
+### Error Handling
+
+The application includes:
+
+- Global Error Boundary
+- Loading states
+- Empty states
+- Not Found page
+- Form validation
+- Stock validation
+- Protected routes
+- Error states
 
 ---
 
 ## 🎨 Design System
 
-The project uses a centralized design system instead of relying entirely on component-level styling.
+TechStore uses a centralized design system instead of relying entirely on component-level styling.
 
 ### Design Tokens
 
-The styling system includes reusable tokens for:
+Reusable tokens cover:
 
-* Colors
-* Semantic colors
-* Typography
-* Font weights
-* Spacing
-* Border radius
-* Shadows
-* Transitions
+- Colors
+- Semantic colors
+- Typography
+- Font weights
+- Spacing
+- Border radius
+- Shadows
+- Transitions
 
-Examples:
+Example token categories:
 
-```css
+```text
 --color-primary
 --color-success
 --color-error
@@ -178,20 +253,15 @@ Examples:
 --radius-lg
 ```
 
-Reusable component styles are organized into dedicated style modules:
+Reusable component styles are organized into dedicated style modules for elements such as:
 
-```text
-styles/
-├── variables.css
-└── components/
-    ├── buttons.css
-    ├── forms.css
-    ├── cards.css
-    ├── alerts.css
-    ├── badges.css
-    ├── layout.css
-    └── quantity.css
-```
+- Buttons
+- Forms
+- Cards
+- Alerts
+- Badges
+- Layout
+- Quantity controls
 
 ---
 
@@ -201,25 +271,16 @@ Accessibility was considered throughout the interface.
 
 Implemented improvements include:
 
-* Skip-to-content link
-* Semantic HTML
-* Accessible form labels
-* `aria-label` for icon-only controls
-* Keyboard-friendly interactive elements
-* Proper button types
-* Focus states
-* Protected navigation
-* Responsive layouts
-* Error states for forms
-* Meaningful image `alt` attributes
-
-The application includes a global skip link:
-
-```text
-Skip navigation → Main content
-```
-
-to improve keyboard navigation.
+- Semantic HTML
+- Skip-to-content navigation
+- Accessible form labels
+- `aria-label` for icon-only controls
+- Keyboard-friendly interactions
+- Proper button types
+- Visible focus states
+- Meaningful image `alt` attributes
+- Form error states
+- Responsive navigation
 
 ---
 
@@ -227,30 +288,27 @@ to improve keyboard navigation.
 
 TechStore is designed to work across:
 
-* Desktop
-* Laptop
-* Tablet
-* Mobile
+- Desktop
+- Laptop
+- Tablet
+- Mobile
 
 Responsive behavior includes:
 
-* Mobile navigation
-* Responsive product grids
-* Collapsible product filters
-* Mobile-friendly checkout
-* Responsive admin dashboard
-* Flexible cards and forms
-* Adaptive typography and spacing
+- Mobile navigation
+- Responsive product grids
+- Collapsible product filters
+- Mobile-friendly checkout
+- Responsive admin dashboard
+- Flexible cards and forms
+- Adaptive typography and spacing
 
 ---
 
-## 🧠 Architecture
-
-The application follows a modular React architecture.
+## 🏗️ Architecture
 
 ```text
 src/
-│
 ├── assets/
 │
 ├── components/
@@ -261,263 +319,45 @@ src/
 │   └── profile/
 │
 ├── context/
-│   ├── AuthContext.jsx
-│   ├── ProductsContext.jsx
-│   ├── CategoriesContext.jsx
-│   ├── CartContext.jsx
-│   ├── OrdersContext.jsx
-│   ├── FavoritesContext.jsx
-│   └── ReviewsContext.jsx
+│   ├── AuthContext
+│   ├── ProductsContext
+│   ├── CategoriesContext
+│   ├── CartContext
+│   ├── OrdersContext
+│   ├── FavoritesContext
+│   └── ReviewsContext
 │
 ├── data/
-│   └── products.js
+│   └── products
 │
 ├── hooks/
-│   ├── useCheckout.js
-│   └── usePageTitle.js
+│   ├── useCheckout
+│   └── usePageTitle
 │
 ├── models/
-│   └── types.js
+│   └── types
 │
 ├── pages/
 │
 ├── services/
-│   └── couponService.js
+│   └── couponService
 │
 ├── styles/
 │
 ├── utils/
-│   ├── constants.js
-│   ├── formatPrice.js
-│   ├── orderStatus.js
-│   └── storage.js
+│   ├── constants
+│   ├── formatPrice
+│   ├── orderStatus
+│   └── storage
 │
-├── App.jsx
-├── main.jsx
-└── routes.jsx
+├── App
+├── main
+└── routes
 ```
 
 ---
 
-## 🔄 State Management
-
-The application uses React Context API for global state.
-
-### Authentication
-
-```text
-AuthContext
-    ↓
-User / Users / Roles
-```
-
-### Products
-
-```text
-ProductsContext
-    ↓
-Products / Stock / CRUD
-```
-
-### Cart
-
-```text
-CartContext
-    ↓
-Cart items / Quantity / Totals
-```
-
-### Orders
-
-```text
-OrdersContext
-    ↓
-Create / Update / Cancel orders
-```
-
-### Favorites
-
-```text
-FavoritesContext
-    ↓
-User-specific favorites
-```
-
-### Reviews
-
-```text
-ReviewsContext
-    ↓
-Product reviews and ratings
-```
-
-This separation keeps each domain's state and logic easier to maintain.
-
----
-
-## 🧩 Custom Hooks
-
-Business logic that doesn't belong directly inside UI components is extracted into custom hooks.
-
-For example:
-
-```text
-useCheckout
-```
-
-handles checkout-related logic such as:
-
-* Validation
-* Coupon handling
-* Stock validation
-* Order creation
-* Checkout submission
-
-This keeps the `Checkout` page focused mainly on rendering and user interaction.
-
----
-
-## ⚙️ Data Persistence
-
-Because this is a frontend-only portfolio project, application data is persisted using browser `localStorage`.
-
-Persisted data includes:
-
-* Users
-* Current user
-* Products
-* Cart
-* Favorites
-* Orders
-* Reviews
-* Categories
-
-A reusable storage utility is used instead of accessing `localStorage` directly throughout the application.
-
----
-
-## 🗂️ Routing
-
-The application uses React Router.
-
-Main routes include:
-
-```text
-/
-├── /products
-├── /products/:id
-├── /cart
-├── /checkout
-├── /order-success
-├── /favorites
-├── /about
-├── /contact
-├── /login
-├── /register
-├── /forgot-password
-├── /profile
-└── /admin
-```
-
-Protected routes:
-
-```text
-/checkout
-/order-success
-/profile
-```
-
-Admin-only route:
-
-```text
-/admin
-```
-
-The project also uses lazy loading for heavier pages such as:
-
-* Admin Dashboard
-* Product Details
-* Checkout
-* Profile
-
-to reduce the initial loading cost.
-
----
-
-## 🛡️ Error Handling
-
-A global `ErrorBoundary` is used around the application's route content to prevent a single rendering error from breaking the entire application.
-
-The project also includes:
-
-* Form validation
-* Empty states
-* Not Found page
-* Loading states
-* Stock validation
-* Protected routes
-
----
-
-## 🛠️ Tech Stack
-
-* **React**
-* **JavaScript (ES6+)**
-* **React Router**
-* **Context API**
-* **React Hooks**
-* **CSS**
-* **Lucide Icons**
-* **LocalStorage**
-* **JSDoc**
-* **Vite**
-
----
-
-## 🚀 Getting Started
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-```
-
-### 2. Navigate into the project
-
-```bash
-cd techstore
-```
-
-### 3. Install dependencies
-
-```bash
-npm install
-```
-
-### 4. Start the development server
-
-```bash
-npm run dev
-```
-
-Then open the local development URL provided by Vite.
-
----
-
-## 👨‍💼 Demo Admin Account
-
-The project includes a default admin account for demonstration purposes:
-
-```text
-Email: admin@techstore.com
-Password: admin123
-```
-
-> This account exists only for the frontend demo. A real production application should never hard-code admin credentials or store passwords in `localStorage`.
-
----
-
-## 📸 Project Highlights
+## 🗺️ Application Flow
 
 ### Customer Experience
 
@@ -541,62 +381,167 @@ Profile / Order History
 
 ```text
 Admin Dashboard
-      ↓
- ┌────┼─────┬──────────┐
- ↓    ↓     ↓          ↓
-Users Products Orders Analytics
-             ↓
-       Status Management
+       ↓
+ ┌─────┼────────┬───────────┐
+ ↓     ↓        ↓           ↓
+Users Products Orders    Analytics
+               ↓
+        Status Management
 ```
+
+---
+
+## 🧭 Routing
+
+Main routes include:
+
+```text
+/
+├── /products
+├── /products/:id
+├── /cart
+├── /checkout
+├── /order-success
+├── /favorites
+├── /about
+├── /contact
+├── /login
+├── /register
+├── /forgot-password
+├── /profile
+└── /admin
+```
+
+Protected routes include:
+
+```text
+/checkout
+/order-success
+/profile
+```
+
+Admin-only route:
+
+```text
+/admin
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| React | UI development |
+| JavaScript (ES6+) | Application logic |
+| Vite | Development & build tooling |
+| React Router | Client-side routing |
+| Context API | Global state management |
+| React Hooks | Reusable state & logic |
+| CSS | Styling & design system |
+| Lucide React | Icons |
+| LocalStorage | Client-side persistence |
+| JSDoc | Code documentation |
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/mina-gharzi/techstore-react.git
+```
+
+### 2. Navigate into the project
+
+```bash
+cd techstore-react
+```
+
+### 3. Install dependencies
+
+```bash
+npm install
+```
+
+### 4. Start the development server
+
+```bash
+npm run dev
+```
+
+Then open the local development URL provided by Vite.
+
+---
+
+## 👨‍💼 Demo Admin Account
+
+For exploring the admin dashboard locally:
+
+```text
+Email: admin@techstore.com
+Password: admin123
+```
+
+> This is a frontend-only demo account. Production applications should use secure server-side authentication and never store passwords in `localStorage`.
+
+---
+
+## ⚠️ Demo Architecture & Limitations
+
+TechStore is intentionally implemented as a **frontend-only portfolio project**.
+
+The application uses:
+
+- Mock data
+- Browser `localStorage`
+- Simulated authentication
+- Simulated checkout/payment flow
+- Client-side inventory management
+
+It is **not intended to represent a production authentication or payment architecture**.
+
+A production version could replace these client-side implementations with a real backend, database, secure authentication system, payment provider, and server-side business logic.
 
 ---
 
 ## 🎯 Project Goals
 
-This project was built to demonstrate practical frontend development skills rather than only creating a static UI.
+The main goals of TechStore were to:
 
-Key goals were:
-
-* Build a realistic e-commerce workflow
-* Practice React component architecture
-* Manage complex global state with Context API
-* Separate UI from business logic
-* Create reusable components and design tokens
-* Handle authentication and protected routes
-* Implement persistent client-side data
-* Build responsive and accessible interfaces
-* Practice admin dashboard architecture
-* Create maintainable and scalable frontend code
-
----
-
-## 🔮 Future Improvements
-
-For a production-ready version, the following could be added:
-
-* Real backend API
-* Database integration
-* Secure authentication
-* JWT / session-based authentication
-* Password hashing
-* Real payment gateway
-* Server-side inventory management
-* Server-side order processing
-* Image upload
-* Product pagination
-* Advanced analytics
-* Automated tests
-* Deployment and CI/CD
+- Build a realistic e-commerce workflow
+- Practice React component architecture
+- Manage complex global state with Context API
+- Separate UI from business logic
+- Build reusable components
+- Create a centralized design system
+- Implement protected routes
+- Handle persistent client-side data
+- Build responsive interfaces
+- Apply accessibility principles
+- Practice admin dashboard architecture
+- Write maintainable and scalable frontend code
 
 ---
 
-## 📌 Disclaimer
+## 🔮 Potential Production Improvements
 
-TechStore is a **frontend portfolio project**.
+If extended into a production application, the architecture could evolve to include:
 
-It intentionally uses mock data and browser storage instead of a real backend. Authentication, payments, inventory, and order processing are simulated for demonstration purposes.
-
-The architecture is designed so these client-side implementations can later be replaced with real APIs and backend services.
+- Real backend API
+- Database integration
+- Secure authentication
+- Session / token-based authentication
+- Password hashing
+- Real payment gateway
+- Server-side inventory management
+- Server-side order processing
+- Image upload and storage
+- Product pagination
+- Advanced analytics
+- Automated testing
+- CI/CD pipeline
 
 ---
 
@@ -606,4 +551,11 @@ The architecture is designed so these client-side implementations can later be r
 
 Frontend Developer — React / JavaScript
 
-This project was created as part of my frontend development portfolio, with a focus on building realistic, maintainable, and user-friendly web applications.
+TechStore was created as part of my frontend development portfolio, with a focus on building realistic, maintainable, accessible, and user-friendly web applications.
+
+---
+
+### 🔗 Links
+
+- **Live Demo:** https://techstorereactshop.netlify.app/
+- **GitHub:** https://github.com/mina-gharzi/techstore-react
