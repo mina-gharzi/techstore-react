@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useOrders } from "../context/OrdersContext";
@@ -34,6 +34,9 @@ export function useCheckout() {
 
   // ---------- Submission State ----------
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // state با تأخیر آپدیت می‌شه؛ ref همون لحظه قفل می‌کنه تا دو submit پشت‌سرهم
+  // دو سفارش (و دو بار کم‌شدن موجودی) نسازن.
+  const submitLockRef = useRef(false);
   const [stockError, setStockError] = useState("");
 
   // ---------- Coupon State ----------
@@ -104,6 +107,8 @@ export function useCheckout() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (submitLockRef.current) return;
+
     if (!validate()) return;
 
     const outOfStockItems = cart.filter((item) => item.quantity > item.stock);
@@ -116,6 +121,7 @@ export function useCheckout() {
     }
 
     setStockError("");
+    submitLockRef.current = true;
     setIsSubmitting(true);
 
     setTimeout(() => {

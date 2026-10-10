@@ -23,7 +23,6 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("فرم ارسال شد:", formData);
     setIsSubmitted(true);
     setFormData({ name: "", email: "", subject: "", message: "" });
     setTimeout(() => setIsSubmitted(false), 3500);
